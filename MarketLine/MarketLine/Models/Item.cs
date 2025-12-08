@@ -12,6 +12,7 @@
 
         public double price { get; set; }
 
+        public string? imageUrl { get; set; }
         public string? category { get; set; }
 
         public int stock_quantity { get; set; }

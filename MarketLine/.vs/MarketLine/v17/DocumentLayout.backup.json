@@ -1,12 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\zozo2\\Desktop\\MarketLine\\MarketLine\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|c:\\users\\zozo2\\desktop\\repo\\marketline\\marketline\\models\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|solutionrelative:marketline\\models\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Item.cs",
+              "DocumentMoniker": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Models\\Item.cs",
+              "RelativeDocumentMoniker": "MarketLine\\Models\\Item.cs",
+              "ToolTip": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Models\\Item.cs",
+              "RelativeToolTip": "MarketLine\\Models\\Item.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-08T01:01:53.088Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
