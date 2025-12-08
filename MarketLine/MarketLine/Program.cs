@@ -1,7 +1,12 @@
+using MarketLine.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//builder.Services.AddDbContext<MarketLineDbContext>(options => options.UseSqlServer);
 
 var app = builder.Build();
 
