@@ -1,12 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MarketLine.Data;
+using MarketLine.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MarketLine.Controllers
 {
     public class ItemController : Controller
     {
-        public IActionResult Index()
+        private readonly MarketLineDbContext _context;
+
+        public ItemController(MarketLineDbContext context) 
+        { 
+            _context = context;
+        }
+
+        [HttpGet] // /Index
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Item> item = await _context.Items.ToListAsync();
+            return View(item);
         }
     }
 }
