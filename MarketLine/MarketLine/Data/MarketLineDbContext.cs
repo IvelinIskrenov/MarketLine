@@ -4,7 +4,7 @@ namespace MarketLine.Data
 {
     public class MarketLineDbContext : DbContext
     {
-        MarketLineDbContext(DbContextOptions<MarketLineDbContext> options) : base(options) { }
+        public MarketLineDbContext(DbContextOptions<MarketLineDbContext> options) : base(options) { }
 
         public DbSet<Item> Items { get; set; }
     }
