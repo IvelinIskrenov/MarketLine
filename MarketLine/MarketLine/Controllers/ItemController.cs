@@ -1,6 +1,7 @@
 ﻿using MarketLine.Data;
 using MarketLine.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketLine.Controllers
@@ -19,6 +20,13 @@ namespace MarketLine.Controllers
         {
             List<Item> item = await _context.Items.ToListAsync();
             return View(item);
+        }
+
+        [HttpGet]
+
+        public IActionResult Create()
+        {
+            return View();
         }
     }
 }

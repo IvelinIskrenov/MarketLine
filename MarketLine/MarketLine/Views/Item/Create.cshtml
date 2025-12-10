@@ -1,0 +1,56 @@
+﻿@model MarketLine.Models.Item 
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h1 class="mb-4 text-center">Create product</h1>
+            
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <form asp-action="Create" method="post">
+                        
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="name" class="form-label">Product name</label>
+                            <input asp-for="name" class="form-control" />
+                            <span asp-validation-for="name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="description" class="form-label">Description</label>
+                            <textarea asp-for="description" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="price" class="form-label">Price</label>
+                            <input asp-for="price" class="form-control" />
+                            <span asp-validation-for="price" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle-fill me-2"></i> Create
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Back to list
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@* Client-side validation section (required for ASP.NET Core)*@
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

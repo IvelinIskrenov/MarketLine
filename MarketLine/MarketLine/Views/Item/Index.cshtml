@@ -1,0 +1,59 @@
+﻿@model IEnumerable<MarketLine.Models.Item>
+@* @model List<MarketLine.Models.Item> *@
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">🛒 Products</h1>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            No quantity in this moment
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0">
+                        <img src="@item.imageUrl" class="card-img-top" alt="@item.name" style="height: 200px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate">@item.name</h5>
+                            <p class="card-text text-muted mb-2">
+                                @(item.description.Length > 70 ? item.description.Substring(0, 70) + "..." : item.description)
+                            </p>
+                            <div class="mt-auto pt-2">
+                                <p class="h4 text-danger mb-3">
+                                    <strong>@item.price.ToString("C2")</strong>
+                                </p>
+                                <a asp-action="Details" asp-route-id="@item.id" class="btn btn-primary w-100">
+                                    View details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@* Phone *@
+<style>
+    /* Ensures that images in maps are not too large on mobile */
+    .card-img-top {
+        max-height: 200px;
+    }
+
+    /* Adds a little indentation for better readability on mobile */
+    @@media (max-width: 576px) {
+        .container {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+</style>
