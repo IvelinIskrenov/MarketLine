@@ -16,20 +16,44 @@
 
                         <div class="mb-3">
                             <label asp-for="name" class="form-label">Product name</label>
-                            <input asp-for="name" class="form-control" />
+                            <input asp-for="name" type="text" class="form-control" />
                             <span asp-validation-for="name" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="description" class="form-label">Description</label>
-                            <textarea asp-for="description" class="form-control" rows="4"></textarea>
+                            <textarea asp-for="description" type="text" class="form-control" rows="4"></textarea>
                             <span asp-validation-for="description" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="price" class="form-label">Price</label>
-                            <input asp-for="price" class="form-control" />
+                            <input asp-for="price" type="number" class="form-control" />
                             <span asp-validation-for="price" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="discount" class="form-label">Discount</label>
+                            <input asp-for="discount" class="form-control" />
+                            <span asp-validation-for="discount" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="imageUrl" class="form-label">image Url</label>
+                            <input asp-for="imageUrl" class="form-control" />
+                            <span asp-validation-for="imageUrl" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="category" class="form-label">category</label>
+                            <input asp-for="category" class="form-control" />
+                            <span asp-validation-for="category" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="stock_quantity" class="form-label">stock quantity</label>
+                            <input asp-for="stock_quantity" class="form-control" />
+                            <span asp-validation-for="stock_quantity" class="text-danger"></span>
                         </div>
 
                         <div class="d-grid gap-2 mt-4">
