@@ -41,7 +41,6 @@
                                 <li><a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="Food">Храни</a></li>
                             </ul>
                         </li>
-
                         <!-- 3. MESSAGE TEXT -->
                         <li class="nav-item ms-3">
                             <span class="navbar-text text-muted">
@@ -88,11 +87,83 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MarketLine - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
+    <footer id="footer">
+        <div class="footerTop">
+            <div class="wrapper">
+                <div class="footerCol firstFooterCol">
+                    <p><span class="footerColTitle">За MarketLine</span></p>
+                    <ul>
+                        <li><a href="/about">За нас</a></li>
+                        <!--<li><a href="/karieri">Кариери</a></li>-->
+                        <li><a href="/contacts">Контакти</a></li>
+                    </ul>
+                </div>
+                <div class="footerCol footerPolicies">
+                    <p><span class="footerColTitle">Политики</span></p>
+                    <ul>
+                        <li><a href="/obshti-uslovia">Общи условия</a></li>
+                        <li><a href="/dostavka-i-plashtane">Доставка и плащане</a></li>
+                        <li><a href="/zashtita-na-lichnite-danni">Защита на личните данни</a></li>
+                    </ul>
+                </div>
     </footer>
+    <style>
+        #footer {
+            background-color: #f7f7f7; /* Very light gray background */
+            border-top: 2px solid #ddd; /* Thin gray top border */
+            color: #111; /* Dark gray/near black primary text color */
+            padding: 20px 0; /* Vertical padding */
+        }
+
+        /* Section for columns */
+        .footerTop .wrapper {
+            display: flex; /* Arranges columns horizontally */
+            justify-content: space-between; /* Evenly distributes space */
+            max-width: 1200px; /* Limits content width */
+            margin: 0 auto;
+        }
+
+        /* Styling for individual columns */
+        .footerCol {
+            width: 30%; /* Width of each column */
+        }
+
+        /* Column title */
+        .footerColTitle {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #555; /* Medium gray color for titles */
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Styling for list items */
+        .footerCol ul {
+            list-style: none; /* Removes standard bullets/dots */
+            padding: 0;
+            margin: 0;
+        }
+
+            .footerCol ul li {
+                margin-bottom: 5px;
+            }
+
+                .footerCol ul li a,
+                .footerCol ul li span {
+                    color: #666; /* Gray color for links */
+                    text-decoration: none;
+                    font-size: 0.95rem;
+                }
+
+                    .footerCol ul li a:hover,
+                    .footerCol ul li span:hover {
+                        color: #333; /* Darker gray on hover */
+                        text-decoration: underline;
+                    }
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

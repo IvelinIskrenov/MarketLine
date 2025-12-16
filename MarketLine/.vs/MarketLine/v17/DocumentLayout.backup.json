@@ -50,8 +50,7 @@
               "RelativeToolTip": "MarketLine\\wwwroot\\css\\site.css",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAAB4AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-12-16T21:27:16.58Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-16T21:27:16.58Z"
             },
             {
               "$type": "Document",
@@ -59,9 +58,9 @@
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "MarketLine\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Views\\Shared\\_Layout.cshtml*",
-              "RelativeToolTip": "MarketLine\\Views\\Shared\\_Layout.cshtml*",
-              "ViewState": "AgIAADQAAAAAAAAAAAAkwEcAAABpAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "MarketLine\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAJMAAAAAAAAAAAAAAKQAAABsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-12-16T20:54:02.286Z",
               "EditorCaption": ""
@@ -76,8 +75,7 @@
               "RelativeToolTip": "MarketLine\\Views\\Item\\Edit.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-16T20:48:31.849Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-16T20:48:31.849Z"
             },
             {
               "$type": "Document",
@@ -89,8 +87,7 @@
               "RelativeToolTip": "MarketLine\\Views\\Item\\Create.cshtml",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAAwAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-10T09:21:32.529Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-10T09:21:32.529Z"
             },
             {
               "$type": "Document",
@@ -114,8 +111,7 @@
               "RelativeToolTip": "MarketLine\\Controllers\\ItemController.cs",
               "ViewState": "AgIAADkAAAAAAAAAAAAgwD8AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-08T10:04:00.465Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-08T10:04:00.465Z"
             },
             {
               "$type": "Document",
@@ -127,8 +123,7 @@
               "RelativeToolTip": "MarketLine\\Models\\Item.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-08T01:01:53.088Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-08T01:01:53.088Z"
             }
           ]
         }
