@@ -11,27 +11,72 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MarketLine</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+
+                <!-- 1. LOGO -->
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    MarketLine
+                </a>
+
+                <!-- Mobile toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+
+                <div class="collapse navbar-collapse" id="mainNavbar">
+
+                    <!-- LEFT SIDE -->
+                    <ul class="navbar-nav align-items-center me-auto">
+
+                        <!-- 2. CATEGORIES DROPDOWN -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center"
+                               href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-list fs-4 me-1"></i> Категории
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="Electronics">Електроника</a></li>
+                                <li><a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="Clothes">Дрехи</a></li>
+                                <li><a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="Food">Храни</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Item" asp-action="Index">Products</a>
+
+                        <!-- 3. MESSAGE TEXT -->
+                        <li class="nav-item ms-3">
+                            <span class="navbar-text text-muted">
+                                Безплатна доставка над 100 лв.
+                            </span>
                         </li>
+                    </ul>
+
+                    <!-- RIGHT SIDE -->
+                    <ul class="navbar-nav align-items-center">
+
+                        <!-- 4. SEARCH ICON -->
+                        <form class="search-form d-flex align-items-center" role="search">
+                            <input type="search"
+                                   class="form-control search-input"
+                                   placeholder="Търси продукти..."
+                                   aria-label="Search">
+                            <button class="btn search-btn" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </form>
+
+
+                        <!-- 5. CART ICON -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Item" asp-action="Create">Products</a>
+                            <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
+                                <img src="~/images/cart.png" alt="Cart" style="width:30px; height:30px;">
+
+                                <!-- OPTIONAL BADGE -->
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    @ViewBag.CartCount
+                                </span>
+                            </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>

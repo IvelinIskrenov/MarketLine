@@ -153,7 +153,6 @@ C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\rjsmcshtml.ds
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\scopedcss\bundle\MarketLine.styles.css
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\scopedcss\projectbundle\MarketLine.bundle.scp.css
-C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\compressed\v5ydqlhgt4-b9sayid5wm.gz
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\compressed\yqi4lwlqu8-61n19gt1b8.gz
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\compressed\qpxmfub98e-xtxxf3hu2r.gz
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\compressed\b1umllvl5l-bqjiyaj88i.gz
@@ -228,3 +227,4 @@ C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\refint\Market
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\MarketLine.pdb
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\MarketLine.genruntimeconfig.cache
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\ref\MarketLine.dll
+C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\compressed\v5ydqlhgt4-3y8m7uxm6z.gz
