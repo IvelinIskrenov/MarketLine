@@ -12,7 +12,7 @@ namespace MarketLine.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        // -> UserManager и RoleManager
+        // -> UserManager § RoleManager
         public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;

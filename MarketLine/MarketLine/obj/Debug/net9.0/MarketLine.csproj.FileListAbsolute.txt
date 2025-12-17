@@ -228,3 +228,8 @@ C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\MarketLine.pd
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\MarketLine.genruntimeconfig.cache
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\ref\MarketLine.dll
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net9.0\compressed\v5ydqlhgt4-3y8m7uxm6z.gz
+C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll
