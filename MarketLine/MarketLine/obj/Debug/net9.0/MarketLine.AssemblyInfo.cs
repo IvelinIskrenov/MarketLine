@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a6c4ab137dc66b793ab9c01f9d01c6792ceb2ea3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+baa4e9842027e674f975456bfbe15784d52323b2")]
 [assembly: System.Reflection.AssemblyProductAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

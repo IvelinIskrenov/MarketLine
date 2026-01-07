@@ -88,7 +88,7 @@ namespace MarketLine.Controllers
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)
             {
-                ModelState.AddModelError("", "Грешка при обновяване на потребителя.");
+                ModelState.AddModelError("", "Error: updating the user");
                 return View(model);
             }
 
@@ -100,7 +100,7 @@ namespace MarketLine.Controllers
 
             if (!removeResult.Succeeded || !addResult.Succeeded)
             {
-                ModelState.AddModelError("", "Грешка при обновяване на ролите.");
+                ModelState.AddModelError("", "Error updating the role");
                 return View(model);
             }
 

@@ -1,4 +1,5 @@
 using MarketLine.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<MarketLineDbContext>(options => 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Add Identity 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddRoles<IdentityRole>() 
+.AddEntityFrameworkStores<MarketLineDbContext>();
 
 var app = builder.Build();
 
@@ -22,6 +30,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+// add Authentication
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

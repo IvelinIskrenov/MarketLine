@@ -55,6 +55,10 @@
               "target": "Package",
               "version": "[9.0.4, )"
             },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.4, )"
