@@ -15,6 +15,13 @@ namespace MarketLine.Controllers
             _context = context;
         }
 
+        [HttpGet] // /AdminControl
+        public async Task<IActionResult> AdminControl()
+        {
+            List<Item> item = await _context.Items.ToListAsync();
+            return View(item);
+        }
+
         [HttpGet] // /Index
         public async Task<IActionResult> Index()
         {

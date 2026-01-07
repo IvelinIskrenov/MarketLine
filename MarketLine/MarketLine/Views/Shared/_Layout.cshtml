@@ -47,7 +47,7 @@
                                 Безплатна доставка над 100 лв.
                             </span>
                         </li>
-                        <li><a class="admin-control" asp-controller="Item" asp-action="Index">Продукти</a></li>
+                        <li><a class="admin-control" asp-controller="Item" asp-action="AdminControl">Продукти</a></li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
                         {
                             <li>
