@@ -1,0 +1,43 @@
+﻿@model IEnumerable<MarketLine.Models.Item>
+@{
+    ViewData["Title"] = "Item list";
+}
+<h1>Item List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add Item</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock quantity</th>
+            <th>Discount</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.id</td>
+                <td>@item.name</td>
+                <td>@item.category</td>
+                <td>@item.price</td>
+                <td>@item.stock_quantity</td>
+                <td>@item.discount</td>
+                
+                <td>
+                    <!--<a asp-action="Details" asp-route-id="@item.Id">Details</a>-->
+                    
+                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
