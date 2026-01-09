@@ -23,10 +23,27 @@ namespace MarketLine.Controllers
         }
 
         [HttpGet] // /Index
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? category)
         {
-            List<Item> item = await _context.Items.ToListAsync();
-            return View(item);
+            var itemsQuery = _context.Items.AsQueryable();
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                if (category == "All")
+                {
+                    itemsQuery = itemsQuery;
+                }
+                else
+                {
+                    itemsQuery = itemsQuery.Where(i => i.category == category);
+                }
+            }
+
+            List<Item> items = await itemsQuery.ToListAsync();
+
+            ViewData["CurrentCategory"] = category;
+
+            return View(items);
         }
 
         [HttpGet]
