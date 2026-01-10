@@ -29,11 +29,7 @@ namespace MarketLine.Controllers
 
             if (!string.IsNullOrEmpty(category))
             {
-                if (category == "All")
-                {
-                    itemsQuery = itemsQuery;
-                }
-                else
+                if (category != "All")
                 {
                     itemsQuery = itemsQuery.Where(i => i.category == category);
                 }
@@ -132,6 +128,37 @@ namespace MarketLine.Controllers
                 return RedirectToAction(nameof(Index)); 
             }
             return View(item);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var item = await _context.Items.FindAsync(id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return View(item);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var item = await _context.Items.FindAsync(id);
+            if (item != null)
+            {
+                _context.Items.Remove(item);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(AdminControl));
         }
     }
 }
