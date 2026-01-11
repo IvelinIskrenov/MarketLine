@@ -27,9 +27,24 @@
                                 @(item.description.Length > 70 ? item.description.Substring(0, 70) + "..." : item.description)
                             </p>
                             <div class="mt-auto pt-2">
-                                <p class="h4 text-danger mb-3">
-                                    <strong>@item.price.ToString("C2")</strong>
-                                </p>
+                                <div class="price-container h4 mb-3">
+                                    @if (item.discount != 0)
+                                    {
+                                        <del class="text-danger me-2">
+                                            @item.price.ToString("C2")
+                                        </del>
+
+                                        <strong class="text-dark">
+                                            @item.DiscountedPrice.ToString("C2")
+                                        </strong>
+                                    }
+                                    else
+                                    {
+                                        <strong class="text-danger">
+                                            @item.price.ToString("C2")
+                                        </strong>
+                                    }
+                                </div>
                                 <a asp-action="Details" asp-route-id="@item.id" class="btn btn-primary w-100">
                                     View details
                                 </a>
