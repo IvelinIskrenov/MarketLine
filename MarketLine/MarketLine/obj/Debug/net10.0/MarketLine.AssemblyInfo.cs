@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+829b45f99e46116b0d77b329b71138b10b538a80")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4775db1a45f8a061866422a7150dde0738d17cef")]
 [assembly: System.Reflection.AssemblyProductAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -27,17 +27,14 @@ namespace MarketLine.Controllers
         {
             var itemsQuery = _context.Items.AsQueryable();
 
-            if (!string.IsNullOrEmpty(category))
+            // Simplify: check if category is provided and isn't "All"
+            if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
             {
-                if (category != "All")
-                {
-                    itemsQuery = itemsQuery.Where(i => i.category == category);
-                }
+                itemsQuery = itemsQuery.Where(i => i.category == category);
             }
 
-            List<Item> items = await itemsQuery.ToListAsync();
-
-            ViewData["CurrentCategory"] = category;
+            var items = await itemsQuery.ToListAsync();
+            ViewData["CurrentCategory"] = category ?? "All";
 
             return View(items);
         }
