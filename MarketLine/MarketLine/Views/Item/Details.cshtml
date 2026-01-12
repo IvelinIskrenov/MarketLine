@@ -27,11 +27,8 @@
             <div class="price-section mb-3">
                 @if (Model.discount != 0)
                 {
-                    // Изчисляваме цената с отстъпка (ако не е пресметната в модела)
-                    decimal discountPrice = Model.price - (Model.price * (decimal)Model.discount / 100);
-
                     <del class="h5 text-danger me-2">@Model.price.ToString("C2")</del>
-                    <strong class="h3 text-dark">@discountPrice.ToString("C2")</strong>
+                    <strong class="h3 text-dark">@Model.DiscountedPrice.ToString("C2")</strong>
                     <span class="badge bg-success ms-2">-@Model.discount%</span>
                 }
                 else
