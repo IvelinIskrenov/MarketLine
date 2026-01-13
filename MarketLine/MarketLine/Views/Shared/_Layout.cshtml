@@ -39,11 +39,19 @@
                         </li>
                         <!-- 3. MESSAGE TEXT -->
                         <li class="nav-item ms-3">
-                            <span class="navbar-text text-muted">
+                            <div class="navbar-text text-muted">
                                 Безплатна доставка над 100 лв.
-                            </span>
+                            </div>
                         </li>
-                        <li><a class="admin-control" asp-controller="Item" asp-action="AdminControl">Продукти</a></li>
+                        <!-- 4. Farmacy consult -->
+                        <li class="nav-item ms-3">
+                            <div class="navbar-text text-muted">
+                                Консултация с фармацевт
+                            </div>
+                        </li>
+                        <li>
+                            <a class="admin-control" asp-controller="Item" asp-action="AdminControl"> Продукти</a>
+                        </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
                         {
                             <li>

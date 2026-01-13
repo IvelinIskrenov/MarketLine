@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|c:\\users\\zozo2\\desktop\\repo\\marketline\\marketline\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|solutionrelative:marketline\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|c:\\users\\zozo2\\desktop\\repo\\marketline\\marketline\\controllers\\itemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|solutionrelative:marketline\\controllers\\itemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|c:\\users\\zozo2\\desktop\\repo\\marketline\\marketline\\views\\item\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|solutionrelative:marketline\\views\\item\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -13,14 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|c:\\users\\zozo2\\desktop\\repo\\marketline\\marketline\\views\\shared\\components\\categorymenu\\default.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|solutionrelative:marketline\\views\\shared\\components\\categorymenu\\default.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|c:\\users\\zozo2\\desktop\\repo\\marketline\\marketline\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|solutionrelative:marketline\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|c:\\users\\zozo2\\desktop\\repo\\marketline\\marketline\\controllers\\itemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|solutionrelative:marketline\\controllers\\itemcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{91C063DB-3139-43C6-B68E-B4ECD9351A13}|MarketLine\\MarketLine.csproj|c:\\users\\zozo2\\desktop\\repo\\marketline\\marketline\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -82,11 +82,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Default.cshtml",
               "DocumentMoniker": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Views\\Shared\\Components\\CategoryMenu\\Default.cshtml",
               "RelativeDocumentMoniker": "MarketLine\\Views\\Shared\\Components\\CategoryMenu\\Default.cshtml",
@@ -94,25 +94,24 @@
               "RelativeToolTip": "MarketLine\\Views\\Shared\\Components\\CategoryMenu\\Default.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-01-12T19:41:10.662Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-12T19:41:10.662Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "MarketLine\\Views\\Shared\\_Layout.cshtml",
               "ToolTip": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "MarketLine\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAACcAAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAADEAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-12-16T20:54:02.286Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "CategoryMenuViewComponent.cs",
               "DocumentMoniker": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\ViewComponents\\CategoryMenuViewComponent.cs",
               "RelativeDocumentMoniker": "MarketLine\\ViewComponents\\CategoryMenuViewComponent.cs",
@@ -120,18 +119,17 @@
               "RelativeToolTip": "MarketLine\\ViewComponents\\CategoryMenuViewComponent.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-12T19:32:26.595Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-12T19:32:26.595Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Views\\Item\\Create.cshtml",
               "RelativeDocumentMoniker": "MarketLine\\Views\\Item\\Create.cshtml",
               "ToolTip": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Views\\Item\\Create.cshtml",
               "RelativeToolTip": "MarketLine\\Views\\Item\\Create.cshtml",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAACIAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-12-10T09:21:32.529Z",
               "EditorCaption": ""
@@ -146,8 +144,7 @@
               "RelativeToolTip": "MarketLine\\Views\\Item\\Details.cshtml",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAABcAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-01-09T08:52:35.329Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-09T08:52:35.329Z"
             },
             {
               "$type": "Document",
@@ -159,8 +156,7 @@
               "RelativeToolTip": "MarketLine\\Views\\Item\\Index.cshtml",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAACkAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-01-07T07:41:31.229Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-07T07:41:31.229Z"
             },
             {
               "$type": "Document",
@@ -172,12 +168,11 @@
               "RelativeToolTip": "MarketLine\\Controllers\\UserController.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAAjwEEAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-16T23:28:02.014Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-16T23:28:02.014Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "ItemController.cs",
               "DocumentMoniker": "C:\\Users\\zozo2\\Desktop\\repo\\MarketLine\\MarketLine\\Controllers\\ItemController.cs",
               "RelativeDocumentMoniker": "MarketLine\\Controllers\\ItemController.cs",
