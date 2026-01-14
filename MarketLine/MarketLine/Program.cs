@@ -1,4 +1,5 @@
 using MarketLine.Data;
+using MarketLine.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
 })
 .AddRoles<IdentityRole>() 
 .AddEntityFrameworkStores<MarketLineDbContext>();
+
+builder.Services.AddScoped<IItemService, ItemService>(); // Adding Item Service
 
 var app = builder.Build();
 

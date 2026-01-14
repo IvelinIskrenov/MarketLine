@@ -1,41 +1,32 @@
-﻿using MarketLine.Data;
-using MarketLine.Models;
+﻿using MarketLine.Models;
+using MarketLine.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketLine.Controllers
 {
     public class ItemController : Controller
     {
-        private readonly MarketLineDbContext _context;
+        private readonly IItemService _itemService;
 
-        public ItemController(MarketLineDbContext context) 
-        { 
-            _context = context;
+        // Инжектираме интерфейса, а не директно DbContext
+        public ItemController(IItemService itemService)
+        {
+            _itemService = itemService;
         }
 
-        [HttpGet] // /AdminControl
+        [HttpGet]
         public async Task<IActionResult> AdminControl()
         {
-            List<Item> item = await _context.Items.ToListAsync();
-            return View(item);
+            var items = await _itemService.GetAllItemsAsync();
+            return View(items);
         }
 
-        [HttpGet] // /Index
+        [HttpGet]
         public async Task<IActionResult> Index(string? category)
         {
-            var itemsQuery = _context.Items.AsQueryable();
-
-            // Simplify: check if category is provided and isn't "All"
-            if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
-            {
-                itemsQuery = itemsQuery.Where(i => i.category == category);
-            }
-
-            var items = await itemsQuery.ToListAsync();
+            var items = await _itemService.GetFilteredItemsAsync(category);
             ViewData["CurrentCategory"] = category ?? "All";
-
             return View(items);
         }
 
@@ -46,74 +37,56 @@ namespace MarketLine.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-        [Bind("name,description,discount,price,imageUrl,category,stock_quantity")]
-        Item item)
+            [Bind("name,description,discount,price,imageUrl,category,stock_quantity")] Item item)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(item);
-                await _context.SaveChangesAsync();
+                await _itemService.CreateItemAsync(item);
                 return RedirectToAction(nameof(Index));
             }
             return View(item);
         }
 
-        [HttpGet] // GET: Items/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var item = await _context.Items.FirstOrDefaultAsync(m => m.id == id);
-
-            if (item == null)
-            {
-                return NotFound();
-            }
+            var item = await _itemService.GetByIdAsync(id.Value);
+            if (item == null) return NotFound();
 
             return View(item);
         }
 
-        [HttpGet] // GET: Items/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var item = await _context.Items.FindAsync(id);
+            var item = await _itemService.GetByIdAsync(id.Value);
+            if (item == null) return NotFound();
 
-            if (item == null)
-            {
-                return NotFound();
-            }
             return View(item);
         }
 
-        [HttpPost] // POST: Items/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-        [Bind("id,name,description,discount,price,imageUrl,category,stock_quantity")]
-        Item item)
+            [Bind("id,name,description,discount,price,imageUrl,category,stock_quantity")] Item item)
         {
-            if (id != item.id)
-            {
-                return NotFound();
-            }
+            if (id != item.id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(item);
-                    await _context.SaveChangesAsync();
+                    await _itemService.UpdateItemAsync(item);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Items.Any(e => e.id == item.id))
+                    if (!_itemService.ItemExists(item.id))
                     {
                         return NotFound();
                     }
@@ -122,7 +95,7 @@ namespace MarketLine.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index)); 
+                return RedirectToAction(nameof(Index));
             }
             return View(item);
         }
@@ -130,31 +103,19 @@ namespace MarketLine.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var item = await _context.Items.FindAsync(id);
+            var item = await _itemService.GetByIdAsync(id.Value);
+            if (item == null) return NotFound();
 
-            if (item == null)
-            {
-                return NotFound();
-            }
             return View(item);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var item = await _context.Items.FindAsync(id);
-            if (item != null)
-            {
-                _context.Items.Remove(item);
-                await _context.SaveChangesAsync();
-            }
-
+            await _itemService.DeleteItemAsync(id);
             return RedirectToAction(nameof(AdminControl));
         }
     }
