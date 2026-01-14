@@ -30,6 +30,25 @@ namespace MarketLine.Services
             return await itemsQuery.ToListAsync();
         }
 
+        public async Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category, string? searchTerm)
+        {
+            var itemsQuery = _context.Items.AsQueryable();
+
+            // Филтър по категория
+            if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
+            {
+                itemsQuery = itemsQuery.Where(i => i.category == category);
+            }
+
+            // НОВО: Филтър по име (Search)
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                itemsQuery = itemsQuery.Where(i => i.name.Contains(searchTerm));
+            }
+
+            return await itemsQuery.ToListAsync();
+        }
+
         public async Task<Item?> GetByIdAsync(int id)
         {
             return await _context.Items.FirstOrDefaultAsync(m => m.id == id);

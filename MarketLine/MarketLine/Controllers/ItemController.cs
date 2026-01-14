@@ -22,11 +22,22 @@ namespace MarketLine.Controllers
             return View(items);
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> Index(string? category)
+        //{
+        //    var items = await _itemService.GetFilteredItemsAsync(category);
+        //    ViewData["CurrentCategory"] = category ?? "All";
+        //    return View(items);
+        //}
+
         [HttpGet]
-        public async Task<IActionResult> Index(string? category)
+        public async Task<IActionResult> Index(string? category, string? searchTerm)
         {
-            var items = await _itemService.GetFilteredItemsAsync(category);
+            var items = await _itemService.GetFilteredItemsAsync(category, searchTerm);
+
             ViewData["CurrentCategory"] = category ?? "All";
+            ViewData["CurrentSearch"] = searchTerm;
+
             return View(items);
         }
 

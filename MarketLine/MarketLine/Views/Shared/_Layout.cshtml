@@ -64,12 +64,13 @@
                     <ul class="navbar-nav align-items-center">
 
                         <!-- 4. SEARCH ICON -->
-                        <form class="search-form d-flex align-items-center" role="search">
+                        <form class="search-form d-flex align-items-center" role="search" method="get" asp-controller="Item" asp-action="Index">
                             <input type="search"
+                                   name="searchTerm"
                                    class="form-control search-input"
                                    placeholder="Търси продукти..."
-                                   aria-label="Search">
-                            <button class="btn search-btn" type="submit">
+                                   aria-label="Search"
+                                   value="@ViewData["CurrentSearch"]"> <button class="btn search-btn" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>
                         </form>
