@@ -222,7 +222,6 @@ C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\a
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\nezrqnk58p-{0}-muycvpuwrr-muycvpuwrr.gz
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\v0zgfp0y55-{0}-87fc7y1x7t-87fc7y1x7t.gz
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\yfc7ypekbg-{0}-mlv21k5csn-mlv21k5csn.gz
-C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\ediq2uz11p-{0}-3y8m7uxm6z-3y8m7uxm6z.gz
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\7s8hosh3k0-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\y9v4l61uwc-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\hn6778j5vq-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -410,3 +409,4 @@ C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net10.0\ru\Microsoft
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
+C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\ediq2uz11p-{0}-sl9m31xnsk-sl9m31xnsk.gz

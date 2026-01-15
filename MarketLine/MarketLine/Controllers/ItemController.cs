@@ -9,7 +9,6 @@ namespace MarketLine.Controllers
     {
         private readonly IItemService _itemService;
 
-        // Инжектираме интерфейса, а не директно DbContext
         public ItemController(IItemService itemService)
         {
             _itemService = itemService;

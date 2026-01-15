@@ -34,13 +34,11 @@ namespace MarketLine.Services
         {
             var itemsQuery = _context.Items.AsQueryable();
 
-            // Филтър по категория
             if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
             {
                 itemsQuery = itemsQuery.Where(i => i.category == category);
             }
 
-            // НОВО: Филтър по име (Search)
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 itemsQuery = itemsQuery.Where(i => i.name.Contains(searchTerm));
