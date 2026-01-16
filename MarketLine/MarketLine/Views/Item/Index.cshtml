@@ -20,11 +20,20 @@
             {
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0">
-                        <img src="@item.imageUrl" class="card-img-top" alt="@item.name" style="height: 200px; object-fit: cover;">
+                        <a asp-action="Details" asp-route-id="@item.id">
+                            <img src="@item.imageUrl" class="card-img-top" alt="@item.name" style="height: 200px; object-fit: cover;">
+                        </a>
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-truncate">@item.name</h5>
+                            <h5 class="card-title text-truncate">
+                                <a asp-action="Details" asp-route-id="@item.id" class="text-decoration-none text-dark">
+                                    @item.name
+                                </a>
+                            </h5>
+
                             <p class="card-text text-muted mb-2">
-                                @(item.description.Length > 70 ? item.description.Substring(0, 70) + "..." : item.description)
+                                <a asp-action="Details" asp-route-id="@item.id" class="text-decoration-none text-muted">
+                                    @(item.description.Length > 70 ? item.description.Substring(0, 70) + "..." : item.description)
+                                </a>
                             </p>
                             <div class="mt-auto pt-2">
                                 <div class="price-container h4 mb-3">
