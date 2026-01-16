@@ -54,8 +54,12 @@
                                         </strong>
                                     }
                                 </div>
-                                <a asp-action="Details" asp-route-id="@item.id" class="btn btn-primary w-100">
-                                    View details
+                                <a asp-action="Details" asp-route-id="@item.id"
+                                   class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
+                                   style="width: 60%;">
+
+                                    <img src="~/images/add-to-cart.png" alt="Cart" style="width: 20px; height: 20px;" class="me-2" />
+                                    Add to Cart
                                 </a>
                             </div>
                         </div>

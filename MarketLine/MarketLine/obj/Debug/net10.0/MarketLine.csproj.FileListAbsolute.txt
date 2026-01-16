@@ -409,4 +409,4 @@ C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net10.0\ru\Microsoft
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Scripting.resources.dll
 C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Scripting.resources.dll
-C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\ediq2uz11p-{0}-y9bhgp54h4-y9bhgp54h4.gz
+C:\Users\zozo2\Desktop\repo\MarketLine\MarketLine\obj\Debug\net10.0\compressed\ediq2uz11p-{0}-acvyu75j56-acvyu75j56.gz
