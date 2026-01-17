@@ -1,4 +1,4 @@
-﻿@model List<string>
+﻿@model List<MarketLine.Models.Category>
 
 <ul class="navbar-nav">
     <li class="nav-item dropdown">
@@ -6,12 +6,16 @@
             Категории
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="All">Всички</a></li>
-            @foreach (var category in Model)
+            <li><a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="">Всички</a></li>
+
+            @foreach (var cat in Model)
             {
                 <li>
-                    <a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="@category">
-                        @category
+                    <a class="dropdown-item"
+                       asp-controller="Item"
+                       asp-action="Index"
+                       asp-route-category="@cat.Name">
+                        @cat.Name 
                     </a>
                 </li>
             }

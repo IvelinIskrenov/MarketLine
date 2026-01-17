@@ -10,10 +10,15 @@ namespace MarketLine.Data
 
         public DbSet<Item> Items { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
         // The DbSets for Users, Roles, UserRoles, and other Identity tables are inherited automatically and do not need to be added manually!
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            ///summery
+            ///Creating Categories which we will use in our app when we create the model
+            ///summery
             builder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Лице" },
                 new Category { Id = 2, Name = "Тяло" },

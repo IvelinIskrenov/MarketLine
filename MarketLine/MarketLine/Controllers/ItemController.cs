@@ -40,22 +40,30 @@ namespace MarketLine.Controllers
             return View(items);
         }
 
+        
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            //Create method item, add ViewBag.Categories for as long as we can access them
+
+            var categories = await _itemService.GetAllCategoriesAsync(); 
+            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("name,description,discount,price,imageUrl,category,stock_quantity")] Item item)
+        public async Task<IActionResult> Create([Bind("name,description,discount,price,imageUrl,CategoryId,stock_quantity")] Item item)
         {
+            //Create method item, add ViewBag.Categories for as long as we can access them
             if (ModelState.IsValid)
             {
                 await _itemService.CreateItemAsync(item);
                 return RedirectToAction(nameof(Index));
             }
+
+            var categories = await _itemService.GetAllCategoriesAsync();
+            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
             return View(item);
         }
 

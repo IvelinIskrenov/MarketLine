@@ -44,10 +44,14 @@
                             <span asp-validation-for="imageUrl" class="text-danger"></span>
                         </div>
 
-                        <div class="mb-3">
+                        @* <div class="mb-3">
                             <label asp-for="category" class="form-label">category</label>
                             <input asp-for="category" class="form-control" />
                             <span asp-validation-for="category" class="text-danger"></span>
+                        </div> *@
+                        <div class ="mb-3">
+                            <label for="CatgoryId">Category</label>
+                            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-controller"></select>
                         </div>
 
                         <div class="mb-3">

@@ -33,7 +33,7 @@ namespace MarketLine.Models
         public int? CategoryId { get; set; }
         [ForeignKey("CategoryId")]
 
-        public Category? Category { get; set; }
+        public Category? category { get; set; }
 
         [Required(ErrorMessage = "Наличността е задължителна.")]
         [Range(0, int.MaxValue, ErrorMessage = "Наличността не може да е отрицателна.")]

@@ -11,6 +11,7 @@ namespace MarketLine.Services
         Task CreateItemAsync(Item item);
         Task UpdateItemAsync(Item item);
         Task DeleteItemAsync(int id);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
         bool ItemExists(int id);
     }
 }

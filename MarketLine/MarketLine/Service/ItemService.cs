@@ -24,7 +24,7 @@ namespace MarketLine.Services
 
             if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
             {
-                itemsQuery = itemsQuery.Where(i => i.category == category);
+                itemsQuery = itemsQuery.Where(i => i.category.Name == category); // fixed add .Name
             }
 
             return await itemsQuery.ToListAsync();
@@ -36,7 +36,7 @@ namespace MarketLine.Services
 
             if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
             {
-                itemsQuery = itemsQuery.Where(i => i.category == category);
+                itemsQuery = itemsQuery.Where(i => i.category.Name == category);// fixed add .Name
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -72,6 +72,13 @@ namespace MarketLine.Services
                 _context.Items.Remove(item);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        {
+            return await _context.Categories
+                                 .OrderBy(c => c.Name)
+                                 .ToListAsync();
         }
 
         public bool ItemExists(int id)
