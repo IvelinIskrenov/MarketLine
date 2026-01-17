@@ -14,6 +14,11 @@ namespace MarketLine.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Category>().HasData(
+                new Category { Id = 1, Name = "Лице" },
+                new Category { Id = 2, Name = "Тяло" },
+                new Category { Id = 3, Name = "Хранително добавки" }
+                );
             // MANDATORY: The base method is called to configure the Identity tables
             base.OnModelCreating(builder);
 
