@@ -97,6 +97,9 @@ namespace MarketLine.Controllers
             return View(item);
         }
 
+        /// <summary>
+        /// Loads the edit form for an existing item.
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -108,6 +111,9 @@ namespace MarketLine.Controllers
             return View(item);
         }
 
+        /// <summary>
+        /// Saves changes to the element with validation and concurrency checks.
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
@@ -137,6 +143,9 @@ namespace MarketLine.Controllers
             return View(item);
         }
 
+        /// <summary>
+        /// Displays a deletion confirmation page.
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -148,6 +157,9 @@ namespace MarketLine.Controllers
             return View(item);
         }
 
+        /// <summary>
+        /// Deletes the item permanently and redirects to the admin panel.
+        /// </summary>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
