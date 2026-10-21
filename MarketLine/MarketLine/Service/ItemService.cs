@@ -15,12 +15,12 @@ namespace MarketLine.Services
 
         public async Task<IEnumerable<Item>> GetAllItemsAsync()
         {
-            return await _context.Items.ToListAsync();
+            return await _context.Items.Include(i => i.category).ToListAsync();
         }
 
         public async Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category)
         {
-            var itemsQuery = _context.Items.AsQueryable();
+            var itemsQuery = _context.Items.Include(i => i.category).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
             {
@@ -32,7 +32,7 @@ namespace MarketLine.Services
 
         public async Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category, string? searchTerm)
         {
-            var itemsQuery = _context.Items.AsQueryable();
+            var itemsQuery = _context.Items.Include(i => i.category).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
             {
@@ -49,7 +49,7 @@ namespace MarketLine.Services
 
         public async Task<Item?> GetByIdAsync(int id)
         {
-            return await _context.Items.FirstOrDefaultAsync(m => m.id == id);
+            return await _context.Items.Include(i => i.category).FirstOrDefaultAsync(m => m.id == id);
         }
 
         public async Task CreateItemAsync(Item item)

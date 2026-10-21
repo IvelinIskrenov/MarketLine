@@ -16,10 +16,8 @@ namespace MarketLine.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categories = await _context.Items
-                .Select(x => x.category)
-                .Distinct()
-                .OrderBy(x => x)
+            var categories = await _context.Categories
+                .OrderBy(c => c.Name)
                 .ToListAsync();
 
             return View(categories);
