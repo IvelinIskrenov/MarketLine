@@ -22,7 +22,7 @@
 
         <div class="col-md-7">
             <h3>@Model.name</h3>
-            <p class="text-muted">Категория: <span class="badge bg-secondary">@Model.category</span></p>
+            <p class="text-muted">Категория: <span class="badge bg-secondary">@(Model.category?.Name)</span></p>
 
             <div class="price-section mb-3">
                 @if (Model.discount != 0)
@@ -57,9 +57,12 @@
             </dl>
 
             <div class="mt-4">
-                <a asp-action="AddToCart" asp-route-id="@Model.id" class="btn btn-success btn-lg px-4 shadow-sm">
-                    <i class="bi bi-cart-plus-fill me-2"></i> Добави в количката
-                </a>
+                <form asp-controller="Cart" asp-action="Add" method="post">
+                    <input type="hidden" name="id" value="@Model.id" />
+                    <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm" @(Model.stock_quantity <= 0 ? "disabled" : null)>
+                        <i class="bi bi-cart-plus-fill me-2"></i> Добави в количката
+                    </button>
+                </form>
             </div>
         </div>
     </div>

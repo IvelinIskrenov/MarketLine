@@ -54,13 +54,15 @@
                                         </strong>
                                     }
                                 </div>
-                                <a asp-action="Details" asp-route-id="@item.id"
-                                   class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
-                                   style="width: 60%;">
-
-                                    <img src="~/images/add-to-cart.png" alt="Cart" style="width: 20px; height: 20px;" class="me-2" />
-                                    Add to Cart
-                                </a>
+                                <form asp-controller="Cart" asp-action="Add" method="post">
+                                    <input type="hidden" name="id" value="@item.id" />
+                                    <button type="submit"
+                                            class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
+                                            style="width: 60%;">
+                                        <img src="~/images/add-to-cart.png" alt="Cart" style="width: 20px; height: 20px;" class="me-2" />
+                                        Add to Cart
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
