@@ -11,6 +11,7 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "10.0.1",
           "Microsoft.AspNetCore.Identity.UI": "10.0.1",
           "Microsoft.EntityFrameworkCore": "10.0.1",
+          "Microsoft.EntityFrameworkCore.InMemory": "10.0.1",
           "Microsoft.EntityFrameworkCore.SqlServer": "10.0.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "10.0.1"
         },
@@ -1334,6 +1335,17 @@
           }
         }
       },
+      "Microsoft.EntityFrameworkCore.InMemory/10.0.1": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "10.0.1"
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
+            "assemblyVersion": "10.0.1.0",
+            "fileVersion": "10.0.125.57005"
+          }
+        }
+      },
       "Microsoft.EntityFrameworkCore.Relational/10.0.1": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "10.0.1"
@@ -2528,6 +2540,13 @@
       "sha512": "sha512-0VcVx+hIo7j6bCjTlgPB1D4vHyLdkY3pVmlcsvRR8APEr0vRQ+Nj2Q3qYXTUeHgp8gdBxQFDVCfcAXknevD2KQ==",
       "path": "microsoft.entityframeworkcore.design/10.0.1",
       "hashPath": "microsoft.entityframeworkcore.design.10.0.1.nupkg.sha512"
+    },
+    "Microsoft.EntityFrameworkCore.InMemory/10.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-f0HNO4Hp80AJLGkv/gV95q9yrPJ7CPfCjNq5trcLsXH75GurM/62D4m2YyXmkyQfeT4MRFXZSBPdhDBOx1CTQQ==",
+      "path": "microsoft.entityframeworkcore.inmemory/10.0.1",
+      "hashPath": "microsoft.entityframeworkcore.inmemory.10.0.1.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.Relational/10.0.1": {
       "type": "package",
