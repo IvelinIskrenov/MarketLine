@@ -1,0 +1,87 @@
+@model MarketLine.Models.CheckoutReviewViewModel
+@{
+    ViewData["Title"] = "Преглед на поръчката";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Преглед на поръчката</h1>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="mb-3">Данни за клиента</h5>
+                    <p class="mb-1">@Model.Customer.FirstName @Model.Customer.LastName</p>
+                    <p class="mb-1">@Model.Customer.Email</p>
+                    <p class="mb-0">@Model.Customer.Phone</p>
+
+                    <hr />
+                    <h5 class="mb-3">Адрес за доставка</h5>
+                    <p class="mb-1">@Model.Customer.Address</p>
+                    <p class="mb-0">@Model.Customer.PostalCode @Model.Customer.City</p>
+
+                    <hr />
+                    <h5 class="mb-3">Куриер и плащане</h5>
+                    <p class="mb-1">Куриер: @Model.Customer.Courier</p>
+                    <p class="mb-1">Доставка: @Model.Customer.DeliveryMethod</p>
+                    <p class="mb-0">Плащане: @Model.Customer.PaymentMethod</p>
+                </div>
+            </div>
+
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Продукт</th>
+                        <th>Количество</th>
+                        <th>Общо</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.Cart.Lines)
+                    {
+                        <tr>
+                            <td>@line.Name</td>
+                            <td>@line.Quantity</td>
+                            <td>@line.LineTotal.ToString("C2")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h5 class="mb-3">Обобщение</h5>
+                    <dl class="row mb-0">
+                        <dt class="col-6">Междинна сума</dt>
+                        <dd class="col-6 text-end">@Model.Cart.SubTotal.ToString("C2")</dd>
+                        <dt class="col-6">Отстъпка</dt>
+                        <dd class="col-6 text-end">-@Model.Cart.PromoDiscount.ToString("C2")</dd>
+                        <dt class="col-6">Доставка</dt>
+                        <dd class="col-6 text-end">
+                            @if (Model.Cart.Shipping == 0)
+                            {
+                                <span class="text-success">Безплатна</span>
+                            }
+                            else
+                            {
+                                @Model.Cart.Shipping.ToString("C2")
+                            }
+                        </dd>
+                    </dl>
+                    <hr />
+                    <div class="d-flex justify-content-between h5 mb-3">
+                        <span>Общо</span>
+                        <strong>@Model.Cart.Total.ToString("C2")</strong>
+                    </div>
+
+                    <form asp-action="Confirm" method="post" class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Потвърди поръчката</button>
+                    </form>
+                    <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">Редактирай данните</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

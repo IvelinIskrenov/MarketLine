@@ -1,0 +1,107 @@
+@model MarketLine.Models.CheckoutForm
+@{
+    ViewData["Title"] = "Каса";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4 text-center">Завършване на поръчка</h1>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form asp-action="Index" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <h5 class="mb-3">Данни за клиента</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label"></label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Phone" class="form-label"></label>
+                                <input asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <h5 class="mb-3">Адрес за доставка</h5>
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label"></label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="City" class="form-label"></label>
+                                <input asp-for="City" class="form-control" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PostalCode" class="form-label"></label>
+                                <input asp-for="PostalCode" class="form-control" />
+                                <span asp-validation-for="PostalCode" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <h5 class="mb-3">Доставка и плащане</h5>
+                        <div class="mb-3">
+                            <label asp-for="Courier" class="form-label"></label>
+                            <select asp-for="Courier" class="form-select">
+                                <option value="">Изберете куриер</option>
+                                <option value="Спиди">Спиди</option>
+                                <option value="Еконт">Еконт</option>
+                            </select>
+                            <span asp-validation-for="Courier" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="DeliveryMethod" class="form-label"></label>
+                            <select asp-for="DeliveryMethod" class="form-select">
+                                <option value="">Изберете начин</option>
+                                <option value="До адрес">До адрес</option>
+                                <option value="До офис на куриера">До офис на куриера</option>
+                            </select>
+                            <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="PaymentMethod" class="form-label"></label>
+                            <select asp-for="PaymentMethod" class="form-select">
+                                <option value="">Изберете метод</option>
+                                <option value="Наложен платеж">Наложен платеж</option>
+                                <option value="Банков превод">Банков превод</option>
+                            </select>
+                            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">Преглед на поръчката</button>
+                            <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">Назад към количката</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
