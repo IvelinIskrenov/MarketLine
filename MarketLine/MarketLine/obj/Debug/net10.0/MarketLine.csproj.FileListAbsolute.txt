@@ -816,7 +816,6 @@ C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\De
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\staticwebassets.development.json
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\staticwebassets.build.endpoints.json
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\swae.build.ex.cache
-C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\MarketLine.csproj.Up2Date
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\MarketLine.dll
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\refint\MarketLine.dll

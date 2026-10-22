@@ -1,0 +1,57 @@
+@model MarketLine.Models.PlacedOrder
+@{
+    ViewData["Title"] = "Успешна поръчка";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="alert alert-success text-center" role="alert">
+                Поръчката е направена успешно.
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-3 text-center">Благодарим ви!</h1>
+                    <p class="text-center mb-4">Номер на поръчка: <strong>@Model.OrderNumber</strong></p>
+
+                    <h5 class="mb-3">Данни за доставка</h5>
+                    <p class="mb-1">@Model.Customer.FirstName @Model.Customer.LastName</p>
+                    <p class="mb-1">@Model.Customer.Address, @Model.Customer.PostalCode @Model.Customer.City</p>
+                    <p class="mb-1">@Model.Customer.Phone · @Model.Customer.Email</p>
+                    <p class="mb-1">@Model.Customer.Courier · @Model.Customer.DeliveryMethod</p>
+                    <p class="mb-3">Плащане: @Model.Customer.PaymentMethod</p>
+
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Продукт</th>
+                                <th>Количество</th>
+                                <th>Общо</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var line in Model.Lines)
+                            {
+                                <tr>
+                                    <td>@line.Name</td>
+                                    <td>@line.Quantity</td>
+                                    <td>@line.LineTotal.ToString("C2")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-between h5">
+                        <span>Платена сума</span>
+                        <strong>@Model.Total.ToString("C2")</strong>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">Към продуктите</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,6 +3,7 @@ using MarketLine.Filters;
 using MarketLine.Models;
 using MarketLine.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,20 @@ builder.Services.AddControllersWithViews(options =>
 });
 
 var useInMemory = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (!useInMemory)
+{
+    try
+    {
+        using var connection = new SqlConnection(connectionString);
+        connection.Open();
+    }
+    catch (Exception)
+    {
+        useInMemory = true;
+    }
+}
 
 builder.Services.AddDbContext<MarketLineDbContext>(options =>
 {
@@ -22,7 +37,7 @@ builder.Services.AddDbContext<MarketLineDbContext>(options =>
     }
     else
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+        options.UseSqlServer(connectionString);
     }
 });
 
@@ -44,6 +59,7 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddScoped<IItemService, ItemService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 
 var app = builder.Build();
 

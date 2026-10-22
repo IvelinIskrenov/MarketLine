@@ -122,6 +122,11 @@ namespace MarketLine.Services
             SaveState(state);
         }
 
+        public void Clear()
+        {
+            SaveState(new CartState());
+        }
+
         public int GetCount()
         {
             return LoadState().Lines.Sum(l => l.Quantity);
