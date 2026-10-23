@@ -16,24 +16,12 @@
                     <!-- LEFT SIDE -->
                     <ul class="navbar-nav align-items-center me-auto">
 
-                    <!-- Farmacy consult -->
                     <li class="nav-item d-flex align-items-center">
-                        <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">
+                        <a asp-controller="Item" asp-action="AdminControl" class="nav-link">
                             <button class="btn btn-login shadow-sm">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Консултация с фармацевт
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Продукти
                             </button>
                         </a>
-                    </li>
-                    <!-- Massage -->
-                    <li class="nav-item d-flex align-items-center">
-                        <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">
-                            <button class="btn btn-login shadow-sm">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Масажи
-                            </button>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="admin-control" asp-controller="Item" asp-action="AdminControl"> Продукти</a>
                     </li>
                     @if (User.Identity?.IsAuthenticated == true && User.IsInRole("admin"))
                     {
