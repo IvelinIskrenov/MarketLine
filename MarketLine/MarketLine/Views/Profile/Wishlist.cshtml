@@ -1,0 +1,59 @@
+@model List<MarketLine.Models.Item>
+@{
+    ViewData["Title"] = "Любими";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="mb-4 text-center">Моят профил</h1>
+            <partial name="_ProfileNav" />
+
+            @if (Model.Count == 0)
+            {
+                <div class="alert alert-warning text-center" role="alert">Нямате любими продукти.</div>
+            }
+            else
+            {
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Продукт</th>
+                            <th>Цена</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        @if (!string.IsNullOrEmpty(item.imageUrl))
+                                        {
+                                            <img src="@item.imageUrl" alt="@item.name" style="width: 70px; height: 70px; object-fit: cover;" class="me-3 rounded" />
+                                        }
+                                        <a asp-controller="Item" asp-action="Details" asp-route-id="@item.id" class="text-decoration-none text-dark">
+                                            @item.name
+                                        </a>
+                                    </div>
+                                </td>
+                                <td>@item.DiscountedPrice.ToString("C2")</td>
+                                <td>
+                                    <form asp-controller="Cart" asp-action="Add" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@item.id" />
+                                        <button type="submit" class="btn btn-custom-green btn-sm">Add to Cart</button>
+                                    </form>
+                                    <form asp-action="ToggleWishlist" method="post" class="d-inline">
+                                        <input type="hidden" name="itemId" value="@item.id" />
+                                        <button type="submit" class="btn btn-link text-danger p-0">Премахни</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
