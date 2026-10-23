@@ -35,7 +35,7 @@
                     <li>
                         <a class="admin-control" asp-controller="Item" asp-action="AdminControl"> Продукти</a>
                     </li>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("admin"))
                     {
                         <li>
                             <a class="user-control" asp-controller="User" asp-action="Index">Потребители</a>
@@ -46,22 +46,40 @@
                 <!-- RIGHT SIDE -->
                 <ul class="navbar-nav align-items-center">
 
-                    <!-- Login -->
-                    <!-- Register -->
-                    <li class="nav-item d-flex align-items-center">
-                        <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">
-                            <button class="btn btn-login shadow-sm">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Вход
-                            </button>
-                        </a>
-                    </li>
-                    <li class="nav-item d-flex align-items-center">
-                        <a asp-area="Identity" asp-page="/Account/Login" class="nav-link">
-                            <button class="btn btn-login shadow-sm">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Регистрация
-                            </button>
-                        </a>
-                    </li>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li class="nav-item d-flex align-items-center">
+                            <a asp-controller="Profile" asp-action="Index" class="nav-link">
+                                <button class="btn btn-login shadow-sm">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Профил
+                                </button>
+                            </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="nav-link mb-0">
+                                <button type="submit" class="btn btn-login shadow-sm">
+                                    Изход
+                                </button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item d-flex align-items-center">
+                            <a asp-controller="Account" asp-action="Login" class="nav-link">
+                                <button class="btn btn-login shadow-sm">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Вход
+                                </button>
+                            </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a asp-controller="Account" asp-action="Register" class="nav-link">
+                                <button class="btn btn-login shadow-sm">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Регистрация
+                                </button>
+                            </a>
+                        </li>
+                    }
 
                 </ul>
             </div>
@@ -101,7 +119,7 @@
                         <li>
                             <a class="admin-control" asp-controller="Item" asp-action="AdminControl"> Продукти</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("admin"))
                         {
                             <li>
                                 <a class="user-control" asp-controller="User" asp-action="Index">Потребители</a>

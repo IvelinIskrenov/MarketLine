@@ -1,0 +1,13 @@
+@model int
+@{
+    var ids = ViewBag.WishlistItemIds as HashSet<int> ?? new HashSet<int>();
+    var isFavorite = ids.Contains(Model);
+}
+
+<form asp-controller="Profile" asp-action="ToggleWishlist" method="post" class="d-inline">
+    <input type="hidden" name="itemId" value="@Model" />
+    <input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
+    <button type="submit" class="btn btn-link p-0">
+        @(isFavorite ? "Премахни от любими" : "Добави в любими")
+    </button>
+</form>

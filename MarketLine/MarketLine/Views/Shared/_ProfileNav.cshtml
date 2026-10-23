@@ -1,0 +1,10 @@
+@{
+    string Css(string name) => ViewBag.ProfileSection as string == name ? "btn-success" : "btn-outline-secondary";
+}
+
+<div class="text-center mb-4">
+    <a asp-controller="Profile" asp-action="Index" class="btn @Css("Profile") btn-sm mb-1">Лични данни</a>
+    <a asp-controller="Profile" asp-action="Addresses" class="btn @Css("Addresses") btn-sm mb-1">Адреси</a>
+    <a asp-controller="Profile" asp-action="Orders" class="btn @Css("Orders") btn-sm mb-1">Поръчки</a>
+    <a asp-controller="Profile" asp-action="Wishlist" class="btn @Css("Wishlist") btn-sm mb-1">Любими</a>
+</div>

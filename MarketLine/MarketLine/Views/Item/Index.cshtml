@@ -63,6 +63,9 @@
                                         Add to Cart
                                     </button>
                                 </form>
+                                <div class="mt-2">
+                                    @await Html.PartialAsync("_WishlistButton", item.id)
+                                </div>
                             </div>
                         </div>
                     </div>

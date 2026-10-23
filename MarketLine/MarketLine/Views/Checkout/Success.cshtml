@@ -1,4 +1,4 @@
-@model MarketLine.Models.PlacedOrder
+@model MarketLine.Models.Order
 @{
     ViewData["Title"] = "Успешна поръчка";
 }
@@ -13,14 +13,15 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
                     <h1 class="h3 mb-3 text-center">Благодарим ви!</h1>
-                    <p class="text-center mb-4">Номер на поръчка: <strong>@Model.OrderNumber</strong></p>
+                    <p class="text-center mb-2">Номер на поръчка: <strong>@Model.OrderNumber</strong></p>
+                    <p class="text-center mb-4">Статус: <span class="badge bg-success">@Model.Status</span></p>
 
                     <h5 class="mb-3">Данни за доставка</h5>
-                    <p class="mb-1">@Model.Customer.FirstName @Model.Customer.LastName</p>
-                    <p class="mb-1">@Model.Customer.Address, @Model.Customer.PostalCode @Model.Customer.City</p>
-                    <p class="mb-1">@Model.Customer.Phone · @Model.Customer.Email</p>
-                    <p class="mb-1">@Model.Customer.Courier · @Model.Customer.DeliveryMethod</p>
-                    <p class="mb-3">Плащане: @Model.Customer.PaymentMethod</p>
+                    <p class="mb-1">@Model.FirstName @Model.LastName</p>
+                    <p class="mb-1">@Model.Address, @Model.PostalCode @Model.City</p>
+                    <p class="mb-1">@Model.Phone · @Model.Email</p>
+                    <p class="mb-1">@Model.Courier · @Model.DeliveryMethod</p>
+                    <p class="mb-3">Плащане: @Model.PaymentMethod</p>
 
                     <table class="table align-middle">
                         <thead>
@@ -48,6 +49,10 @@
                     </div>
 
                     <div class="text-center mt-4">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a asp-controller="Profile" asp-action="Order" asp-route-orderNumber="@Model.OrderNumber" class="btn btn-success me-2">Проследи поръчката</a>
+                        }
                         <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">Към продуктите</a>
                     </div>
                 </div>

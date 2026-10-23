@@ -6,7 +6,6 @@ namespace MarketLine.Services
     {
         void SaveDraft(CheckoutForm form);
         CheckoutForm? GetDraft();
-        PlacedOrder PlaceOrder(CheckoutForm form, CartViewModel cart);
-        PlacedOrder? GetOrder(string orderNumber);
+        void ClearDraft();
     }
 }
