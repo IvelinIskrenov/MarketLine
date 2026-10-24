@@ -74,6 +74,7 @@ builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IWishlistService, WishlistService>();
+builder.Services.AddScoped<IShopAdminService, ShopAdminService>();
 
 var app = builder.Build();
 
@@ -163,6 +164,11 @@ if (useInMemory)
     }
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    ShopSeed.EnsureAsync(scope.ServiceProvider).GetAwaiter().GetResult();
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -170,12 +176,19 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "site-page",
+    pattern: "{key}",
+    defaults: new { controller = "Home", action = "Page" },
+    constraints: new { key = "about|contacts|obshti-uslovia|dostavka-i-plashtane|zashtita-na-lichnite-danni" });
 
 app.MapControllerRoute(
     name: "default",

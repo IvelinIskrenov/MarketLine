@@ -1,6 +1,7 @@
 ﻿@model MarketLine.Models.Item 
 @{
     ViewData["Title"] = "Create";
+    Layout = "_AdminLayout";
 }
 <div class="container mt-4">
     <div class="row justify-content-center">
@@ -64,8 +65,8 @@
                             <button type="submit" class="btn btn-success btn-lg">
                                 <i class="bi bi-check-circle-fill me-2"></i> Create
                             </button>
-                            <a asp-action="Index" class="btn btn-outline-secondary">
-                                Back to list
+                            <a asp-action="AdminControl" class="btn btn-outline-secondary">
+                                Назад към продуктите
                             </a>
                         </div>
                     </form>

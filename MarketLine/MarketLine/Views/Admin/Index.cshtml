@@ -1,0 +1,68 @@
+@model MarketLine.Services.AdminStats
+@{
+    ViewData["Title"] = "Админ панел";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Административен панел</h1>
+    <partial name="_AdminNav" />
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Поръчки</h6>
+                    <p class="display-6 mb-0">@Model.OrderCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Оборот</h6>
+                    <p class="display-6 mb-0">@Model.Turnover.ToString("C2")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Средна стойност</h6>
+                    <p class="display-6 mb-0">@Model.AverageOrder.ToString("C2")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="mb-3">Най-продавани продукти</h5>
+            @if (Model.TopProducts.Count == 0)
+            {
+                <p class="text-muted mb-0">Все още няма продажби.</p>
+            }
+            else
+            {
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Продукт</th>
+                            <th>Количество</th>
+                            <th>Оборот</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model.TopProducts)
+                        {
+                            <tr>
+                                <td>@product.Name</td>
+                                <td>@product.Quantity</td>
+                                <td>@product.Total.ToString("C2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

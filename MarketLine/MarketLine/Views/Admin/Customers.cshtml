@@ -1,0 +1,31 @@
+@model List<MarketLine.Models.User>
+@{
+    ViewData["Title"] = "Клиенти";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Клиенти</h1>
+    <partial name="_AdminNav" />
+
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Име</th>
+                <th>Имейл</th>
+                <th>Телефон</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FirstName @user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>@(user.PhoneNumber ?? "-")</td>
+                    <td><a asp-action="Customer" asp-route-id="@user.Id">Профил</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

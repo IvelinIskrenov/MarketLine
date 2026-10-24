@@ -17,16 +17,18 @@
                     <ul class="navbar-nav align-items-center me-auto">
 
                     <li class="nav-item d-flex align-items-center">
-                        <a asp-controller="Item" asp-action="AdminControl" class="nav-link">
+                        <a asp-controller="Item" asp-action="Index" class="nav-link">
                             <button class="btn btn-login shadow-sm">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Продукти
+                                Продукти
                             </button>
                         </a>
                     </li>
-                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("admin"))
+                    @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("Admin") || User.IsInRole("admin")))
                     {
-                        <li>
-                            <a class="user-control" asp-controller="User" asp-action="Index">Потребители</a>
+                        <li class="nav-item d-flex align-items-center">
+                            <a asp-controller="Admin" asp-action="Index" class="nav-link">
+                                <button class="btn btn-login shadow-sm">Админ панел</button>
+                            </a>
                         </li>
                     }
                 </ul>
@@ -99,20 +101,12 @@
                             </div>
                         </li>
                         <!-- 3. MESSAGE TEXT -->
-                        <li class="nav-item ms-3">
-                            <div class="navbar-text text-muted">
-                                Безплатна доставка над 100 лв.
-                            </div>
+                        <li class="nav-item ms-3 d-flex align-items-center">
+                            <span class="btn btn-custom-green">Безплатна доставка над 100 лв.</span>
                         </li>
-                        <li>
-                            <a class="admin-control" asp-controller="Item" asp-action="AdminControl"> Продукти</a>
+                        <li class="nav-item d-flex align-items-center ms-3">
+                            <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">Продукти</a>
                         </li>
-                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("admin"))
-                        {
-                            <li>
-                                <a class="user-control" asp-controller="User" asp-action="Index">Потребители</a>
-                            </li>
-                        }
                     </ul>
 
                     <!-- RIGHT SIDE -->

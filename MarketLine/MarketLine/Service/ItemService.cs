@@ -20,24 +20,24 @@ namespace MarketLine.Services
 
         public async Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category)
         {
-            var itemsQuery = _context.Items.Include(i => i.category).AsQueryable();
+            var itemsQuery = _context.Items
+                .Include(i => i.category)
+                .ThenInclude(c => c!.Parent)
+                .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
-            {
-                itemsQuery = itemsQuery.Where(i => i.category.Name == category); // fixed add .Name
-            }
+            itemsQuery = ApplyCategoryFilter(itemsQuery, category);
 
             return await itemsQuery.ToListAsync();
         }
 
         public async Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category, string? searchTerm)
         {
-            var itemsQuery = _context.Items.Include(i => i.category).AsQueryable();
+            var itemsQuery = _context.Items
+                .Include(i => i.category)
+                .ThenInclude(c => c!.Parent)
+                .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(category) && !category.Equals("All", StringComparison.OrdinalIgnoreCase))
-            {
-                itemsQuery = itemsQuery.Where(i => i.category.Name == category);// fixed add .Name
-            }
+            itemsQuery = ApplyCategoryFilter(itemsQuery, category);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -84,6 +84,18 @@ namespace MarketLine.Services
         public bool ItemExists(int id)
         {
             return _context.Items.Any(e => e.id == id);
+        }
+
+        private static IQueryable<Item> ApplyCategoryFilter(IQueryable<Item> itemsQuery, string? category)
+        {
+            if (string.IsNullOrWhiteSpace(category) || category.Equals("All", StringComparison.OrdinalIgnoreCase))
+            {
+                return itemsQuery;
+            }
+
+            return itemsQuery.Where(i =>
+                i.category != null &&
+                (i.category.Name == category || (i.category.Parent != null && i.category.Parent.Name == category)));
         }
     }
 }

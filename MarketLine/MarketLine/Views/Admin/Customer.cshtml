@@ -1,0 +1,47 @@
+@model MarketLine.Services.AdminCustomer
+@{
+    ViewData["Title"] = "Клиент";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Клиентски профил</h1>
+    <partial name="_AdminNav" />
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <p><strong>Име:</strong> @Model.User.FirstName @Model.User.LastName</p>
+            <p><strong>Имейл:</strong> @Model.User.Email</p>
+            <p class="mb-0"><strong>Телефон:</strong> @(Model.User.PhoneNumber ?? "-")</p>
+        </div>
+    </div>
+
+    <h5 class="mb-3">Поръчки</h5>
+    @if (Model.Orders.Count == 0)
+    {
+        <p class="text-muted">Няма поръчки.</p>
+    }
+    else
+    {
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                    <th>Сума</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Orders)
+                {
+                    <tr>
+                        <td><a asp-action="Order" asp-route-id="@order.Id">@order.OrderNumber</a></td>
+                        <td>@order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@order.Status</td>
+                        <td>@order.Total.ToString("C2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

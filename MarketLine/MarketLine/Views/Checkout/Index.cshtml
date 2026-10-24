@@ -65,8 +65,18 @@
                             <label asp-for="Courier" class="form-label"></label>
                             <select asp-for="Courier" class="form-select">
                                 <option value="">Изберете куриер</option>
-                                <option value="Спиди">Спиди</option>
-                                <option value="Еконт">Еконт</option>
+                                @if (ViewBag.Couriers is IEnumerable<MarketLine.Models.Courier> couriers && couriers.Any())
+                                {
+                                    foreach (var courier in couriers)
+                                    {
+                                        <option value="@courier.Name">@courier.Name — @courier.Price.ToString("C2")</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="Спиди">Спиди</option>
+                                    <option value="Еконт">Еконт</option>
+                                }
                             </select>
                             <span asp-validation-for="Courier" class="text-danger"></span>
                         </div>

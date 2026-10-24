@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using MarketLine.Data;
 
 namespace MarketLine.ViewComponents
-
 {
     public class CategoryMenuViewComponent : ViewComponent
     {

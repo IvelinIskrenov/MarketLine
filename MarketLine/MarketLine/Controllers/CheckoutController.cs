@@ -11,6 +11,7 @@ namespace MarketLine.Controllers
         private readonly ICheckoutService _checkoutService;
         private readonly IOrderService _orderService;
         private readonly IAddressService _addressService;
+        private readonly IShopAdminService _admin;
         private readonly UserManager<User> _userManager;
 
         public CheckoutController(
@@ -18,12 +19,14 @@ namespace MarketLine.Controllers
             ICheckoutService checkoutService,
             IOrderService orderService,
             IAddressService addressService,
+            IShopAdminService admin,
             UserManager<User> userManager)
         {
             _cartService = cartService;
             _checkoutService = checkoutService;
             _orderService = orderService;
             _addressService = addressService;
+            _admin = admin;
             _userManager = userManager;
         }
 
@@ -40,6 +43,7 @@ namespace MarketLine.Controllers
             }
 
             var form = _checkoutService.GetDraft() ?? await CreatePrefillAsync();
+            await FillCouriersAsync();
             return View(form);
         }
 
@@ -58,6 +62,7 @@ namespace MarketLine.Controllers
 
             if (!ModelState.IsValid)
             {
+                await FillCouriersAsync();
                 return View(model);
             }
 
@@ -78,6 +83,7 @@ namespace MarketLine.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            await ApplyCourierShippingAsync(cart, draft.Courier);
             return View(new CheckoutReviewViewModel
             {
                 Customer = draft,
@@ -100,6 +106,7 @@ namespace MarketLine.Controllers
             }
 
             var userId = _userManager.GetUserId(User);
+            await ApplyCourierShippingAsync(cart, draft.Courier);
             var order = await _orderService.PlaceAsync(draft, cart, userId);
             _checkoutService.ClearDraft();
             _cartService.Clear();
@@ -146,6 +153,21 @@ namespace MarketLine.Controllers
             }
 
             return form;
+        }
+
+        private async Task FillCouriersAsync()
+        {
+            ViewBag.Couriers = await _admin.GetCouriersAsync(true);
+        }
+
+        private async Task ApplyCourierShippingAsync(CartViewModel cart, string courierName)
+        {
+            var settings = await _admin.GetShippingAsync();
+            var courier = (await _admin.GetCouriersAsync(true))
+                .FirstOrDefault(c => c.Name == courierName);
+            var price = courier?.Price ?? settings.DefaultPrice;
+            cart.Shipping = cart.SubTotal >= settings.FreeOver ? 0m : price;
+            cart.Total = Math.Max(0, cart.SubTotal - cart.PromoDiscount + cart.Shipping);
         }
     }
 }

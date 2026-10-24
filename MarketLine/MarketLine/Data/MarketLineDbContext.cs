@@ -20,6 +20,14 @@ namespace MarketLine.Data
 
         public DbSet<WishlistItem> WishlistItems { get; set; }
 
+        public DbSet<PromoCode> PromoCodes { get; set; }
+
+        public DbSet<Courier> Couriers { get; set; }
+
+        public DbSet<ShippingSettings> ShippingSettings { get; set; }
+
+        public DbSet<SitePage> SitePages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Category>().HasData(
@@ -29,6 +37,40 @@ namespace MarketLine.Data
                 );
 
             base.OnModelCreating(builder);
+
+            builder.Entity<Category>()
+                .HasOne(c => c.Parent)
+                .WithMany(c => c.Children)
+                .HasForeignKey(c => c.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<PromoCode>()
+                .HasIndex(p => p.Code)
+                .IsUnique();
+
+            builder.Entity<PromoCode>()
+                .Property(p => p.Value)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Entity<PromoCode>()
+                .Property(p => p.MinSubTotal)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Entity<Courier>()
+                .Property(c => c.Price)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Entity<ShippingSettings>()
+                .Property(s => s.DefaultPrice)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Entity<ShippingSettings>()
+                .Property(s => s.FreeOver)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Entity<SitePage>()
+                .HasIndex(p => p.Key)
+                .IsUnique();
 
             builder.Entity<Address>()
                 .HasOne<User>()

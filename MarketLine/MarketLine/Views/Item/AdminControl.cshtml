@@ -1,43 +1,43 @@
 ﻿@model IEnumerable<MarketLine.Models.Item>
 @{
-    ViewData["Title"] = "Item list";
+    ViewData["Title"] = "Продукти";
+    Layout = "_AdminLayout";
 }
-<h1>Item List</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Add Item</a>
-</p>
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Управление на продукти</h1>
+    <partial name="_AdminNav" />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Stock quantity</th>
-            <th>Discount</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <p>
+        <a asp-action="Create" class="btn btn-success">Добави продукт</a>
+    </p>
+
+    <table class="table align-middle">
+        <thead>
             <tr>
-                <td>@item.id</td>
-                <td>@item.name</td>
-                <td>@(item.category?.Name)</td>
-                <td>@item.price</td>
-                <td>@item.stock_quantity</td>
-                <td>@item.discount</td>
-                
-                <td>
-                    <!--<a asp-action="Details" asp-route-id="item.Id">Details</a>-->
-                    
-                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-                </td>
+                <th>Име</th>
+                <th>Категория</th>
+                <th>Цена</th>
+                <th>Наличност</th>
+                <th>Отстъпка</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.name</td>
+                    <td>@(item.category?.Name)</td>
+                    <td>@item.price.ToString("C2")</td>
+                    <td>@item.stock_quantity</td>
+                    <td>@item.discount %</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.id">Редакция</a>
+                        <a asp-action="Delete" asp-route-id="@item.id" class="ms-2">Изтрий</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,17 @@
+@{
+    string Css(string name) => ViewBag.AdminSection as string == name ? "btn-success" : "btn-outline-secondary";
+}
+
+<div class="text-center mb-4">
+    <a asp-controller="Admin" asp-action="Index" class="btn @Css("Dashboard") btn-sm mb-1">Статистика</a>
+    <a asp-controller="Item" asp-action="AdminControl" class="btn @Css("Products") btn-sm mb-1">Продукти</a>
+    <a asp-controller="Admin" asp-action="Categories" class="btn @Css("Categories") btn-sm mb-1">Категории</a>
+    <a asp-controller="Admin" asp-action="Orders" class="btn @Css("Orders") btn-sm mb-1">Поръчки</a>
+    <a asp-controller="Admin" asp-action="Inventory" class="btn @Css("Inventory") btn-sm mb-1">Наличности</a>
+    <a asp-controller="Admin" asp-action="Customers" class="btn @Css("Customers") btn-sm mb-1">Клиенти</a>
+    <a asp-controller="Admin" asp-action="Promotions" class="btn @Css("Promotions") btn-sm mb-1">Промоции</a>
+    <a asp-controller="Admin" asp-action="Shipping" class="btn @Css("Shipping") btn-sm mb-1">Доставки</a>
+    <a asp-controller="Admin" asp-action="Payments" class="btn @Css("Payments") btn-sm mb-1">Плащания</a>
+    <a asp-controller="Admin" asp-action="Content" class="btn @Css("Content") btn-sm mb-1">Съдържание</a>
+    <a asp-controller="User" asp-action="Index" class="btn @Css("Users") btn-sm mb-1">Потребители</a>
+</div>
