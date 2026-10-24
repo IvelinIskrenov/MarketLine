@@ -1,0 +1,61 @@
+@model List<MarketLine.Models.Category>
+@{
+    ViewData["Title"] = "Категории";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Категории</h1>
+    <partial name="_AdminNav" />
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form asp-action="AddCategory" method="post" class="row g-2 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label">Име</label>
+                    <input name="name" class="form-control" required />
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Родителска категория</label>
+                    <select name="parentId" class="form-select">
+                        <option value="">Основна категория</option>
+                        @foreach (var category in Model.Where(c => c.ParentId == null))
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100">Добави</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Категория</th>
+                <th>Тип</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <td>@(category.Parent != null ? $"{category.Parent.Name} / {category.Name}" : category.Name)</td>
+                    <td>@(category.ParentId == null ? "Основна" : "Подкатегория")</td>
+                    <td>
+                        @if (category.Id > 3)
+                        {
+                            <form asp-action="DeleteCategory" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@category.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Изтрий</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

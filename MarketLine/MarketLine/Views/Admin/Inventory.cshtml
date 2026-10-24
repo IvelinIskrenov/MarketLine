@@ -1,0 +1,54 @@
+@model IEnumerable<MarketLine.Models.Item>
+@{
+    ViewData["Title"] = "Наличности";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Наличности</h1>
+    <partial name="_AdminNav" />
+
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Продукт</th>
+                <th>Категория</th>
+                <th>Количество</th>
+                <th>Състояние</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.name</td>
+                    <td>@(item.category?.Name)</td>
+                    <td>
+                        <form asp-action="UpdateStock" method="post" class="d-flex gap-2">
+                            <input type="hidden" name="itemId" value="@item.id" />
+                            <input type="number" name="quantity" class="form-control form-control-sm" style="max-width:100px" value="@item.stock_quantity" min="0" />
+                            <button type="submit" class="btn btn-sm btn-success">Запази</button>
+                        </form>
+                    </td>
+                    <td>
+                        @if (item.stock_quantity <= 0)
+                        {
+                            <span class="badge bg-danger">Изчерпан</span>
+                        }
+                        else if (item.stock_quantity <= 5)
+                        {
+                            <span class="badge bg-warning text-dark">Ниска наличност</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">В наличност</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-controller="Item" asp-action="Edit" asp-route-id="@item.id">Редакция</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

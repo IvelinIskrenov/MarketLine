@@ -1,0 +1,77 @@
+@model List<MarketLine.Models.PromoCode>
+@{
+    ViewData["Title"] = "Промоции";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Промоции и купони</h1>
+    <partial name="_AdminNav" />
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form asp-action="AddPromo" method="post" class="row g-2 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label">Код</label>
+                    <input name="Code" class="form-control" required />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Стойност</label>
+                    <input name="Value" type="number" step="0.01" class="form-control" required />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Тип</label>
+                    <select name="IsPercent" class="form-select">
+                        <option value="true">Процент</option>
+                        <option value="false">Сума</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Мин. сума</label>
+                    <input name="MinSubTotal" type="number" step="0.01" class="form-control" value="0" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Край</label>
+                    <input name="EndsAt" type="date" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100">Добави</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Код</th>
+                <th>Отстъпка</th>
+                <th>Минимум</th>
+                <th>Период</th>
+                <th>Статус</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var promo in Model)
+            {
+                <tr>
+                    <td>@promo.Code</td>
+                    <td>@(promo.IsPercent ? $"{promo.Value}%" : promo.Value.ToString("C2"))</td>
+                    <td>@promo.MinSubTotal.ToString("C2")</td>
+                    <td>@(promo.EndsAt?.ToString("dd.MM.yyyy") ?? "Без срок")</td>
+                    <td>@(promo.IsActive ? "Активна" : "Спряна")</td>
+                    <td>
+                        <form asp-action="TogglePromo" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@promo.Id" />
+                            <button class="btn btn-sm btn-outline-secondary">@(promo.IsActive ? "Спри" : "Активирай")</button>
+                        </form>
+                        <form asp-action="DeletePromo" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@promo.Id" />
+                            <button class="btn btn-sm btn-outline-danger">Изтрий</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

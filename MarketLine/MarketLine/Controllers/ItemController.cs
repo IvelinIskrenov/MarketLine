@@ -1,6 +1,8 @@
 ﻿using MarketLine.Models;
 using MarketLine.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketLine.Controllers
@@ -18,9 +20,11 @@ namespace MarketLine.Controllers
         /// Loads the AdminControl page and returns the list of items 
         /// </summary>
         /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AdminControl()
         {
+            ViewBag.AdminSection = "Products";
             var items = await _itemService.GetAllItemsAsync();
             return View(items);
         }
@@ -51,11 +55,13 @@ namespace MarketLine.Controllers
         /// <summary>
         /// Loads the new item creation page and returns a list of all categories.
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var categories = await _itemService.GetAllCategoriesAsync(); 
-            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+            ViewBag.AdminSection = "Products";
+            var categories = await _itemService.GetAllCategoriesAsync();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View();
         }
 
@@ -67,19 +73,20 @@ namespace MarketLine.Controllers
         /// On validation failure, the category list is reloaded and the form is redisplayed with the entered data.
         /// </remarks>
         /// <returns>Redirect to Index on success or return the form on error.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("name,description,discount,price,imageUrl,CategoryId,stock_quantity")] Item item)
         {
-            //Create method item, add ViewBag.Categories for as long as we can access them
+            ViewBag.AdminSection = "Products";
             if (ModelState.IsValid)
             {
                 await _itemService.CreateItemAsync(item);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AdminControl));
             }
 
             var categories = await _itemService.GetAllCategoriesAsync();
-            ViewBag.Categories = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(categories, "Id", "Name");
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View(item);
         }
 
@@ -100,6 +107,7 @@ namespace MarketLine.Controllers
         /// <summary>
         /// Loads the edit form for an existing item.
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -108,19 +116,24 @@ namespace MarketLine.Controllers
             var item = await _itemService.GetByIdAsync(id.Value);
             if (item == null) return NotFound();
 
+            ViewBag.AdminSection = "Products";
+            var categories = await _itemService.GetAllCategoriesAsync();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name", item.CategoryId);
             return View(item);
         }
 
         /// <summary>
         /// Saves changes to the element with validation and concurrency checks.
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("id,name,description,discount,price,imageUrl,category,stock_quantity")] Item item)
+            [Bind("id,name,description,discount,price,imageUrl,CategoryId,stock_quantity")] Item item)
         {
             if (id != item.id) return NotFound();
 
+            ViewBag.AdminSection = "Products";
             if (ModelState.IsValid)
             {
                 try
@@ -138,14 +151,18 @@ namespace MarketLine.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AdminControl));
             }
+
+            var categories = await _itemService.GetAllCategoriesAsync();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name", item.CategoryId);
             return View(item);
         }
 
         /// <summary>
         /// Displays a deletion confirmation page.
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -154,12 +171,14 @@ namespace MarketLine.Controllers
             var item = await _itemService.GetByIdAsync(id.Value);
             if (item == null) return NotFound();
 
+            ViewBag.AdminSection = "Products";
             return View(item);
         }
 
         /// <summary>
         /// Deletes the item permanently and redirects to the admin panel.
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

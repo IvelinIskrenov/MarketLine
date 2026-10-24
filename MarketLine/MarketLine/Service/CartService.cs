@@ -105,9 +105,10 @@ namespace MarketLine.Services
                 return "Въведете промоционален код.";
             }
 
-            if (!TryGetPromoDiscount(code, cart.SubTotal, out _, out var error) && error != null)
+            var promoResult = await GetPromoDiscountAsync(code, cart.SubTotal);
+            if (promoResult.Error != null)
             {
-                return error;
+                return promoResult.Error;
             }
 
             state.PromoCode = code.Trim().ToUpperInvariant();
@@ -171,14 +172,17 @@ namespace MarketLine.Services
             SaveState(state);
 
             var subTotal = lines.Sum(l => l.LineTotal);
-            if (!TryGetPromoDiscount(state.PromoCode, subTotal, out var promoDiscount, out _) && !string.IsNullOrWhiteSpace(state.PromoCode))
+            var promoResult = await GetPromoDiscountAsync(state.PromoCode, subTotal);
+            var promoDiscount = promoResult.Discount;
+            if (promoResult.Error != null && !string.IsNullOrWhiteSpace(state.PromoCode))
             {
                 state.PromoCode = null;
                 promoDiscount = 0;
                 SaveState(state);
             }
-            var shipping = subTotal >= FreeShippingThreshold ? 0m : (lines.Count == 0 ? 0m : ShippingCost);
-            var remaining = subTotal >= FreeShippingThreshold ? 0m : FreeShippingThreshold - subTotal;
+            var settings = await GetShippingSettingsAsync();
+            var shipping = subTotal >= settings.FreeOver ? 0m : (lines.Count == 0 ? 0m : settings.DefaultPrice);
+            var remaining = subTotal >= settings.FreeOver ? 0m : settings.FreeOver - subTotal;
 
             return new CartViewModel
             {
@@ -188,38 +192,51 @@ namespace MarketLine.Services
                 PromoDiscount = promoDiscount,
                 Shipping = shipping,
                 Total = Math.Max(0, subTotal - promoDiscount + shipping),
-                FreeShippingThreshold = FreeShippingThreshold,
+                FreeShippingThreshold = settings.FreeOver,
                 RemainingForFreeShipping = remaining
             };
         }
 
-        private static bool TryGetPromoDiscount(string? code, decimal subTotal, out decimal discount, out string? error)
+        private async Task<(decimal Discount, string? Error)> GetPromoDiscountAsync(string? code, decimal subTotal)
         {
-            discount = 0;
-            error = null;
-
             if (string.IsNullOrWhiteSpace(code))
             {
-                return true;
+                return (0, null);
             }
 
-            switch (code.Trim().ToUpperInvariant())
+            var normalized = code.Trim().ToUpperInvariant();
+            var promo = await _context.PromoCodes.FirstOrDefaultAsync(p => p.Code == normalized);
+            if (promo == null || !promo.IsActive)
             {
-                case "WELCOME10":
-                    discount = Math.Round(subTotal * 0.10m, 2);
-                    return true;
-                case "SAVE5":
-                    if (subTotal < 5m)
-                    {
-                        error = "Код SAVE5 изисква поръчка над 5.00.";
-                        return false;
-                    }
-                    discount = 5m;
-                    return true;
-                default:
-                    error = "Невалиден промоционален код.";
-                    return false;
+                return (0, "Невалиден промоционален код.");
             }
+
+            var now = DateTime.Now;
+            if (promo.StartsAt.HasValue && now < promo.StartsAt.Value)
+            {
+                return (0, "Промоцията още не е активна.");
+            }
+
+            if (promo.EndsAt.HasValue && now > promo.EndsAt.Value)
+            {
+                return (0, "Промоцията е изтекла.");
+            }
+
+            if (subTotal < promo.MinSubTotal)
+            {
+                return (0, $"Код {promo.Code} изисква поръчка над {promo.MinSubTotal:0.00}.");
+            }
+
+            var discount = promo.IsPercent
+                ? Math.Round(subTotal * promo.Value / 100m, 2)
+                : promo.Value;
+            return (discount, null);
+        }
+
+        private async Task<ShippingSettings> GetShippingSettingsAsync()
+        {
+            var settings = await _context.ShippingSettings.FirstOrDefaultAsync();
+            return settings ?? new ShippingSettings { DefaultPrice = ShippingCost, FreeOver = FreeShippingThreshold };
         }
 
         private CartState LoadState()

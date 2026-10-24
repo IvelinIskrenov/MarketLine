@@ -9,6 +9,7 @@ namespace MarketLine.Models
         public const string Processing = "Обработва се";
         public const string Shipped = "Изпратена";
         public const string Delivered = "Доставена";
+        public const string Cancelled = "Отказана";
 
         public static readonly string[] Steps =
         {
@@ -16,6 +17,15 @@ namespace MarketLine.Models
             Processing,
             Shipped,
             Delivered
+        };
+
+        public static readonly string[] All =
+        {
+            Accepted,
+            Processing,
+            Shipped,
+            Delivered,
+            Cancelled
         };
 
         public static int IndexOf(string? status)
@@ -47,6 +57,11 @@ namespace MarketLine.Models
 
         [Required]
         public string Status { get; set; } = OrderStatuses.Accepted;
+
+        public bool StatusManagedByAdmin { get; set; }
+
+        [Required]
+        public string PaymentStatus { get; set; } = PaymentStatuses.Pending;
 
         [Required]
         public string FirstName { get; set; } = string.Empty;
@@ -89,6 +104,20 @@ namespace MarketLine.Models
         public decimal Total { get; set; }
 
         public List<OrderLine> Lines { get; set; } = new();
+    }
+
+    public static class PaymentStatuses
+    {
+        public const string Pending = "Очаква плащане";
+        public const string Paid = "Платена";
+        public const string Refunded = "Възстановена";
+
+        public static readonly string[] All =
+        {
+            Pending,
+            Paid,
+            Refunded
+        };
     }
 
     public class OrderLine

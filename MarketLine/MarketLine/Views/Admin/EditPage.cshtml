@@ -1,0 +1,32 @@
+@model MarketLine.Models.SitePage
+@{
+    ViewData["Title"] = "Редакция на страница";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Редакция на съдържание</h1>
+    <partial name="_AdminNav" />
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <form asp-action="EditPage" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Key" />
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Body" class="form-label"></label>
+                    <textarea asp-for="Body" class="form-control" rows="8"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ImageUrl" class="form-label"></label>
+                    <input asp-for="ImageUrl" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-success">Запази</button>
+                <a asp-action="Content" class="btn btn-outline-secondary">Назад</a>
+            </form>
+        </div>
+    </div>
+</div>

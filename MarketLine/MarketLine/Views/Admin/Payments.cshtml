@@ -1,0 +1,46 @@
+@model List<MarketLine.Models.Order>
+@{
+    ViewData["Title"] = "Плащания";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Плащания</h1>
+    <partial name="_AdminNav" />
+
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Поръчка</th>
+                <th>Клиент</th>
+                <th>Метод</th>
+                <th>Сума</th>
+                <th>Статус</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td><a asp-action="Order" asp-route-id="@order.Id">@order.OrderNumber</a></td>
+                    <td>@order.FirstName @order.LastName</td>
+                    <td>@order.PaymentMethod</td>
+                    <td>@order.Total.ToString("C2")</td>
+                    <td>@order.PaymentStatus</td>
+                    <td>
+                        <form asp-action="SetPaymentStatus" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@order.Id" />
+                            <input type="hidden" name="paymentStatus" value="@MarketLine.Models.PaymentStatuses.Paid" />
+                            <button class="btn btn-sm btn-success" @(order.PaymentStatus == MarketLine.Models.PaymentStatuses.Paid ? "disabled" : null)>Платена</button>
+                        </form>
+                        <form asp-action="SetPaymentStatus" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@order.Id" />
+                            <input type="hidden" name="paymentStatus" value="@MarketLine.Models.PaymentStatuses.Refunded" />
+                            <button class="btn btn-sm btn-outline-danger" @(order.PaymentStatus == MarketLine.Models.PaymentStatuses.Refunded ? "disabled" : null)>Възстанови</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

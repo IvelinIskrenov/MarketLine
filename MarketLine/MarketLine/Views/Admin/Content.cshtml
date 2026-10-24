@@ -1,0 +1,35 @@
+@model List<MarketLine.Models.SitePage>
+@{
+    ViewData["Title"] = "Съдържание";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Съдържание на сайта</h1>
+    <partial name="_AdminNav" />
+
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Страница</th>
+                <th>Ключ</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sitePage in Model)
+            {
+                <tr>
+                    <td>@sitePage.Title</td>
+                    <td>@sitePage.Key</td>
+                    <td>
+                        <a asp-action="EditPage" asp-route-key="@sitePage.Key">Редакция</a>
+                        @if (sitePage.Key != "home")
+                        {
+                            <a asp-controller="Home" asp-action="Page" asp-route-key="@sitePage.Key" class="ms-2">Преглед</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
