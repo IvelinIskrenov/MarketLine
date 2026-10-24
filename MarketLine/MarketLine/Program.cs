@@ -1,10 +1,14 @@
+using System.Threading.RateLimiting;
 using MarketLine.Data;
 using MarketLine.Filters;
 using MarketLine.Models;
+using MarketLine.Security;
 using MarketLine.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,29 +38,75 @@ builder.Services.AddDbContext<MarketLineDbContext>(options =>
 {
     if (useInMemory)
     {
-        options.UseInMemoryDatabase("MarketLineDemo");
+        var inMemoryName = builder.Configuration["InMemoryDatabaseName"] ?? "MarketLineDemo";
+        options.UseInMemoryDatabase(inMemoryName);
     }
     else
     {
         options.UseSqlServer(connectionString);
+        options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
 });
 
-builder.Services.AddDefaultIdentity<User>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
+    options.User.RequireUniqueEmail = true;
+    options.Lockout.AllowedForNewUsers = true;
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 })
-.AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<MarketLineDbContext>();
+.AddEntityFrameworkStores<MarketLineDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.Configure<PasswordHasherOptions>(options =>
+{
+    options.IterationCount = 100_000;
+});
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(1);
+});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.LogoutPath = "/Account/Logout";
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.SlidingExpiration = true;
+    options.Cookie.Name = ".MarketLine.Auth";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+});
+
+var loginPermitLimit = builder.Configuration.GetValue("Security:LoginPermitLimit", 5);
+var loginWindowSeconds = builder.Configuration.GetValue("Security:LoginWindowSeconds", 60);
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.ContentType = "text/plain; charset=utf-8";
+        await context.HttpContext.Response.WriteAsync(AuthMessages.LoginRateLimited, token);
+    };
+    options.AddPolicy("login", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = Math.Max(1, loginPermitLimit),
+                Window = TimeSpan.FromSeconds(Math.Max(1, loginWindowSeconds)),
+                QueueLimit = 0
+            }));
 });
 
 builder.Services.AddHttpContextAccessor();
@@ -64,8 +114,11 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(2);
+    options.Cookie.Name = ".MarketLine.Session";
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
 
 builder.Services.AddScoped<IItemService, ItemService>();
@@ -178,6 +231,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseRateLimiter();
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -195,6 +249,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-app.MapRazorPages();
-
 app.Run();
+
+public partial class Program;
