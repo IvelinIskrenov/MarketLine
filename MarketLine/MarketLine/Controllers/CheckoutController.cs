@@ -110,6 +110,7 @@ namespace MarketLine.Controllers
             var order = await _orderService.PlaceAsync(draft, cart, userId);
             _checkoutService.ClearDraft();
             _cartService.Clear();
+            HttpContext.Session.SetString("LastOrderNumber", order.OrderNumber);
             return RedirectToAction(nameof(Success), new { orderNumber = order.OrderNumber });
         }
 
@@ -119,13 +120,35 @@ namespace MarketLine.Controllers
         [HttpGet]
         public async Task<IActionResult> Success(string orderNumber)
         {
-            var order = await _orderService.GetByNumberAsync(orderNumber);
+            var order = await FindAccessibleOrderAsync(orderNumber);
             if (order == null)
             {
                 return RedirectToAction("Index", "Item");
             }
 
             return View(order);
+        }
+
+        private async Task<Order?> FindAccessibleOrderAsync(string? orderNumber)
+        {
+            if (string.IsNullOrWhiteSpace(orderNumber))
+            {
+                return null;
+            }
+
+            var userId = _userManager.GetUserId(User);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                return await _orderService.GetByNumberAsync(orderNumber, userId);
+            }
+
+            var lastOrder = HttpContext.Session.GetString("LastOrderNumber");
+            if (!string.Equals(lastOrder, orderNumber, StringComparison.Ordinal))
+            {
+                return null;
+            }
+
+            return await _orderService.GetByNumberAsync(orderNumber);
         }
 
         private async Task<CheckoutForm> CreatePrefillAsync()

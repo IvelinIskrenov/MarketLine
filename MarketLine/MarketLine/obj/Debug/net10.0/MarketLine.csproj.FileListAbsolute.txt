@@ -822,3 +822,4 @@ C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\De
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\MarketLine.pdb
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\MarketLine.genruntimeconfig.cache
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\obj\Debug\net10.0\ref\MarketLine.dll
+C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine\bin\Debug\net10.0\appsettings.Testing.json

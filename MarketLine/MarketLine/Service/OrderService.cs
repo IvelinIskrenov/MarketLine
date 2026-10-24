@@ -132,10 +132,9 @@ namespace MarketLine.Services
                 .Include(o => o.Lines)
                 .Where(o => o.OrderNumber == orderNumber);
 
-            if (userId != null)
-            {
-                query = query.Where(o => o.UserId == userId);
-            }
+            query = userId == null
+                ? query.Where(o => o.UserId == null)
+                : query.Where(o => o.UserId == userId);
 
             var order = await query.FirstOrDefaultAsync();
             if (order == null) return null;
