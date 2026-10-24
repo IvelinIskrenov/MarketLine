@@ -109,6 +109,24 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MarketLine", policy =>
+    {
+        if (allowedOrigins.Length == 0)
+        {
+            policy.SetIsOriginAllowed(_ => false);
+            return;
+        }
+
+        policy.WithOrigins(allowedOrigins)
+            .WithHeaders("Accept", "Content-Type")
+            .WithMethods("GET", "POST")
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -231,6 +249,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("MarketLine");
 app.UseRateLimiter();
 app.UseSession();
 app.UseAuthentication();

@@ -1,7 +1,8 @@
+using System.Text.Json;
 using MarketLine.Data;
 using MarketLine.Models;
+using MarketLine.Security;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 
 namespace MarketLine.Services
 {
@@ -29,7 +30,15 @@ namespace MarketLine.Services
 
         public async Task<string?> AddAsync(int itemId, int quantity = 1)
         {
-            if (quantity < 1) quantity = 1;
+            if (itemId <= 0)
+            {
+                return "Невалиден продукт.";
+            }
+
+            if (quantity < 1 || quantity > InputLimits.QuantityMax)
+            {
+                return "Невалидно количество.";
+            }
 
             var item = await _context.Items.FirstOrDefaultAsync(i => i.id == itemId);
             if (item == null) return "Продуктът не е намерен.";
@@ -67,6 +76,16 @@ namespace MarketLine.Services
 
         public async Task<string?> UpdateQuantityAsync(int itemId, int quantity)
         {
+            if (itemId <= 0)
+            {
+                return "Невалиден продукт.";
+            }
+
+            if (quantity > InputLimits.QuantityMax)
+            {
+                return "Невалидно количество.";
+            }
+
             if (quantity < 1)
             {
                 await RemoveAsync(itemId);
@@ -100,7 +119,7 @@ namespace MarketLine.Services
             var state = LoadState();
             var cart = await BuildCartAsync(state);
 
-            if (string.IsNullOrWhiteSpace(code))
+            if (string.IsNullOrWhiteSpace(code) || code.Length > InputLimits.Promo)
             {
                 return "Въведете промоционален код.";
             }

@@ -7,12 +7,14 @@ namespace MarketLine.Models
         public int Id { get; set; }
 
         [Required]
+        [StringLength(30)]
         [Display(Name = "Код")]
         public string Code { get; set; } = string.Empty;
 
         [Display(Name = "Процентна отстъпка")]
         public bool IsPercent { get; set; }
 
+        [Range(0, 100000)]
         [Display(Name = "Стойност")]
         public decimal Value { get; set; }
 

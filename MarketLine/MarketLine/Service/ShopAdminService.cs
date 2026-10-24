@@ -1,5 +1,6 @@
 using MarketLine.Data;
 using MarketLine.Models;
+using MarketLine.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketLine.Services
@@ -24,11 +25,17 @@ namespace MarketLine.Services
 
         public async Task AddCategoryAsync(string name, int? parentId)
         {
-            if (string.IsNullOrWhiteSpace(name)) return;
+            name = name.Trim();
+            if (name.Length is 0 or > InputLimits.Category) return;
+
+            if (parentId is <= 0)
+            {
+                parentId = null;
+            }
 
             _context.Categories.Add(new Category
             {
-                Name = name.Trim(),
+                Name = name,
                 ParentId = parentId
             });
             await _context.SaveChangesAsync();
@@ -55,6 +62,11 @@ namespace MarketLine.Services
 
         public async Task AddPromoAsync(PromoCode promo)
         {
+            if (string.IsNullOrWhiteSpace(promo.Code) || promo.Code.Length > InputLimits.Promo || promo.Value < 0)
+            {
+                return;
+            }
+
             promo.Code = promo.Code.Trim().ToUpperInvariant();
             _context.PromoCodes.Add(promo);
             await _context.SaveChangesAsync();
@@ -156,7 +168,7 @@ namespace MarketLine.Services
         {
             var item = await _context.Items.FindAsync(itemId);
             if (item == null) return;
-            item.stock_quantity = Math.Max(0, quantity);
+            item.stock_quantity = Math.Clamp(quantity, 0, InputLimits.StockMax);
             await _context.SaveChangesAsync();
         }
 

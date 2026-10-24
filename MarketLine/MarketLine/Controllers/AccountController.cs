@@ -79,7 +79,7 @@ namespace MarketLine.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([Bind("FirstName,LastName,Email,Phone,Password,ConfirmPassword")] RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -90,9 +90,10 @@ namespace MarketLine.Controllers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                PhoneNumber = model.Phone,
+                FirstName = model.FirstName.Trim(),
+                LastName = model.LastName.Trim(),
+                PhoneNumber = string.IsNullOrWhiteSpace(model.Phone) ? null : model.Phone.Trim(),
+                IsAdmin = false,
                 RegistrationDate = DateTime.Now
             };
 

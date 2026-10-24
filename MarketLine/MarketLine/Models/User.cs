@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace MarketLine.Models
 {
@@ -16,5 +17,14 @@ namespace MarketLine.Models
         public bool IsAdmin { get; set; } = false;
 
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
+
+        [JsonIgnore]
+        public override string? PasswordHash { get; set; }
+
+        [JsonIgnore]
+        public override string? SecurityStamp { get; set; }
+
+        [JsonIgnore]
+        public override string? ConcurrencyStamp { get; set; }
     }
 }
