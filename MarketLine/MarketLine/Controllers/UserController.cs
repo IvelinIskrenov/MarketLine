@@ -81,22 +81,31 @@ namespace MarketLine.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound();
 
-            // Update personal information
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
+            user.FirstName = model.FirstName.Trim();
+            user.LastName = model.LastName.Trim();
 
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)
             {
-                ModelState.AddModelError("", "Error: updating the user");
+                ModelState.AddModelError("", "Потребителят не може да бъде обновен.");
                 return View(model);
             }
+
+            var allowedRoles = _roleManager.Roles
+                .Select(role => role.Name)
+                .Where(name => !string.IsNullOrWhiteSpace(name))
+                .Select(name => name!)
+                .ToHashSet();
+            var requestedRoles = (model.UserRoles ?? new List<string>())
+                .Where(role => allowedRoles.Contains(role))
+                .Distinct()
+                .ToList();
 
             var currentRoles = await _userManager.GetRolesAsync(user);
 
             var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
-            var addResult = await _userManager.AddToRolesAsync(user, model.UserRoles ?? new List<string>());
+            var addResult = await _userManager.AddToRolesAsync(user, requestedRoles);
 
             if (!removeResult.Succeeded || !addResult.Succeeded)
             {

@@ -1,4 +1,5 @@
 ﻿using MarketLine.Models;
+using MarketLine.Security;
 using MarketLine.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,17 @@ namespace MarketLine.Controllers
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Index(string? category, string? searchTerm)
-        {   
+        {
+            if (category?.Length > InputLimits.Category)
+            {
+                category = category[..InputLimits.Category];
+            }
+
+            if (searchTerm?.Length > InputLimits.Search)
+            {
+                searchTerm = searchTerm[..InputLimits.Search];
+            }
+
             var items = await _itemService.GetFilteredItemsAsync(category, searchTerm);
 
             ViewData["CurrentCategory"] = category ?? "All";
@@ -79,6 +90,11 @@ namespace MarketLine.Controllers
         public async Task<IActionResult> Create([Bind("name,description,discount,price,imageUrl,CategoryId,stock_quantity")] Item item)
         {
             ViewBag.AdminSection = "Products";
+            if (ModelState.IsValid && !await CategoryExistsAsync(item.CategoryId))
+            {
+                ModelState.AddModelError(nameof(item.CategoryId), "Невалидна категория.");
+            }
+
             if (ModelState.IsValid)
             {
                 await _itemService.CreateItemAsync(item);
@@ -96,7 +112,7 @@ namespace MarketLine.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null) return NotFound();
+            if (id is null or <= 0) return NotFound();
 
             var item = await _itemService.GetByIdAsync(id.Value);
             if (item == null) return NotFound();
@@ -134,6 +150,11 @@ namespace MarketLine.Controllers
             if (id != item.id) return NotFound();
 
             ViewBag.AdminSection = "Products";
+            if (ModelState.IsValid && !await CategoryExistsAsync(item.CategoryId))
+            {
+                ModelState.AddModelError(nameof(item.CategoryId), "Невалидна категория.");
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -185,6 +206,17 @@ namespace MarketLine.Controllers
         {
             await _itemService.DeleteItemAsync(id);
             return RedirectToAction(nameof(AdminControl));
+        }
+
+        private async Task<bool> CategoryExistsAsync(int? categoryId)
+        {
+            if (categoryId is null or <= 0)
+            {
+                return false;
+            }
+
+            var categories = await _itemService.GetAllCategoriesAsync();
+            return categories.Any(category => category.Id == categoryId);
         }
     }
 }

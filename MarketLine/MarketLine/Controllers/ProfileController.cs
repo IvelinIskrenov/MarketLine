@@ -1,4 +1,5 @@
 using MarketLine.Models;
+using MarketLine.Security;
 using MarketLine.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -44,7 +45,7 @@ namespace MarketLine.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(ProfileForm model)
+        public async Task<IActionResult> Index([Bind("FirstName,LastName,Email,Phone")] ProfileForm model)
         {
             ViewBag.ProfileSection = "Profile";
             if (!ModelState.IsValid)
@@ -55,9 +56,9 @@ namespace MarketLine.Controllers
             var user = await GetCurrentUserAsync();
             if (user == null) return Challenge();
 
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.PhoneNumber = model.Phone;
+            user.FirstName = model.FirstName.Trim();
+            user.LastName = model.LastName.Trim();
+            user.PhoneNumber = string.IsNullOrWhiteSpace(model.Phone) ? null : model.Phone.Trim();
 
             if (!string.Equals(user.Email, model.Email, StringComparison.OrdinalIgnoreCase))
             {
@@ -73,11 +74,7 @@ namespace MarketLine.Controllers
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                }
-
+                ModelState.AddModelError(string.Empty, "Данните не могат да бъдат записани.");
                 return View(model);
             }
 
@@ -126,6 +123,7 @@ namespace MarketLine.Controllers
         {
             var user = await GetCurrentUserAsync();
             if (user == null) return Challenge();
+            if (id <= 0) return RedirectToAction(nameof(Addresses));
 
             await _addressService.SetDefaultAsync(user.Id, id);
             return RedirectToAction(nameof(Addresses));
@@ -137,6 +135,7 @@ namespace MarketLine.Controllers
         {
             var user = await GetCurrentUserAsync();
             if (user == null) return Challenge();
+            if (id <= 0) return RedirectToAction(nameof(Addresses));
 
             await _addressService.DeleteAsync(user.Id, id);
             TempData["ProfileMessage"] = "Адресът е премахнат.";
@@ -159,6 +158,11 @@ namespace MarketLine.Controllers
         {
             var user = await GetCurrentUserAsync();
             if (user == null) return Challenge();
+
+            if (string.IsNullOrWhiteSpace(orderNumber) || orderNumber.Length > InputLimits.OrderNumber)
+            {
+                return RedirectToAction(nameof(Orders));
+            }
 
             var order = await _orderService.GetByNumberAsync(orderNumber, user.Id);
             if (order == null)
@@ -187,6 +191,11 @@ namespace MarketLine.Controllers
         {
             var user = await GetCurrentUserAsync();
             if (user == null) return Challenge();
+
+            if (itemId <= 0)
+            {
+                return RedirectToAction(nameof(Wishlist));
+            }
 
             await _wishlistService.ToggleAsync(user.Id, itemId);
 

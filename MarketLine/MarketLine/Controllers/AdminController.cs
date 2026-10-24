@@ -1,4 +1,5 @@
 using MarketLine.Models;
+using MarketLine.Security;
 using MarketLine.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +44,11 @@ namespace MarketLine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddCategory(string name, int? parentId)
         {
-            await _admin.AddCategoryAsync(name, parentId);
+            if (!string.IsNullOrWhiteSpace(name) && name.Length <= InputLimits.Category)
+            {
+                await _admin.AddCategoryAsync(name, parentId);
+            }
+
             return RedirectToAction(nameof(Categories));
         }
 
@@ -98,7 +103,11 @@ namespace MarketLine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateStock(int itemId, int quantity)
         {
-            await _admin.UpdateStockAsync(itemId, quantity);
+            if (itemId > 0 && quantity >= 0 && quantity <= InputLimits.StockMax)
+            {
+                await _admin.UpdateStockAsync(itemId, quantity);
+            }
+
             return RedirectToAction(nameof(Inventory));
         }
 

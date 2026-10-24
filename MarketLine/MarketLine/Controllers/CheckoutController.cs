@@ -52,7 +52,7 @@ namespace MarketLine.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(CheckoutForm model)
+        public async Task<IActionResult> Index([Bind("FirstName,LastName,Email,Phone,Address,City,PostalCode,Courier,DeliveryMethod,PaymentMethod")] CheckoutForm model)
         {
             var cart = await _cartService.GetCartAsync();
             if (cart.Lines.Count == 0)
@@ -131,7 +131,7 @@ namespace MarketLine.Controllers
 
         private async Task<Order?> FindAccessibleOrderAsync(string? orderNumber)
         {
-            if (string.IsNullOrWhiteSpace(orderNumber))
+            if (string.IsNullOrWhiteSpace(orderNumber) || orderNumber.Length > 40)
             {
                 return null;
             }

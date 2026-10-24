@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MarketLine.Security;
 
 namespace MarketLine.Models
 {
@@ -9,10 +10,11 @@ namespace MarketLine.Models
         public int id { get; set; }
 
         [Required(ErrorMessage = "Името е задължително.")]
-        [StringLength(100, ErrorMessage = "Името не може да е по-дълго от 100 символа.")]
+        [StringLength(InputLimits.ProductName, ErrorMessage = "Името не може да е по-дълго от 100 символа.")]
         [Display(Name = "Име на продукт")]
         public string? name { get; set; }
 
+        [StringLength(InputLimits.ProductDescription, ErrorMessage = "Описанието е твърде дълго.")]
         [Display(Name = "Описание")]
         public string? description { get; set; }
 
@@ -21,10 +23,12 @@ namespace MarketLine.Models
         public double discount { get; set; }
 
         [Required(ErrorMessage = "Цената е задължителна.")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Цената трябва да е над 0.")]
+        [Range(0.01, InputLimits.PriceMax, ErrorMessage = "Цената трябва да е над 0.")]
         [Display(Name = "Цена")]
         public decimal price { get; set; }
 
+        [StringLength(InputLimits.Url)]
+        [HttpUrl]
         [Display(Name = "URL на изображение")]
         public string? imageUrl { get; set; }
 
@@ -36,7 +40,7 @@ namespace MarketLine.Models
         public Category? category { get; set; }
 
         [Required(ErrorMessage = "Наличността е задължителна.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Наличността не може да е отрицателна.")]
+        [Range(0, InputLimits.StockMax, ErrorMessage = "Наличността не е валидна.")]
         [Display(Name = "Налично количество")]
         public int stock_quantity { get; set; }
 
