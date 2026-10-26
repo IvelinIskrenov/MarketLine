@@ -11,10 +11,11 @@ using System;
 using System.Reflection;
 
 [assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("marketline-local-secrets")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8e61956ac13e059d8ab4359519c04babc907e51")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d2462503f9f54bd922baa5503fcf7d22132779b")]
 [assembly: System.Reflection.AssemblyProductAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MarketLine")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

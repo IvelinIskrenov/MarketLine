@@ -665,3 +665,4 @@ C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine.Tests\
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine.Tests\obj\Debug\net10.0\MarketLine.Tests.pdb
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine.Tests\obj\Debug\net10.0\MarketLine.Tests.genruntimeconfig.cache
 C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine.Tests\obj\Debug\net10.0\ref\MarketLine.Tests.dll
+C:\Users\zozo2\Downloads\MarketLine-main\marketline\MarketLine\MarketLine.Tests\bin\Debug\net10.0\appsettings.Production.json
