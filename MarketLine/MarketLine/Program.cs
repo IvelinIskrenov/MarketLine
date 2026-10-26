@@ -4,6 +4,7 @@ using MarketLine.Filters;
 using MarketLine.Models;
 using MarketLine.Security;
 using MarketLine.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
@@ -20,6 +21,17 @@ builder.Services.AddControllersWithViews(options =>
 
 var useInMemory = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var isProduction = builder.Environment.IsProduction();
+
+if (!useInMemory && string.IsNullOrWhiteSpace(connectionString))
+{
+    if (isProduction)
+    {
+        throw new InvalidOperationException("Set ConnectionStrings__DefaultConnection in the hosting environment.");
+    }
+
+    useInMemory = true;
+}
 
 if (!useInMemory)
 {
@@ -30,6 +42,11 @@ if (!useInMemory)
     }
     catch (Exception)
     {
+        if (isProduction)
+        {
+            throw new InvalidOperationException("The database is not available.");
+        }
+
         useInMemory = true;
     }
 }
@@ -84,7 +101,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
     options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.SecurePolicy = isProduction ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest;
 });
 
 var loginPermitLimit = builder.Configuration.GetValue("Security:LoginPermitLimit", 5);
@@ -127,6 +144,25 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
+builder.Services.AddHsts(options =>
+{
+    options.MaxAge = TimeSpan.FromDays(365);
+    options.IncludeSubDomains = true;
+});
+
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+    options.HttpsPort = 443;
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -136,7 +172,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
     options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.SecurePolicy = isProduction ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest;
 });
 
 builder.Services.AddScoped<IItemService, ItemService>();
@@ -243,10 +279,16 @@ using (var scope = app.Services.CreateScope())
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+}
+
+if (app.Environment.IsProduction())
+{
+    app.UseForwardedHeaders();
     app.UseHsts();
     app.UseHttpsRedirection();
 }
 
+app.UseMarketLineSecurityHeaders();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("MarketLine");

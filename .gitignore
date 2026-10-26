@@ -1,0 +1,4 @@
+**/appsettings.*.local.json
+secrets.json
+*.pfx
+*.key
