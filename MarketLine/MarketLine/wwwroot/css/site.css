@@ -97,3 +97,7 @@ body {
 .catalog-filters .form-label {
     font-weight: 600;
 }
+
+.order-steps .badge {
+    white-space: normal;
+}

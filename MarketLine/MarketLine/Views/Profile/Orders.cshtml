@@ -31,10 +31,17 @@
                             <tr>
                                 <td>@order.OrderNumber</td>
                                 <td>@order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
-                                <td><span class="badge bg-success">@order.Status</span></td>
+                                <td>
+                                    <span class="badge @OrderStatuses.BadgeClass(order.Status)">
+                                        @OrderStatuses.Normalize(order.Status)
+                                    </span>
+                                </td>
                                 <td>@order.Total.ToString("C2")</td>
                                 <td>
                                     <a asp-action="Order" asp-route-orderNumber="@order.OrderNumber">Проследи</a>
+                                    <span class="ms-2">
+                                        <partial name="_ReorderButton" model="order" />
+                                    </span>
                                 </td>
                             </tr>
                         }

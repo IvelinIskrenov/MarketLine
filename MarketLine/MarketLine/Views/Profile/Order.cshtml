@@ -1,7 +1,6 @@
 @model MarketLine.Models.Order
 @{
     ViewData["Title"] = "Поръчка " + Model.OrderNumber;
-    var currentStep = OrderStatuses.IndexOf(Model.Status);
 }
 
 <div class="container mt-4">
@@ -15,23 +14,21 @@
                     <h5 class="mb-3">Поръчка @Model.OrderNumber</h5>
                     <p class="mb-3">Дата: @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
 
-                    <h5 class="mb-3">Статус</h5>
-                    <div class="d-flex justify-content-between mb-4">
-                        @for (var i = 0; i < OrderStatuses.Steps.Length; i++)
-                        {
-                            var step = OrderStatuses.Steps[i];
-                            <div class="text-center flex-fill">
-                                <span class="badge @(i <= currentStep ? "bg-success" : "bg-secondary")">@step</span>
-                            </div>
-                        }
-                    </div>
+                    <h5 class="mb-3">Проследяване</h5>
+                    <p class="mb-3">
+                        Текущ статус:
+                        <span class="badge @OrderStatuses.BadgeClass(Model.Status)">
+                            @OrderStatuses.Normalize(Model.Status)
+                        </span>
+                    </p>
+                    <partial name="_OrderTracker" model="Model" />
 
                     <h5 class="mb-3">Данни за доставка</h5>
                     <p class="mb-1">@Model.FirstName @Model.LastName</p>
                     <p class="mb-1">@Model.Address, @Model.PostalCode @Model.City</p>
                     <p class="mb-1">@Model.Phone · @Model.Email</p>
                     <p class="mb-1">@Model.Courier · @Model.DeliveryMethod</p>
-                    <p class="mb-0">Плащане: @Model.PaymentMethod</p>
+                    <p class="mb-0">Плащане: @Model.PaymentMethod — @Model.PaymentStatus</p>
                 </div>
             </div>
 
@@ -60,7 +57,8 @@
                 <strong>@Model.Total.ToString("C2")</strong>
             </div>
 
-            <div class="text-center mt-4">
+            <div class="text-center mt-4 d-flex flex-wrap justify-content-center gap-2">
+                <partial name="_ReorderButton" model="Model" />
                 <a asp-action="Orders" class="btn btn-outline-secondary">Назад към поръчките</a>
             </div>
         </div>

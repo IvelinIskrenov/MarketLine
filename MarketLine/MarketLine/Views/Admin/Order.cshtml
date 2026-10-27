@@ -13,10 +13,18 @@
             <p><strong>Адрес:</strong> @Model.Address, @Model.City, @Model.PostalCode</p>
             <p><strong>Доставка:</strong> @Model.Courier, @Model.DeliveryMethod</p>
             <p><strong>Плащане:</strong> @Model.PaymentMethod — @Model.PaymentStatus</p>
-            <p><strong>Статус:</strong> @Model.Status</p>
+            <p>
+                <strong>Статус:</strong>
+                <span class="badge @OrderStatuses.BadgeClass(Model.Status)">
+                    @OrderStatuses.Normalize(Model.Status)
+                </span>
+            </p>
             <p class="mb-0"><strong>Сума:</strong> @Model.Total.ToString("C2")</p>
         </div>
     </div>
+
+    <h5 class="mb-3">Проследяване</h5>
+    <partial name="_OrderTracker" model="Model" />
 
     <table class="table align-middle mb-4">
         <thead>
@@ -42,15 +50,15 @@
         <form asp-action="SetOrderStatus" method="post" class="d-flex gap-2">
             <input type="hidden" name="id" value="@Model.Id" />
             <select name="status" class="form-select">
-                @foreach (var status in MarketLine.Models.OrderStatuses.All)
+                @foreach (var status in OrderStatuses.All)
                 {
-                    <option value="@status" selected="@(status == Model.Status)">@status</option>
+                    <option value="@status" selected="@(status == OrderStatuses.Normalize(Model.Status))">@status</option>
                 }
             </select>
             <button type="submit" class="btn btn-success">Запази статус</button>
         </form>
 
-        @if (Model.Status != MarketLine.Models.OrderStatuses.Cancelled)
+        @if (OrderStatuses.Normalize(Model.Status) != OrderStatuses.Cancelled)
         {
             <form asp-action="CancelOrder" method="post">
                 <input type="hidden" name="id" value="@Model.Id" />
@@ -62,7 +70,7 @@
             <input type="hidden" name="id" value="@Model.Id" />
             <input type="hidden" name="returnAction" value="Order" />
             <select name="paymentStatus" class="form-select">
-                @foreach (var status in MarketLine.Models.PaymentStatuses.All)
+                @foreach (var status in PaymentStatuses.All)
                 {
                     <option value="@status" selected="@(status == Model.PaymentStatus)">@status</option>
                 }
