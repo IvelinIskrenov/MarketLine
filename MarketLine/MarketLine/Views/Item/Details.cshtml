@@ -22,7 +22,20 @@
 
         <div class="col-md-7">
             <h3>@Model.name</h3>
-            <p class="text-muted">Категория: <span class="badge bg-secondary">@(Model.category?.Name)</span></p>
+            <p class="text-muted mb-1">Категория: <span class="badge bg-secondary">@(Model.category?.Name)</span></p>
+            @if (!string.IsNullOrWhiteSpace(Model.Brand))
+            {
+                <p class="text-muted mb-2">Марка: <span class="badge bg-success">@Model.Brand</span></p>
+            }
+            @if (Model.FeatureTags.Count > 0)
+            {
+                <p class="mb-3">
+                    @foreach (var tag in Model.FeatureTags)
+                    {
+                        <span class="badge bg-light text-dark border me-1">@tag</span>
+                    }
+                </p>
+            }
 
             <div class="price-section mb-3">
                 @if (Model.discount != 0)

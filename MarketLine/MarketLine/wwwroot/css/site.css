@@ -58,3 +58,42 @@ body {
     filter: brightness(90%);
     color: #000; 
 }
+
+.search-form {
+    position: relative;
+}
+
+.search-suggest {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.search-suggest-item {
+    display: block;
+    padding: 0.55rem 0.75rem;
+    color: #111;
+    text-decoration: none;
+}
+
+.search-suggest-item:hover,
+.search-suggest-item.is-active {
+    background: #f3fff3;
+}
+
+.search-suggest-item small {
+    display: block;
+    color: #666;
+}
+
+.catalog-filters .form-label {
+    font-weight: 600;
+}

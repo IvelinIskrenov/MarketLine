@@ -91,6 +91,16 @@ namespace MarketLine.Data
                 );
             }
 
+            foreach (var item in await db.Items.ToListAsync())
+            {
+                if (string.IsNullOrWhiteSpace(item.Brand))
+                {
+                    item.CreatedAt = default;
+                }
+
+                ItemCatalogData.ApplyDefaults(item);
+            }
+
             await db.SaveChangesAsync();
         }
     }

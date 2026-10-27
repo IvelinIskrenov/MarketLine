@@ -44,6 +44,23 @@ namespace MarketLine.Models
         [Display(Name = "Налично количество")]
         public int stock_quantity { get; set; }
 
+        [StringLength(InputLimits.Brand)]
+        [Display(Name = "Марка")]
+        public string? Brand { get; set; }
+
+        [StringLength(InputLimits.Features)]
+        [Display(Name = "Характеристики")]
+        public string? Features { get; set; }
+
+        [Display(Name = "Добавен на")]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [NotMapped]
+        public IReadOnlyList<string> FeatureTags =>
+            string.IsNullOrWhiteSpace(Features)
+                ? Array.Empty<string>()
+                : Features.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
         [NotMapped] 
         [Display(Name = "Цена с отстъпка")]
         public decimal DiscountedPrice

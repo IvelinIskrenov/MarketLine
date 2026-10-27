@@ -25,6 +25,17 @@
                 <span asp-validation-for="description" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Brand" class="control-label"></label>
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Features" class="control-label"></label>
+                <input asp-for="Features" class="form-control" />
+                <span class="form-text">Разделете характеристиките със запетая.</span>
+                <span asp-validation-for="Features" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="discount" class="control-label"></label>
                 <input asp-for="discount" class="form-control" />
                 <span asp-validation-for="discount" class="text-danger"></span>
