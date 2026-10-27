@@ -16,6 +16,7 @@
         <thead>
             <tr>
                 <th>Име</th>
+                <th>Марка</th>
                 <th>Категория</th>
                 <th>Цена</th>
                 <th>Наличност</th>
@@ -28,6 +29,7 @@
             {
                 <tr>
                     <td>@item.name</td>
+                    <td>@(item.Brand)</td>
                     <td>@(item.category?.Name)</td>
                     <td>@item.price.ToString("C2")</td>
                     <td>@item.stock_quantity</td>

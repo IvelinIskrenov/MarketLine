@@ -7,6 +7,8 @@ namespace MarketLine.Services
         Task<IEnumerable<Item>> GetAllItemsAsync();
         Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category);
         Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category, string? searchTerm);
+        Task<ItemCatalogViewModel> GetCatalogAsync(ItemSearchQuery query);
+        Task<IReadOnlyList<ItemSuggestion>> SuggestAsync(string term);
         Task<Item?> GetByIdAsync(int id);
         Task CreateItemAsync(Item item);
         Task UpdateItemAsync(Item item);

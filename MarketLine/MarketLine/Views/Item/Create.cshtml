@@ -28,6 +28,19 @@
                         </div>
 
                         <div class="mb-3">
+                            <label asp-for="Brand" class="form-label"></label>
+                            <input asp-for="Brand" class="form-control" />
+                            <span asp-validation-for="Brand" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Features" class="form-label"></label>
+                            <input asp-for="Features" class="form-control" placeholder="напр. Хидратация, За лице, Дневен" />
+                            <div class="form-text">Разделете характеристиките със запетая.</div>
+                            <span asp-validation-for="Features" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
                             <label asp-for="price" class="form-label">Price</label>
                             <input asp-for="price" type="number" class="form-control" />
                             <span asp-validation-for="price" class="text-danger"></span>

@@ -39,10 +39,17 @@ namespace MarketLine.Controllers
         //}
 
         /// <summary>
-        /// Retrieves and displays a list of items filtered by category and keyword
+        /// Retrieves and displays a list of items filtered by category, keyword, price, brand and features.
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> Index(string? category, string? searchTerm)
+        public async Task<IActionResult> Index(
+            string? category,
+            string? searchTerm,
+            decimal? minPrice,
+            decimal? maxPrice,
+            string? brand,
+            string? feature,
+            string? sort)
         {
             if (category?.Length > InputLimits.Category)
             {
@@ -54,12 +61,63 @@ namespace MarketLine.Controllers
                 searchTerm = searchTerm[..InputLimits.Search];
             }
 
-            var items = await _itemService.GetFilteredItemsAsync(category, searchTerm);
+            if (brand?.Length > InputLimits.Brand)
+            {
+                brand = brand[..InputLimits.Brand];
+            }
+
+            if (feature?.Length > InputLimits.Features)
+            {
+                feature = feature[..InputLimits.Features];
+            }
+
+            if (minPrice is < 0 or > InputLimits.PriceMax)
+            {
+                minPrice = null;
+            }
+
+            if (maxPrice is < 0 or > InputLimits.PriceMax)
+            {
+                maxPrice = null;
+            }
+
+            sort = NormalizeSort(sort);
+
+            var catalog = await _itemService.GetCatalogAsync(new ItemSearchQuery
+            {
+                Category = category,
+                SearchTerm = searchTerm,
+                MinPrice = minPrice,
+                MaxPrice = maxPrice,
+                Brand = brand,
+                Feature = feature,
+                Sort = sort
+            });
 
             ViewData["CurrentCategory"] = category ?? "All";
             ViewData["CurrentSearch"] = searchTerm;
 
-            return View(items);
+            return View(catalog);
+        }
+
+        /// <summary>
+        /// Returns product name suggestions while the customer is typing.
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Suggest(string? q)
+        {
+            if (string.IsNullOrWhiteSpace(q) || q.Trim().Length < 2)
+            {
+                return Json(Array.Empty<ItemSuggestion>());
+            }
+
+            if (q.Length > InputLimits.Search)
+            {
+                q = q[..InputLimits.Search];
+            }
+
+            var suggestions = await _itemService.SuggestAsync(q);
+            return Json(suggestions);
         }
 
 
@@ -87,7 +145,7 @@ namespace MarketLine.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("name,description,discount,price,imageUrl,CategoryId,stock_quantity")] Item item)
+        public async Task<IActionResult> Create([Bind("name,description,discount,price,imageUrl,CategoryId,stock_quantity,Brand,Features")] Item item)
         {
             ViewBag.AdminSection = "Products";
             if (ModelState.IsValid && !await CategoryExistsAsync(item.CategoryId))
@@ -145,7 +203,7 @@ namespace MarketLine.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("id,name,description,discount,price,imageUrl,CategoryId,stock_quantity")] Item item)
+            [Bind("id,name,description,discount,price,imageUrl,CategoryId,stock_quantity,Brand,Features")] Item item)
         {
             if (id != item.id) return NotFound();
 
@@ -217,6 +275,17 @@ namespace MarketLine.Controllers
 
             var categories = await _itemService.GetAllCategoriesAsync();
             return categories.Any(category => category.Id == categoryId);
+        }
+
+        private static string NormalizeSort(string? sort)
+        {
+            return sort?.Trim().ToLowerInvariant() switch
+            {
+                "price-asc" => "price-asc",
+                "price-desc" => "price-desc",
+                "popular" => "popular",
+                _ => "newest"
+            };
         }
     }
 }

@@ -214,7 +214,10 @@ if (useInMemory)
                 price = 24.90m,
                 imageUrl = "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?auto=format&fit=crop&w=800&q=80",
                 CategoryId = 1,
-                stock_quantity = 18
+                stock_quantity = 18,
+                Brand = "DermaLine",
+                Features = "Хидратация, За всеки тип кожа, Дневен",
+                CreatedAt = new DateTime(2026, 6, 1, 0, 0, 0, DateTimeKind.Utc)
             },
             new Item
             {
@@ -224,7 +227,10 @@ if (useInMemory)
                 price = 32.50m,
                 imageUrl = "https://images.unsplash.com/photo-1556228720-195a9692988c?auto=format&fit=crop&w=800&q=80",
                 CategoryId = 1,
-                stock_quantity = 12
+                stock_quantity = 12,
+                Brand = "SunCare",
+                Features = "SPF 50, Неомазняващ, За лице",
+                CreatedAt = new DateTime(2026, 5, 1, 0, 0, 0, DateTimeKind.Utc)
             },
             new Item
             {
@@ -234,7 +240,10 @@ if (useInMemory)
                 price = 18.99m,
                 imageUrl = "https://images.unsplash.com/photo-1608248543803-ba4f8c70e0c6?auto=format&fit=crop&w=800&q=80",
                 CategoryId = 2,
-                stock_quantity = 25
+                stock_quantity = 25,
+                Brand = "BodySoft",
+                Features = "Подхранване, Суха кожа, За тяло",
+                CreatedAt = new DateTime(2026, 4, 1, 0, 0, 0, DateTimeKind.Utc)
             },
             new Item
             {
@@ -244,7 +253,10 @@ if (useInMemory)
                 price = 9.49m,
                 imageUrl = "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=800&q=80",
                 CategoryId = 2,
-                stock_quantity = 40
+                stock_quantity = 40,
+                Brand = "AloePure",
+                Features = "Натурално, За тяло, Ежедневна грижа",
+                CreatedAt = new DateTime(2026, 3, 1, 0, 0, 0, DateTimeKind.Utc)
             },
             new Item
             {
@@ -254,7 +266,10 @@ if (useInMemory)
                 price = 15.90m,
                 imageUrl = "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80",
                 CategoryId = 3,
-                stock_quantity = 50
+                stock_quantity = 50,
+                Brand = "VitaPlus",
+                Features = "Имунитет, Таблетки, Хранителна добавка",
+                CreatedAt = new DateTime(2026, 2, 1, 0, 0, 0, DateTimeKind.Utc)
             },
             new Item
             {
@@ -264,7 +279,10 @@ if (useInMemory)
                 price = 21.00m,
                 imageUrl = "https://images.unsplash.com/photo-1471864190282-a93a3070b6de?auto=format&fit=crop&w=800&q=80",
                 CategoryId = 3,
-                stock_quantity = 33
+                stock_quantity = 33,
+                Brand = "VitaPlus",
+                Features = "Сърце, Капсули, Хранителна добавка",
+                CreatedAt = new DateTime(2026, 1, 15, 0, 0, 0, DateTimeKind.Utc)
             }
         );
         db.SaveChanges();
