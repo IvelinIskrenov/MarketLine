@@ -5,15 +5,19 @@ namespace MarketLine.Models
 {
     public static class OrderStatuses
     {
-        public const string Accepted = "Приета";
+        public const string New = "Нова";
+        public const string Confirmed = "Потвърдена";
         public const string Processing = "Обработва се";
         public const string Shipped = "Изпратена";
         public const string Delivered = "Доставена";
         public const string Cancelled = "Отказана";
+        public const string Accepted = Confirmed;
+        public const string LegacyAccepted = "Приета";
 
         public static readonly string[] Steps =
         {
-            Accepted,
+            New,
+            Confirmed,
             Processing,
             Shipped,
             Delivered
@@ -21,26 +25,63 @@ namespace MarketLine.Models
 
         public static readonly string[] All =
         {
-            Accepted,
+            New,
+            Confirmed,
             Processing,
             Shipped,
             Delivered,
             Cancelled
         };
 
+        public static string Normalize(string? status)
+        {
+            if (string.IsNullOrWhiteSpace(status) || status == LegacyAccepted)
+            {
+                return string.IsNullOrWhiteSpace(status) ? New : Confirmed;
+            }
+
+            return status;
+        }
+
+        public static bool IsKnown(string? status)
+        {
+            var normalized = Normalize(status);
+            return All.Contains(normalized);
+        }
+
         public static int IndexOf(string? status)
         {
-            var index = Array.IndexOf(Steps, status);
+            var normalized = Normalize(status);
+            if (normalized == Cancelled)
+            {
+                return -1;
+            }
+
+            var index = Array.IndexOf(Steps, normalized);
             return index < 0 ? 0 : index;
         }
 
         public static string FromAge(DateTime createdAt)
         {
             var minutes = (DateTime.Now - createdAt).TotalMinutes;
-            if (minutes < 2) return Accepted;
-            if (minutes < 8) return Processing;
-            if (minutes < 20) return Shipped;
+            if (minutes < 2) return New;
+            if (minutes < 8) return Confirmed;
+            if (minutes < 20) return Processing;
+            if (minutes < 40) return Shipped;
             return Delivered;
+        }
+
+        public static string BadgeClass(string? status)
+        {
+            return Normalize(status) switch
+            {
+                Cancelled => "bg-danger",
+                Delivered => "bg-success",
+                Shipped => "bg-primary",
+                Processing => "bg-info text-dark",
+                Confirmed => "bg-success",
+                _ => "bg-warning text-dark"
+            };
         }
     }
 
@@ -56,7 +97,7 @@ namespace MarketLine.Models
         public DateTime CreatedAt { get; set; }
 
         [Required]
-        public string Status { get; set; } = OrderStatuses.Accepted;
+        public string Status { get; set; } = OrderStatuses.New;
 
         public bool StatusManagedByAdmin { get; set; }
 

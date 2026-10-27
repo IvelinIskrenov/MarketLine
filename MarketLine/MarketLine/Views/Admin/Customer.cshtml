@@ -37,7 +37,11 @@
                     <tr>
                         <td><a asp-action="Order" asp-route-id="@order.Id">@order.OrderNumber</a></td>
                         <td>@order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
-                        <td>@order.Status</td>
+                        <td>
+                            <span class="badge @OrderStatuses.BadgeClass(order.Status)">
+                                @OrderStatuses.Normalize(order.Status)
+                            </span>
+                        </td>
                         <td>@order.Total.ToString("C2")</td>
                     </tr>
                 }

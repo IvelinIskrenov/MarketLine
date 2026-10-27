@@ -14,17 +14,20 @@ namespace MarketLine.Controllers
         private readonly IAddressService _addressService;
         private readonly IOrderService _orderService;
         private readonly IWishlistService _wishlistService;
+        private readonly ICartService _cartService;
 
         public ProfileController(
             UserManager<User> userManager,
             IAddressService addressService,
             IOrderService orderService,
-            IWishlistService wishlistService)
+            IWishlistService wishlistService,
+            ICartService cartService)
         {
             _userManager = userManager;
             _addressService = addressService;
             _orderService = orderService;
             _wishlistService = wishlistService;
+            _cartService = cartService;
         }
 
         [HttpGet]
@@ -172,6 +175,60 @@ namespace MarketLine.Controllers
 
             ViewBag.ProfileSection = "Orders";
             return View(order);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reorder(string orderNumber)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Challenge();
+
+            if (string.IsNullOrWhiteSpace(orderNumber) || orderNumber.Length > InputLimits.OrderNumber)
+            {
+                return RedirectToAction(nameof(Orders));
+            }
+
+            var order = await _orderService.GetByNumberAsync(orderNumber, user.Id);
+            if (order == null)
+            {
+                TempData["CartError"] = "Поръчката не е намерена.";
+                return RedirectToAction(nameof(Orders));
+            }
+
+            var added = 0;
+            var errors = new List<string>();
+            foreach (var line in order.Lines)
+            {
+                var error = await _cartService.AddAsync(line.ItemId, line.Quantity);
+                if (error == null)
+                {
+                    added++;
+                    continue;
+                }
+
+                errors.Add($"{line.Name}: {error}");
+            }
+
+            if (added > 0)
+            {
+                TempData["CartMessage"] = added == 1
+                    ? $"Добавен е 1 продукт от поръчка {order.OrderNumber}."
+                    : $"Добавени са {added} продукта от поръчка {order.OrderNumber}.";
+            }
+            else
+            {
+                TempData["CartError"] = errors.Count == 0
+                    ? "Няма продукти за повторна поръчка."
+                    : string.Join(" ", errors);
+            }
+
+            if (added > 0 && errors.Count > 0)
+            {
+                TempData["CartError"] = string.Join(" ", errors);
+            }
+
+            return RedirectToAction("Index", "Cart");
         }
 
         [HttpGet]

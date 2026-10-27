@@ -61,10 +61,33 @@ namespace MarketLine.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Orders()
+        public async Task<IActionResult> Orders(string? status)
         {
             ViewBag.AdminSection = "Orders";
-            return View(await _orders.GetAllAsync());
+            if (status?.Length > 40)
+            {
+                status = null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                status = OrderStatuses.Normalize(status);
+                if (!OrderStatuses.All.Contains(status))
+                {
+                    status = null;
+                }
+            }
+
+            var orders = await _orders.GetAllAsync();
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                orders = orders
+                    .Where(order => OrderStatuses.Normalize(order.Status) == status)
+                    .ToList();
+            }
+
+            ViewBag.StatusFilter = status;
+            return View(orders);
         }
 
         [HttpGet]
@@ -80,7 +103,17 @@ namespace MarketLine.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetOrderStatus(int id, string status)
         {
-            await _orders.SetStatusAsync(id, status);
+            if (id <= 0)
+            {
+                return RedirectToAction(nameof(Orders));
+            }
+
+            if (status?.Length > 40)
+            {
+                status = status[..40];
+            }
+
+            await _orders.SetStatusAsync(id, status ?? string.Empty);
             return RedirectToAction(nameof(Order), new { id });
         }
 

@@ -1,0 +1,5 @@
+@model MarketLine.Models.Order
+<form asp-controller="Profile" asp-action="Reorder" method="post" class="d-inline">
+    <input type="hidden" name="orderNumber" value="@Model.OrderNumber" />
+    <button type="submit" class="btn btn-custom-green btn-sm">Повтори поръчката</button>
+</form>

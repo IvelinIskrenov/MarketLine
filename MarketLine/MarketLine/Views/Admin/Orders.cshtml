@@ -1,11 +1,20 @@
 @model List<MarketLine.Models.Order>
 @{
     ViewData["Title"] = "Поръчки";
+    var currentStatus = ViewBag.StatusFilter as string;
 }
 
 <div class="container mt-4">
     <h1 class="mb-4 text-center">Поръчки</h1>
     <partial name="_AdminNav" />
+
+    <div class="mb-3 d-flex flex-wrap gap-2">
+        <a asp-action="Orders" class="btn btn-sm @(string.IsNullOrWhiteSpace(currentStatus) ? "btn-success" : "btn-outline-secondary")">Всички</a>
+        @foreach (var status in OrderStatuses.All)
+        {
+            <a asp-action="Orders" asp-route-status="@status" class="btn btn-sm @(currentStatus == status ? "btn-success" : "btn-outline-secondary")">@status</a>
+        }
+    </div>
 
     @if (Model.Count == 0)
     {
@@ -32,7 +41,11 @@
                         <td>@order.OrderNumber</td>
                         <td>@order.FirstName @order.LastName</td>
                         <td>@order.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
-                        <td>@order.Status</td>
+                        <td>
+                            <span class="badge @OrderStatuses.BadgeClass(order.Status)">
+                                @OrderStatuses.Normalize(order.Status)
+                            </span>
+                        </td>
                         <td>@order.PaymentStatus</td>
                         <td>@order.Total.ToString("C2")</td>
                         <td><a asp-action="Order" asp-route-id="@order.Id">Обработка</a></td>

@@ -190,8 +190,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BZG1pbk5hdi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Shared/_OrderTracker.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9PcmRlclRyYWNrZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Shared/_ProfileNav.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Qcm9maWxlTmF2LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Shared/_ReorderButton.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9SZW9yZGVyQnV0dG9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Shared/_ValidationScriptsPartial.cshtml]

@@ -20,7 +20,7 @@ namespace MarketLine.Services
                 OrderNumber = $"ML-{DateTime.Now:yyyyMMdd}-{Random.Shared.Next(1000, 9999)}",
                 UserId = userId,
                 CreatedAt = DateTime.Now,
-                Status = OrderStatuses.Accepted,
+                Status = OrderStatuses.New,
                 PaymentStatus = PaymentStatuses.Pending,
                 FirstName = form.FirstName,
                 LastName = form.LastName,
@@ -86,33 +86,21 @@ namespace MarketLine.Services
 
         public async Task SetStatusAsync(int id, string status)
         {
+            status = OrderStatuses.Normalize(status);
             if (!OrderStatuses.All.Contains(status)) return;
 
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.Include(o => o.Lines).FirstOrDefaultAsync(o => o.Id == id);
             if (order == null) return;
 
-            order.Status = status;
-            order.StatusManagedByAdmin = true;
-            await _context.SaveChangesAsync();
+            await ApplyStatusAsync(order, status, managedByAdmin: true);
         }
 
         public async Task CancelAsync(int id)
         {
             var order = await _context.Orders.Include(o => o.Lines).FirstOrDefaultAsync(o => o.Id == id);
-            if (order == null || order.Status == OrderStatuses.Cancelled) return;
+            if (order == null) return;
 
-            foreach (var line in order.Lines)
-            {
-                var item = await _context.Items.FindAsync(line.ItemId);
-                if (item != null)
-                {
-                    item.stock_quantity += line.Quantity;
-                }
-            }
-
-            order.Status = OrderStatuses.Cancelled;
-            order.StatusManagedByAdmin = true;
-            await _context.SaveChangesAsync();
+            await ApplyStatusAsync(order, OrderStatuses.Cancelled, managedByAdmin: true);
         }
 
         public async Task SetPaymentStatusAsync(int id, string paymentStatus)
@@ -161,18 +149,60 @@ namespace MarketLine.Services
 
         private async Task RefreshStatusAsync(Order order)
         {
-            if (order.StatusManagedByAdmin || order.Status == OrderStatuses.Cancelled)
+            var normalized = OrderStatuses.Normalize(order.Status);
+            if (order.StatusManagedByAdmin || normalized == OrderStatuses.Cancelled)
             {
+                if (order.Status != normalized)
+                {
+                    order.Status = normalized;
+                    await _context.SaveChangesAsync();
+                }
+
                 return;
             }
 
             var nextStatus = OrderStatuses.FromAge(order.CreatedAt);
-            if (OrderStatuses.IndexOf(nextStatus) <= OrderStatuses.IndexOf(order.Status))
+            if (OrderStatuses.IndexOf(nextStatus) <= OrderStatuses.IndexOf(normalized)
+                && order.Status == normalized)
             {
                 return;
             }
 
-            order.Status = nextStatus;
+            if (OrderStatuses.IndexOf(nextStatus) > OrderStatuses.IndexOf(normalized))
+            {
+                normalized = nextStatus;
+            }
+
+            if (order.Status == normalized)
+            {
+                return;
+            }
+
+            order.Status = normalized;
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task ApplyStatusAsync(Order order, string status, bool managedByAdmin)
+        {
+            var previous = OrderStatuses.Normalize(order.Status);
+            if (status == OrderStatuses.Cancelled && previous != OrderStatuses.Cancelled)
+            {
+                foreach (var line in order.Lines)
+                {
+                    var item = await _context.Items.FindAsync(line.ItemId);
+                    if (item != null)
+                    {
+                        item.stock_quantity += line.Quantity;
+                    }
+                }
+            }
+
+            order.Status = status;
+            if (managedByAdmin)
+            {
+                order.StatusManagedByAdmin = true;
+            }
+
             await _context.SaveChangesAsync();
         }
     }
