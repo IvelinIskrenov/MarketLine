@@ -13,6 +13,7 @@ namespace MarketLine.Security
         public const int ProductDescription = 2000;
         public const int Brand = 40;
         public const int Features = 200;
+        public const int VariantLabel = 40;
         public const int Url = 500;
         public const int Search = 80;
         public const int Category = 80;

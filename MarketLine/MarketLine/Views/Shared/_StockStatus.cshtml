@@ -1,0 +1,14 @@
+@model MarketLine.Models.Item
+
+@if (Model.IsSoldOut)
+{
+    <span class="badge bg-danger">Изчерпан</span>
+}
+else if (Model.IsLowStock)
+{
+    <span class="badge bg-warning text-dark">Ниска наличност (@Model.AvailableStock)</span>
+}
+else
+{
+    <span class="badge bg-success">В наличност (@Model.AvailableStock)</span>
+}

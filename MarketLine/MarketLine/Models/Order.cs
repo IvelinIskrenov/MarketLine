@@ -171,6 +171,10 @@ namespace MarketLine.Models
 
         public int ItemId { get; set; }
 
+        public int? VariantId { get; set; }
+
+        public string? VariantLabel { get; set; }
+
         [Required]
         public string Name { get; set; } = string.Empty;
 

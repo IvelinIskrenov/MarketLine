@@ -13,8 +13,35 @@ namespace MarketLine.Services
             _context = context;
         }
 
-        public async Task<Order> PlaceAsync(CheckoutForm form, CartViewModel cart, string? userId)
+        public async Task<(Order? Order, string? Error)> PlaceAsync(CheckoutForm form, CartViewModel cart, string? userId)
         {
+            if (cart.Lines.Count == 0)
+            {
+                return (null, "Количката е празна.");
+            }
+
+            var itemIds = cart.Lines.Select(line => line.ItemId).Distinct().ToList();
+            var items = await _context.Items
+                .Include(item => item.Variants)
+                .Where(item => itemIds.Contains(item.id))
+                .ToListAsync();
+
+            foreach (var line in cart.Lines)
+            {
+                var item = items.FirstOrDefault(candidate => candidate.id == line.ItemId);
+                if (item == null)
+                {
+                    return (null, "Продуктът не е намерен.");
+                }
+
+                var variant = ItemInventoryData.Resolve(item, line.VariantId > 0 ? line.VariantId : null);
+                var available = variant?.StockQuantity ?? item.stock_quantity;
+                if (available < line.Quantity)
+                {
+                    return (null, $"{line.Name} е изчерпан или няма достатъчно количество.");
+                }
+            }
+
             var order = new Order
             {
                 OrderNumber = $"ML-{DateTime.Now:yyyyMMdd}-{Random.Shared.Next(1000, 9999)}",
@@ -40,6 +67,8 @@ namespace MarketLine.Services
                 Lines = cart.Lines.Select(line => new OrderLine
                 {
                     ItemId = line.ItemId,
+                    VariantId = line.VariantId > 0 ? line.VariantId : null,
+                    VariantLabel = line.VariantLabel,
                     Name = line.Name ?? "Продукт",
                     ImageUrl = line.ImageUrl,
                     UnitPrice = line.UnitPrice,
@@ -47,18 +76,24 @@ namespace MarketLine.Services
                 }).ToList()
             };
 
-            foreach (var line in order.Lines)
+            foreach (var line in cart.Lines)
             {
-                var item = await _context.Items.FindAsync(line.ItemId);
-                if (item != null)
+                var item = items.First(candidate => candidate.id == line.ItemId);
+                var variant = ItemInventoryData.Resolve(item, line.VariantId > 0 ? line.VariantId : null);
+                if (variant != null)
                 {
-                    item.stock_quantity = Math.Max(0, item.stock_quantity - line.Quantity);
+                    variant.StockQuantity -= line.Quantity;
+                    ItemInventoryData.SyncStock(item);
+                }
+                else
+                {
+                    item.stock_quantity -= line.Quantity;
                 }
             }
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
-            return order;
+            return (order, null);
         }
 
         public async Task<Order?> GetByIdAsync(int id)
@@ -189,11 +224,7 @@ namespace MarketLine.Services
             {
                 foreach (var line in order.Lines)
                 {
-                    var item = await _context.Items.FindAsync(line.ItemId);
-                    if (item != null)
-                    {
-                        item.stock_quantity += line.Quantity;
-                    }
+                    await RestoreStockAsync(line);
                 }
             }
 
@@ -204,6 +235,42 @@ namespace MarketLine.Services
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task RestoreStockAsync(OrderLine line)
+        {
+            if (line.VariantId is int variantId)
+            {
+                var variant = await _context.ItemVariants
+                    .Include(current => current.Item)
+                    .ThenInclude(item => item!.Variants)
+                    .FirstOrDefaultAsync(current => current.Id == variantId);
+                if (variant?.Item == null)
+                {
+                    return;
+                }
+
+                variant.StockQuantity += line.Quantity;
+                ItemInventoryData.SyncStock(variant.Item);
+                return;
+            }
+
+            var item = await _context.Items
+                .Include(current => current.Variants)
+                .FirstOrDefaultAsync(current => current.id == line.ItemId);
+            if (item == null)
+            {
+                return;
+            }
+
+            if (item.Variants.Count == 1)
+            {
+                item.Variants[0].StockQuantity += line.Quantity;
+                ItemInventoryData.SyncStock(item);
+                return;
+            }
+
+            item.stock_quantity += line.Quantity;
         }
     }
 }

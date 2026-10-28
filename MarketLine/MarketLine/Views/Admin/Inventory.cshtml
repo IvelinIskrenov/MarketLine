@@ -7,48 +7,90 @@
     <h1 class="mb-4 text-center">Наличности</h1>
     <partial name="_AdminNav" />
 
-    <table class="table align-middle">
-        <thead>
-            <tr>
-                <th>Продукт</th>
-                <th>Категория</th>
-                <th>Количество</th>
-                <th>Състояние</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.name</td>
-                    <td>@(item.category?.Name)</td>
-                    <td>
-                        <form asp-action="UpdateStock" method="post" class="d-flex gap-2">
-                            <input type="hidden" name="itemId" value="@item.id" />
-                            <input type="number" name="quantity" class="form-control form-control-sm" style="max-width:100px" value="@item.stock_quantity" min="0" />
-                            <button type="submit" class="btn btn-sm btn-success">Запази</button>
-                        </form>
-                    </td>
-                    <td>
-                        @if (item.stock_quantity <= 0)
-                        {
-                            <span class="badge bg-danger">Изчерпан</span>
-                        }
-                        else if (item.stock_quantity <= 5)
-                        {
-                            <span class="badge bg-warning text-dark">Ниска наличност</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-success">В наличност</span>
-                        }
-                    </td>
-                    <td>
+    @foreach (var item in Model)
+    {
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <div>
+                        <h5 class="mb-1">@item.name</h5>
+                        <p class="text-muted mb-0">@(item.category?.Name) · общо @item.AvailableStock бр.</p>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        @await Html.PartialAsync("_StockStatus", item)
                         <a asp-controller="Item" asp-action="Edit" asp-route-id="@item.id">Редакция</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    </div>
+                </div>
+
+                <table class="table align-middle mb-3">
+                    <thead>
+                        <tr>
+                            <th>Размер</th>
+                            <th>Цвят</th>
+                            <th>Модел</th>
+                            <th>Количество</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var variant in item.Variants)
+                        {
+                            <tr>
+                                <td>@(variant.Size ?? "—")</td>
+                                <td>@(variant.Color ?? "—")</td>
+                                <td>@(variant.Model ?? "—")</td>
+                                <td>
+                                    <form asp-action="UpdateVariantStock" method="post" class="d-flex gap-2">
+                                        <input type="hidden" name="variantId" value="@variant.Id" />
+                                        <input type="number" name="quantity" class="form-control form-control-sm" style="max-width:100px" value="@variant.StockQuantity" min="0" />
+                                        <button type="submit" class="btn btn-sm btn-success">Запази</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    @if (variant.IsSoldOut)
+                                    {
+                                        <span class="badge bg-danger">Изчерпан</span>
+                                    }
+                                    else if (variant.IsLowStock)
+                                    {
+                                        <span class="badge bg-warning text-dark">Ниска наличност</span>
+                                    }
+                                    @if (item.Variants.Count > 1)
+                                    {
+                                        <form asp-action="DeleteVariant" method="post" class="d-inline ms-2">
+                                            <input type="hidden" name="variantId" value="@variant.Id" />
+                                            <button type="submit" class="btn btn-link btn-sm text-danger p-0">Изтрий</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <form asp-action="AddVariant" method="post" class="row g-2 align-items-end">
+                    <input type="hidden" name="itemId" value="@item.id" />
+                    <div class="col-md-2">
+                        <label class="form-label">Размер</label>
+                        <input name="size" class="form-control form-control-sm" maxlength="40" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Цвят</label>
+                        <input name="color" class="form-control form-control-sm" maxlength="40" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Модел</label>
+                        <input name="model" class="form-control form-control-sm" maxlength="40" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Количество</label>
+                        <input type="number" name="quantity" class="form-control form-control-sm" value="0" min="0" />
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-sm btn-custom-green">Добави вариант</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
 </div>

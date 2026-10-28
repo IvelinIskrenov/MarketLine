@@ -34,6 +34,51 @@
         </div>
     </div>
 
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">Предупреждения за наличност</h5>
+            @if (Model.LowStockItems.Count == 0)
+            {
+                <p class="text-muted mb-0">Няма продукти с ниска или изчерпана наличност.</p>
+            }
+            else
+            {
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Продукт</th>
+                            <th>Вариант</th>
+                            <th>Количество</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var alert in Model.LowStockItems)
+                        {
+                            <tr>
+                                <td>@alert.Name</td>
+                                <td>@(alert.VariantLabel ?? "—")</td>
+                                <td>
+                                    @if (alert.IsSoldOut)
+                                    {
+                                        <span class="badge bg-danger">Изчерпан</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark">@alert.StockQuantity бр.</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Inventory">Към наличностите</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+
     <div class="card shadow-sm border-0">
         <div class="card-body">
             <h5 class="mb-3">Най-продавани продукти</h5>

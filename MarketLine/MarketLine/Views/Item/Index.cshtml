@@ -209,15 +209,43 @@
                                                 </strong>
                                             }
                                         </div>
-                                        <form asp-controller="Cart" asp-action="Add" method="post">
-                                            <input type="hidden" name="id" value="@item.id" />
-                                            <button type="submit"
+                                        <div class="mb-2">
+                                            @await Html.PartialAsync("_StockStatus", item)
+                                        </div>
+                                        @if (item.IsSoldOut)
+                                        {
+                                            <button type="button"
                                                     class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
-                                                    style="width: 60%;">
-                                                <img src="~/images/add-to-cart.png" alt="Cart" style="width: 20px; height: 20px;" class="me-2" />
-                                                Add to Cart
+                                                    style="width: 60%;"
+                                                    disabled>
+                                                Изчерпан
                                             </button>
-                                        </form>
+                                        }
+                                        else if (item.HasMultipleVariants)
+                                        {
+                                            <a asp-action="Details"
+                                               asp-route-id="@item.id"
+                                               class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
+                                               style="width: 60%;">
+                                                Избери вариант
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <form asp-controller="Cart" asp-action="Add" method="post">
+                                                <input type="hidden" name="id" value="@item.id" />
+                                                @if (item.Variants.Count == 1)
+                                                {
+                                                    <input type="hidden" name="variantId" value="@item.Variants[0].Id" />
+                                                }
+                                                <button type="submit"
+                                                        class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
+                                                        style="width: 60%;">
+                                                    <img src="~/images/add-to-cart.png" alt="Cart" style="width: 20px; height: 20px;" class="me-2" />
+                                                    Add to Cart
+                                                </button>
+                                            </form>
+                                        }
                                         <div class="mt-2">
                                             @await Html.PartialAsync("_WishlistButton", item.id)
                                         </div>

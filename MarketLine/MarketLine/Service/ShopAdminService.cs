@@ -166,10 +166,94 @@ namespace MarketLine.Services
 
         public async Task UpdateStockAsync(int itemId, int quantity)
         {
-            var item = await _context.Items.FindAsync(itemId);
+            var item = await _context.Items.Include(i => i.Variants).FirstOrDefaultAsync(i => i.id == itemId);
             if (item == null) return;
-            item.stock_quantity = Math.Clamp(quantity, 0, InputLimits.StockMax);
+
+            quantity = Math.Clamp(quantity, 0, InputLimits.StockMax);
+            if (item.Variants.Count == 0)
+            {
+                item.stock_quantity = quantity;
+                ItemInventoryData.EnsureVariants(item);
+            }
+            else if (item.Variants.Count == 1)
+            {
+                item.Variants[0].StockQuantity = quantity;
+                ItemInventoryData.SyncStock(item);
+            }
+
             await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateVariantStockAsync(int variantId, int quantity)
+        {
+            var variant = await _context.ItemVariants
+                .Include(current => current.Item)
+                .ThenInclude(item => item!.Variants)
+                .FirstOrDefaultAsync(current => current.Id == variantId);
+            if (variant?.Item == null) return;
+
+            variant.StockQuantity = Math.Clamp(quantity, 0, InputLimits.StockMax);
+            ItemInventoryData.SyncStock(variant.Item);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddVariantAsync(int itemId, string? size, string? color, string? model, int quantity)
+        {
+            var item = await _context.Items.Include(i => i.Variants).FirstOrDefaultAsync(i => i.id == itemId);
+            if (item == null) return;
+
+            size = CleanLabel(size);
+            color = CleanLabel(color);
+            model = CleanLabel(model);
+            if (size == null && color == null && model == null)
+            {
+                model = InventoryRules.DefaultLabel;
+            }
+
+            item.Variants.Add(new ItemVariant
+            {
+                Size = size,
+                Color = color,
+                Model = model,
+                StockQuantity = Math.Clamp(quantity, 0, InputLimits.StockMax)
+            });
+            ItemInventoryData.SyncStock(item);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteVariantAsync(int variantId)
+        {
+            var variant = await _context.ItemVariants
+                .Include(current => current.Item)
+                .ThenInclude(item => item!.Variants)
+                .FirstOrDefaultAsync(current => current.Id == variantId);
+            if (variant?.Item == null || variant.Item.Variants.Count <= 1)
+            {
+                return;
+            }
+
+            _context.ItemVariants.Remove(variant);
+            await _context.SaveChangesAsync();
+
+            var item = await _context.Items.Include(i => i.Variants).FirstOrDefaultAsync(i => i.id == variant.ItemId);
+            if (item != null)
+            {
+                ItemInventoryData.SyncStock(item);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private static string? CleanLabel(string? value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return null;
+            }
+
+            value = value.Trim();
+            return value.Length > InputLimits.VariantLabel
+                ? value[..InputLimits.VariantLabel]
+                : value;
         }
 
         public async Task<AdminStats> GetStatsAsync()
@@ -196,6 +280,24 @@ namespace MarketLine.Services
                 })
                 .OrderByDescending(p => p.Quantity)
                 .Take(5)
+                .ToList();
+
+            var alerts = await _context.ItemVariants
+                .Include(variant => variant.Item)
+                .Where(variant => variant.StockQuantity <= InventoryRules.LowStockThreshold)
+                .OrderBy(variant => variant.StockQuantity)
+                .Take(12)
+                .ToListAsync();
+
+            stats.LowStockItems = alerts
+                .Where(variant => variant.Item != null)
+                .Select(variant => new AdminStockAlert
+                {
+                    ItemId = variant.ItemId,
+                    Name = variant.Item!.name ?? "Продукт",
+                    VariantLabel = variant.Label,
+                    StockQuantity = variant.StockQuantity
+                })
                 .ToList();
 
             return stats;

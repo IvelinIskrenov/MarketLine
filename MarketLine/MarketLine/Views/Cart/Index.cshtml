@@ -51,12 +51,17 @@
                                         <a asp-controller="Item" asp-action="Details" asp-route-id="@line.ItemId" class="text-decoration-none text-dark">
                                             @line.Name
                                         </a>
+                                        @if (!string.IsNullOrWhiteSpace(line.VariantLabel))
+                                        {
+                                            <div class="text-muted small">@line.VariantLabel</div>
+                                        }
                                     </div>
                                 </td>
                                 <td>@line.UnitPrice.ToString("C2")</td>
                                 <td>
                                     <form asp-action="Update" method="post" class="d-flex align-items-center">
                                         <input type="hidden" name="id" value="@line.ItemId" />
+                                        <input type="hidden" name="variantId" value="@line.VariantId" />
                                         <input type="number"
                                                name="quantity"
                                                value="@line.Quantity"
@@ -71,6 +76,7 @@
                                 <td>
                                     <form asp-action="Remove" method="post">
                                         <input type="hidden" name="id" value="@line.ItemId" />
+                                        <input type="hidden" name="variantId" value="@line.VariantId" />
                                         <button type="submit" class="btn btn-link text-danger p-0">Премахни</button>
                                     </form>
                                 </td>

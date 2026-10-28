@@ -200,7 +200,7 @@ namespace MarketLine.Controllers
             var errors = new List<string>();
             foreach (var line in order.Lines)
             {
-                var error = await _cartService.AddAsync(line.ItemId, line.Quantity);
+                var error = await _cartService.AddAsync(line.ItemId, line.Quantity, line.VariantId ?? 0);
                 if (error == null)
                 {
                     added++;

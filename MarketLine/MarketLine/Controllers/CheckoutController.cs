@@ -107,7 +107,13 @@ namespace MarketLine.Controllers
 
             var userId = _userManager.GetUserId(User);
             await ApplyCourierShippingAsync(cart, draft.Courier);
-            var order = await _orderService.PlaceAsync(draft, cart, userId);
+            var (order, error) = await _orderService.PlaceAsync(draft, cart, userId);
+            if (order == null)
+            {
+                TempData["CartError"] = error ?? "Поръчката не може да бъде завършена.";
+                return RedirectToAction(nameof(Review));
+            }
+
             _checkoutService.ClearDraft();
             _cartService.Clear();
             HttpContext.Session.SetString("LastOrderNumber", order.OrderNumber);

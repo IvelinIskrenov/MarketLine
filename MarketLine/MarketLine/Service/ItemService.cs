@@ -1,5 +1,6 @@
 ﻿using MarketLine.Data;
 using MarketLine.Models;
+using MarketLine.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace MarketLine.Services
@@ -15,7 +16,10 @@ namespace MarketLine.Services
 
         public async Task<IEnumerable<Item>> GetAllItemsAsync()
         {
-            return await _context.Items.Include(i => i.category).ToListAsync();
+            return await _context.Items
+                .Include(i => i.category)
+                .Include(i => i.Variants)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category)
@@ -56,6 +60,7 @@ namespace MarketLine.Services
             var itemsQuery = _context.Items
                 .Include(i => i.category)
                 .ThenInclude(c => c!.Parent)
+                .Include(i => i.Variants)
                 .AsQueryable();
 
             itemsQuery = ApplyCategoryFilter(itemsQuery, query.Category);
@@ -133,7 +138,10 @@ namespace MarketLine.Services
 
         public async Task<Item?> GetByIdAsync(int id)
         {
-            return await _context.Items.Include(i => i.category).FirstOrDefaultAsync(m => m.id == id);
+            return await _context.Items
+                .Include(i => i.category)
+                .Include(i => i.Variants)
+                .FirstOrDefaultAsync(m => m.id == id);
         }
 
         public async Task CreateItemAsync(Item item)
@@ -145,27 +153,54 @@ namespace MarketLine.Services
 
             _context.Add(item);
             await _context.SaveChangesAsync();
+            ItemInventoryData.EnsureVariants(item);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateItemAsync(Item item)
         {
-            var current = await _context.Items.AsNoTracking().FirstOrDefaultAsync(i => i.id == item.id);
-            if (current != null)
+            var current = await _context.Items
+                .Include(i => i.Variants)
+                .FirstOrDefaultAsync(i => i.id == item.id);
+            if (current == null)
             {
-                item.CreatedAt = current.CreatedAt == default ? DateTime.UtcNow : current.CreatedAt;
-            }
-            else if (item.CreatedAt == default)
-            {
-                item.CreatedAt = DateTime.UtcNow;
+                return;
             }
 
-            _context.Update(item);
+            current.name = item.name;
+            current.description = item.description;
+            current.Brand = item.Brand;
+            current.Features = item.Features;
+            current.discount = item.discount;
+            current.price = item.price;
+            current.imageUrl = item.imageUrl;
+            current.CategoryId = item.CategoryId;
+            if (current.CreatedAt == default)
+            {
+                current.CreatedAt = item.CreatedAt == default ? DateTime.UtcNow : item.CreatedAt;
+            }
+
+            if (current.Variants.Count == 0)
+            {
+                current.stock_quantity = item.stock_quantity;
+                ItemInventoryData.EnsureVariants(current);
+            }
+            else if (current.Variants.Count == 1)
+            {
+                current.Variants[0].StockQuantity = Math.Clamp(item.stock_quantity, 0, InputLimits.StockMax);
+                ItemInventoryData.SyncStock(current);
+            }
+            else
+            {
+                ItemInventoryData.SyncStock(current);
+            }
+
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteItemAsync(int id)
         {
-            var item = await _context.Items.FindAsync(id);
+            var item = await _context.Items.Include(i => i.Variants).FirstOrDefaultAsync(i => i.id == id);
             if (item != null)
             {
                 _context.Items.Remove(item);

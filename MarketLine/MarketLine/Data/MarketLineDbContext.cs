@@ -10,6 +10,8 @@ namespace MarketLine.Data
 
         public DbSet<Item> Items { get; set; }
 
+        public DbSet<ItemVariant> ItemVariants { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
@@ -129,6 +131,18 @@ namespace MarketLine.Data
             builder.Entity<OrderLine>()
                 .Property(l => l.UnitPrice)
                 .HasColumnType("decimal(18,2)");
+
+            builder.Entity<Item>()
+                .HasMany(i => i.Variants)
+                .WithOne(v => v.Item)
+                .HasForeignKey(v => v.ItemId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<OrderLine>()
+                .HasOne<ItemVariant>()
+                .WithMany()
+                .HasForeignKey(l => l.VariantId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
