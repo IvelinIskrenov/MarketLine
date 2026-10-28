@@ -44,6 +44,8 @@ namespace MarketLine.Models
         [Display(Name = "Налично количество")]
         public int stock_quantity { get; set; }
 
+        public List<ItemVariant> Variants { get; set; } = new();
+
         [StringLength(InputLimits.Brand)]
         [Display(Name = "Марка")]
         public string? Brand { get; set; }
@@ -60,6 +62,20 @@ namespace MarketLine.Models
             string.IsNullOrWhiteSpace(Features)
                 ? Array.Empty<string>()
                 : Features.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+
+        [NotMapped]
+        public int AvailableStock => Variants.Count > 0
+            ? Variants.Sum(variant => variant.StockQuantity)
+            : stock_quantity;
+
+        [NotMapped]
+        public bool IsSoldOut => AvailableStock <= 0;
+
+        [NotMapped]
+        public bool IsLowStock => AvailableStock > 0 && AvailableStock <= InventoryRules.LowStockThreshold;
+
+        [NotMapped]
+        public bool HasMultipleVariants => Variants.Count > 1;
 
         [NotMapped] 
         [Display(Name = "Цена с отстъпка")]

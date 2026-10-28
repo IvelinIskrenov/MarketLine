@@ -261,6 +261,39 @@ namespace MarketLine.Migrations
                     b.ToTable("Items");
                 });
 
+            modelBuilder.Entity("MarketLine.Models.ItemVariant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Model")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("Size")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("ItemVariants");
+                });
+
             modelBuilder.Entity("MarketLine.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -382,9 +415,17 @@ namespace MarketLine.Migrations
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("VariantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VariantLabel")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("VariantId");
 
                     b.ToTable("OrderLines");
                 });
@@ -665,6 +706,17 @@ namespace MarketLine.Migrations
                     b.Navigation("category");
                 });
 
+            modelBuilder.Entity("MarketLine.Models.ItemVariant", b =>
+                {
+                    b.HasOne("MarketLine.Models.Item", "Item")
+                        .WithMany("Variants")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+                });
+
             modelBuilder.Entity("MarketLine.Models.Order", b =>
                 {
                     b.HasOne("MarketLine.Models.User", null)
@@ -680,6 +732,11 @@ namespace MarketLine.Migrations
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MarketLine.Models.ItemVariant", null)
+                        .WithMany()
+                        .HasForeignKey("VariantId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Order");
                 });
@@ -757,6 +814,11 @@ namespace MarketLine.Migrations
                     b.Navigation("Children");
 
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("MarketLine.Models.Item", b =>
+                {
+                    b.Navigation("Variants");
                 });
 
             modelBuilder.Entity("MarketLine.Models.Order", b =>

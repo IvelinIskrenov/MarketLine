@@ -27,9 +27,9 @@ namespace MarketLine.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add(int id, int quantity = 1, string? returnUrl = null)
+        public async Task<IActionResult> Add(int id, int quantity = 1, int variantId = 0, string? returnUrl = null)
         {
-            var error = await _cartService.AddAsync(id, quantity);
+            var error = await _cartService.AddAsync(id, quantity, variantId);
             if (error != null)
             {
                 TempData["CartError"] = error;
@@ -52,9 +52,9 @@ namespace MarketLine.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, int quantity)
+        public async Task<IActionResult> Update(int id, int quantity, int variantId = 0)
         {
-            var error = await _cartService.UpdateQuantityAsync(id, quantity);
+            var error = await _cartService.UpdateQuantityAsync(id, quantity, variantId);
             if (error != null)
             {
                 TempData["CartError"] = error;
@@ -68,9 +68,9 @@ namespace MarketLine.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> Remove(int id, int variantId = 0)
         {
-            await _cartService.RemoveAsync(id);
+            await _cartService.RemoveAsync(id, variantId);
             return RedirectToAction(nameof(Index));
         }
 

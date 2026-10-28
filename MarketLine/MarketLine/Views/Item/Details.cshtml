@@ -2,11 +2,21 @@
 
 @{
     ViewData["Title"] = "Details";
+    var selectedVariant = Model.Variants.FirstOrDefault(variant => variant.StockQuantity > 0) ?? Model.Variants.FirstOrDefault();
 }
 
 <div class="container mt-4">
     <h4>Детайли за продукта</h4>
     <hr />
+
+    @if (TempData["CartError"] != null)
+    {
+        <div class="alert alert-warning" role="alert">@TempData["CartError"]</div>
+    }
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">@TempData["CartMessage"]</div>
+    }
 
     <div class="row">
         <div class="col-md-5 mb-4">
@@ -56,26 +66,89 @@
                 <dt class="col-sm-4">@Html.DisplayNameFor(model => model.description)</dt>
                 <dd class="col-sm-8">@Html.DisplayFor(model => model.description)</dd>
 
-                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.stock_quantity)</dt>
+                <dt class="col-sm-4">Наличност</dt>
                 <dd class="col-sm-8">
-                    @if (Model.stock_quantity > 0)
-                    {
-                        <span class="text-success">В наличност (@Model.stock_quantity)</span>
-                    }
-                    else
-                    {
-                        <span class="text-danger">Изчерпан</span>
-                    }
+                    @await Html.PartialAsync("_StockStatus", Model)
                 </dd>
             </dl>
 
+            @if (Model.Variants.Count > 0)
+            {
+                <div class="mb-3">
+                    <p class="fw-semibold mb-2">Размер, цвят и модел</p>
+                    <ul class="list-unstyled small text-muted mb-0">
+                        @foreach (var variant in Model.Variants)
+                        {
+                            <li>
+                                @variant.Label —
+                                @if (variant.IsSoldOut)
+                                {
+                                    <span class="text-danger">изчерпан</span>
+                                }
+                                else if (variant.IsLowStock)
+                                {
+                                    <span class="text-warning">остават @variant.StockQuantity бр.</span>
+                                }
+                                else
+                                {
+                                    <span>@variant.StockQuantity бр.</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+
             <div class="mt-4">
-                <form asp-controller="Cart" asp-action="Add" method="post">
+                <form asp-controller="Cart" asp-action="Add" method="post" class="d-flex flex-wrap align-items-end gap-2">
                     <input type="hidden" name="id" value="@Model.id" />
-                    <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm" @(Model.stock_quantity <= 0 ? "disabled" : null)>
+                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                    @if (Model.Variants.Count > 0)
+                    {
+                        <div>
+                            <label class="form-label" for="variantId">Вариант</label>
+                            <select id="variantId" name="variantId" class="form-select" @(Model.IsSoldOut ? "disabled" : null)>
+                                @foreach (var variant in Model.Variants)
+                                {
+                                    if (variant.IsSoldOut)
+                                    {
+                                        <option value="@variant.Id" disabled>@variant.Label — изчерпан</option>
+                                    }
+                                    else if (selectedVariant?.Id == variant.Id)
+                                    {
+                                        <option value="@variant.Id" selected>@variant.Label (@variant.StockQuantity бр.)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@variant.Id">@variant.Label (@variant.StockQuantity бр.)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    }
+                    <div>
+                        <label class="form-label" for="quantity">Количество</label>
+                        <input id="quantity"
+                               type="number"
+                               name="quantity"
+                               class="form-control"
+                               value="1"
+                               min="1"
+                               max="@(selectedVariant?.StockQuantity ?? Model.AvailableStock)"
+                               @(Model.IsSoldOut ? "disabled" : null) />
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm" @(Model.IsSoldOut ? "disabled" : null)>
                         <i class="bi bi-cart-plus-fill me-2"></i> Добави в количката
                     </button>
                 </form>
+                @if (Model.IsSoldOut)
+                {
+                    <p class="text-danger mt-2 mb-0">Този продукт е изчерпан и не може да бъде поръчан.</p>
+                }
+                else if (Model.IsLowStock)
+                {
+                    <p class="text-warning mt-2 mb-0">Внимание: остават малко бройки на склад.</p>
+                }
                 <div class="mt-2">
                     @await Html.PartialAsync("_WishlistButton", Model.id)
                 </div>
@@ -83,4 +156,3 @@
         </div>
     </div>
 </div>
-

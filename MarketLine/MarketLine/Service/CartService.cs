@@ -28,7 +28,7 @@ namespace MarketLine.Services
             return await BuildCartAsync(state);
         }
 
-        public async Task<string?> AddAsync(int itemId, int quantity = 1)
+        public async Task<string?> AddAsync(int itemId, int quantity = 1, int variantId = 0)
         {
             if (itemId <= 0)
             {
@@ -40,22 +40,39 @@ namespace MarketLine.Services
                 return "Невалидно количество.";
             }
 
-            var item = await _context.Items.FirstOrDefaultAsync(i => i.id == itemId);
+            var item = await LoadItemAsync(itemId);
             if (item == null) return "Продуктът не е намерен.";
-            if (item.stock_quantity <= 0) return "Продуктът е изчерпан.";
+
+            var variant = ResolveVariant(item, variantId);
+            if (item.Variants.Count > 0 && variant == null)
+            {
+                return "Изберете размер, цвят или модел.";
+            }
+
+            var available = variant?.StockQuantity ?? item.stock_quantity;
+            if (available <= 0)
+            {
+                return "Продуктът е изчерпан.";
+            }
 
             var state = LoadState();
-            var line = state.Lines.FirstOrDefault(l => l.ItemId == itemId);
+            var resolvedVariantId = variant?.Id ?? 0;
+            var line = FindLine(state, itemId, resolvedVariantId);
             var newQuantity = (line?.Quantity ?? 0) + quantity;
 
-            if (newQuantity > item.stock_quantity)
+            if (newQuantity > available)
             {
-                return $"Налични са само {item.stock_quantity} бр.";
+                return $"Налични са само {available} бр.";
             }
 
             if (line == null)
             {
-                state.Lines.Add(new CartStateLine { ItemId = itemId, Quantity = newQuantity });
+                state.Lines.Add(new CartStateLine
+                {
+                    ItemId = itemId,
+                    VariantId = resolvedVariantId,
+                    Quantity = newQuantity
+                });
             }
             else
             {
@@ -66,15 +83,23 @@ namespace MarketLine.Services
             return null;
         }
 
-        public Task RemoveAsync(int itemId)
+        public Task RemoveAsync(int itemId, int variantId = 0)
         {
             var state = LoadState();
-            state.Lines.RemoveAll(l => l.ItemId == itemId);
+            if (variantId > 0)
+            {
+                state.Lines.RemoveAll(line => line.ItemId == itemId && line.VariantId == variantId);
+            }
+            else
+            {
+                state.Lines.RemoveAll(line => line.ItemId == itemId);
+            }
+
             SaveState(state);
             return Task.CompletedTask;
         }
 
-        public async Task<string?> UpdateQuantityAsync(int itemId, int quantity)
+        public async Task<string?> UpdateQuantityAsync(int itemId, int quantity, int variantId = 0)
         {
             if (itemId <= 0)
             {
@@ -88,22 +113,36 @@ namespace MarketLine.Services
 
             if (quantity < 1)
             {
-                await RemoveAsync(itemId);
+                await RemoveAsync(itemId, variantId);
                 return null;
             }
 
-            var item = await _context.Items.FirstOrDefaultAsync(i => i.id == itemId);
+            var item = await LoadItemAsync(itemId);
             if (item == null) return "Продуктът не е намерен.";
-            if (quantity > item.stock_quantity)
+
+            var variant = ResolveVariant(item, variantId);
+            if (item.Variants.Count > 0 && variant == null)
             {
-                return $"Налични са само {item.stock_quantity} бр.";
+                return "Изберете размер, цвят или модел.";
+            }
+
+            var available = variant?.StockQuantity ?? item.stock_quantity;
+            if (quantity > available)
+            {
+                return $"Налични са само {available} бр.";
             }
 
             var state = LoadState();
-            var line = state.Lines.FirstOrDefault(l => l.ItemId == itemId);
+            var resolvedVariantId = variant?.Id ?? variantId;
+            var line = FindLine(state, itemId, resolvedVariantId);
             if (line == null)
             {
-                state.Lines.Add(new CartStateLine { ItemId = itemId, Quantity = quantity });
+                state.Lines.Add(new CartStateLine
+                {
+                    ItemId = itemId,
+                    VariantId = resolvedVariantId,
+                    Quantity = quantity
+                });
             }
             else
             {
@@ -154,8 +193,9 @@ namespace MarketLine.Services
 
         private async Task<CartViewModel> BuildCartAsync(CartState state)
         {
-            var itemIds = state.Lines.Select(l => l.ItemId).ToList();
+            var itemIds = state.Lines.Select(l => l.ItemId).Distinct().ToList();
             var items = await _context.Items
+                .Include(i => i.Variants)
                 .Where(i => itemIds.Contains(i.id))
                 .ToListAsync();
 
@@ -165,26 +205,37 @@ namespace MarketLine.Services
                 var item = items.FirstOrDefault(i => i.id == savedLine.ItemId);
                 if (item == null)
                 {
-                    state.Lines.RemoveAll(l => l.ItemId == savedLine.ItemId);
+                    state.Lines.Remove(savedLine);
                     continue;
                 }
 
-                var quantity = Math.Min(savedLine.Quantity, item.stock_quantity);
+                var variant = ResolveVariant(item, savedLine.VariantId);
+                if (item.Variants.Count > 0 && variant == null)
+                {
+                    state.Lines.Remove(savedLine);
+                    continue;
+                }
+
+                var available = variant?.StockQuantity ?? item.stock_quantity;
+                var quantity = Math.Min(savedLine.Quantity, available);
                 if (quantity < 1)
                 {
-                    state.Lines.RemoveAll(l => l.ItemId == savedLine.ItemId);
+                    state.Lines.Remove(savedLine);
                     continue;
                 }
 
                 savedLine.Quantity = quantity;
+                savedLine.VariantId = variant?.Id ?? 0;
                 lines.Add(new CartLine
                 {
                     ItemId = item.id,
+                    VariantId = savedLine.VariantId,
+                    VariantLabel = variant?.Label,
                     Name = item.name,
                     ImageUrl = item.imageUrl,
                     UnitPrice = item.DiscountedPrice,
                     Quantity = quantity,
-                    StockQuantity = item.stock_quantity
+                    StockQuantity = available
                 });
             }
 
@@ -214,6 +265,23 @@ namespace MarketLine.Services
                 FreeShippingThreshold = settings.FreeOver,
                 RemainingForFreeShipping = remaining
             };
+        }
+
+        private Task<Item?> LoadItemAsync(int itemId)
+        {
+            return _context.Items.Include(i => i.Variants).FirstOrDefaultAsync(i => i.id == itemId);
+        }
+
+        private static ItemVariant? ResolveVariant(Item item, int variantId)
+        {
+            return ItemInventoryData.Resolve(item, variantId > 0 ? variantId : null);
+        }
+
+        private static CartStateLine? FindLine(CartState state, int itemId, int variantId)
+        {
+            return variantId > 0
+                ? state.Lines.FirstOrDefault(line => line.ItemId == itemId && line.VariantId == variantId)
+                : state.Lines.FirstOrDefault(line => line.ItemId == itemId);
         }
 
         private async Task<(decimal Discount, string? Error)> GetPromoDiscountAsync(string? code, decimal subTotal)
@@ -286,6 +354,7 @@ namespace MarketLine.Services
         private class CartStateLine
         {
             public int ItemId { get; set; }
+            public int VariantId { get; set; }
             public int Quantity { get; set; }
         }
     }

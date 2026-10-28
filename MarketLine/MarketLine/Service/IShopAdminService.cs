@@ -26,6 +26,9 @@ namespace MarketLine.Services
         Task SavePageAsync(SitePage page);
 
         Task UpdateStockAsync(int itemId, int quantity);
+        Task UpdateVariantStockAsync(int variantId, int quantity);
+        Task AddVariantAsync(int itemId, string? size, string? color, string? model, int quantity);
+        Task DeleteVariantAsync(int variantId);
 
         Task<AdminStats> GetStatsAsync();
         Task<List<User>> GetCustomersAsync();
@@ -38,6 +41,7 @@ namespace MarketLine.Services
         public decimal Turnover { get; set; }
         public decimal AverageOrder { get; set; }
         public List<AdminTopProduct> TopProducts { get; set; } = new();
+        public List<AdminStockAlert> LowStockItems { get; set; } = new();
     }
 
     public class AdminTopProduct
@@ -45,6 +49,15 @@ namespace MarketLine.Services
         public string Name { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public decimal Total { get; set; }
+    }
+
+    public class AdminStockAlert
+    {
+        public int ItemId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? VariantLabel { get; set; }
+        public int StockQuantity { get; set; }
+        public bool IsSoldOut => StockQuantity <= 0;
     }
 
     public class AdminCustomer

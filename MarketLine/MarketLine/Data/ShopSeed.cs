@@ -91,7 +91,7 @@ namespace MarketLine.Data
                 );
             }
 
-            foreach (var item in await db.Items.ToListAsync())
+            foreach (var item in await db.Items.Include(i => i.Variants).ToListAsync())
             {
                 if (string.IsNullOrWhiteSpace(item.Brand))
                 {
@@ -99,6 +99,7 @@ namespace MarketLine.Data
                 }
 
                 ItemCatalogData.ApplyDefaults(item);
+                ItemInventoryData.EnsureVariants(item);
             }
 
             await db.SaveChangesAsync();

@@ -144,6 +144,42 @@ namespace MarketLine.Controllers
             return RedirectToAction(nameof(Inventory));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateVariantStock(int variantId, int quantity)
+        {
+            if (variantId > 0 && quantity >= 0 && quantity <= InputLimits.StockMax)
+            {
+                await _admin.UpdateVariantStockAsync(variantId, quantity);
+            }
+
+            return RedirectToAction(nameof(Inventory));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddVariant(int itemId, string? size, string? color, string? model, int quantity)
+        {
+            if (itemId > 0 && quantity >= 0 && quantity <= InputLimits.StockMax)
+            {
+                await _admin.AddVariantAsync(itemId, size, color, model, quantity);
+            }
+
+            return RedirectToAction(nameof(Inventory));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteVariant(int variantId)
+        {
+            if (variantId > 0)
+            {
+                await _admin.DeleteVariantAsync(variantId);
+            }
+
+            return RedirectToAction(nameof(Inventory));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Customers()
         {

@@ -4,13 +4,13 @@
     <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
     <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
     <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
-    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\AppData\Local\Temp\cursor-sandbox-cache\981bddfc891a95bd36ad97e8fce8acbd\nuget</NuGetPackageRoot>
-    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\zozo2\AppData\Local\Temp\cursor-sandbox-cache\981bddfc891a95bd36ad97e8fce8acbd\nuget;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\AppData\Local\Temp\cursor-sandbox-cache\9c6528e6b08759306e9f766bb5c7f343\nuget</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\zozo2\AppData\Local\Temp\cursor-sandbox-cache\9c6528e6b08759306e9f766bb5c7f343\nuget;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
     <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">7.0.0</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <SourceRoot Include="C:\Users\zozo2\AppData\Local\Temp\cursor-sandbox-cache\981bddfc891a95bd36ad97e8fce8acbd\nuget\" />
+    <SourceRoot Include="C:\Users\zozo2\AppData\Local\Temp\cursor-sandbox-cache\9c6528e6b08759306e9f766bb5c7f343\nuget\" />
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
@@ -24,7 +24,7 @@
     <Import Project="$(NuGetPackageRoot)\microsoft.extensions.configuration.usersecrets\10.0.1\buildTransitive\net8.0\Microsoft.Extensions.Configuration.UserSecrets.props" Condition="Exists('$(NuGetPackageRoot)\microsoft.extensions.configuration.usersecrets\10.0.1\buildTransitive\net8.0\Microsoft.Extensions.Configuration.UserSecrets.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Pkgxunit_analyzers Condition=" '$(Pkgxunit_analyzers)' == '' ">C:\Users\zozo2\AppData\Local\Temp\cursor-sandbox-cache\981bddfc891a95bd36ad97e8fce8acbd\nuget\xunit.analyzers\1.18.0</Pkgxunit_analyzers>
-    <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\zozo2\AppData\Local\Temp\cursor-sandbox-cache\981bddfc891a95bd36ad97e8fce8acbd\nuget\microsoft.codeanalysis.analyzers\3.11.0</PkgMicrosoft_CodeAnalysis_Analyzers>
+    <Pkgxunit_analyzers Condition=" '$(Pkgxunit_analyzers)' == '' ">C:\Users\zozo2\AppData\Local\Temp\cursor-sandbox-cache\9c6528e6b08759306e9f766bb5c7f343\nuget\xunit.analyzers\1.18.0</Pkgxunit_analyzers>
+    <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\zozo2\AppData\Local\Temp\cursor-sandbox-cache\9c6528e6b08759306e9f766bb5c7f343\nuget\microsoft.codeanalysis.analyzers\3.11.0</PkgMicrosoft_CodeAnalysis_Analyzers>
   </PropertyGroup>
 </Project>

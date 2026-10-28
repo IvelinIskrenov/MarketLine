@@ -59,6 +59,12 @@ body {
     color: #000; 
 }
 
+.btn-custom-green:disabled,
+.btn-custom-green.disabled {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
 .search-form {
     position: relative;
 }

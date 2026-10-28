@@ -3,6 +3,8 @@ namespace MarketLine.Models
     public class CartLine
     {
         public int ItemId { get; set; }
+        public int VariantId { get; set; }
+        public string? VariantLabel { get; set; }
         public string? Name { get; set; }
         public string? ImageUrl { get; set; }
         public decimal UnitPrice { get; set; }

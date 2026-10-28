@@ -38,7 +38,13 @@
             @foreach (var line in Model.Lines)
             {
                 <tr>
-                    <td>@line.Name</td>
+                    <td>
+                        @line.Name
+                        @if (!string.IsNullOrWhiteSpace(line.VariantLabel))
+                        {
+                            <div class="text-muted small">@line.VariantLabel</div>
+                        }
+                    </td>
                     <td>@line.Quantity</td>
                     <td>@line.LineTotal.ToString("C2")</td>
                 </tr>

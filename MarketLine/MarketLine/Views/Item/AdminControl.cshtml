@@ -32,7 +32,10 @@
                     <td>@(item.Brand)</td>
                     <td>@(item.category?.Name)</td>
                     <td>@item.price.ToString("C2")</td>
-                    <td>@item.stock_quantity</td>
+                    <td>
+                        @item.AvailableStock
+                        <div class="mt-1">@await Html.PartialAsync("_StockStatus", item)</div>
+                    </td>
                     <td>@item.discount %</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.id">Редакция</a>

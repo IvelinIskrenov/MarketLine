@@ -55,17 +55,57 @@
                 <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="stock_quantity" class="control-label"></label>
-                <input asp-for="stock_quantity" class="form-control" />
-                <span asp-validation-for="stock_quantity" class="text-danger"></span>
-            </div>
+            @if (Model.Variants.Count > 1)
+            {
+                <div class="form-group">
+                    <label class="control-label">Обща наличност</label>
+                    <input class="form-control" value="@Model.AvailableStock" disabled />
+                    <span class="form-text">Количеството се управлява по варианти.</span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label asp-for="stock_quantity" class="control-label"></label>
+                    <input asp-for="stock_quantity" class="form-control" />
+                    <span asp-validation-for="stock_quantity" class="text-danger"></span>
+                </div>
+            }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
+@if (Model.Variants.Count > 0)
+{
+    <div class="mt-4">
+        <h5>Варианти</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Размер</th>
+                    <th>Цвят</th>
+                    <th>Модел</th>
+                    <th>Наличност</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var variant in Model.Variants)
+                {
+                    <tr>
+                        <td>@(variant.Size ?? "—")</td>
+                        <td>@(variant.Color ?? "—")</td>
+                        <td>@(variant.Model ?? "—")</td>
+                        <td>@variant.StockQuantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a asp-controller="Admin" asp-action="Inventory">Управление на наличностите</a>
+    </div>
+}
 
 <div>
     <a asp-action="AdminControl">Назад към продуктите</a>
