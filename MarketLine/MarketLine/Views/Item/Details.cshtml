@@ -149,6 +149,7 @@
                 {
                     <p class="text-warning mt-2 mb-0">Внимание: остават малко бройки на склад.</p>
                 }
+                @await Html.PartialAsync("_StockAlertForm", Model)
                 <div class="mt-2">
                     @await Html.PartialAsync("_WishlistButton", Model.id)
                 </div>

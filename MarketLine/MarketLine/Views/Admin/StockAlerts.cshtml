@@ -1,0 +1,49 @@
+@model IEnumerable<MarketLine.Models.StockAlert>
+@{
+    ViewData["Title"] = "Известия за наличност";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Известия за наличност</h1>
+    <partial name="_AdminNav" />
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted text-center">Все още няма заявки за известие.</p>
+    }
+    else
+    {
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Имейл</th>
+                    <th>Продукт</th>
+                    <th>Вариант</th>
+                    <th>Заявена</th>
+                    <th>Състояние</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var alert in Model)
+                {
+                    <tr>
+                        <td>@alert.Email</td>
+                        <td>@(alert.Item?.name ?? $"#{alert.ItemId}")</td>
+                        <td>@(alert.Variant?.Label ?? "Всеки вариант")</td>
+                        <td>@alert.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            @if (alert.IsPending)
+                            {
+                                <span class="badge bg-warning text-dark">Чака наличност</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Изпратено @alert.NotifiedAt?.ToString("dd.MM.yyyy HH:mm")</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

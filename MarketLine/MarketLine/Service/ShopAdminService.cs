@@ -8,10 +8,12 @@ namespace MarketLine.Services
     public class ShopAdminService : IShopAdminService
     {
         private readonly MarketLineDbContext _context;
+        private readonly IStockAlertService _alerts;
 
-        public ShopAdminService(MarketLineDbContext context)
+        public ShopAdminService(MarketLineDbContext context, IStockAlertService alerts)
         {
             _context = context;
+            _alerts = alerts;
         }
 
         public Task<List<Category>> GetCategoriesAsync()
@@ -182,6 +184,7 @@ namespace MarketLine.Services
             }
 
             await _context.SaveChangesAsync();
+            await _alerts.NotifyRestockAsync(itemId);
         }
 
         public async Task UpdateVariantStockAsync(int variantId, int quantity)
@@ -195,6 +198,7 @@ namespace MarketLine.Services
             variant.StockQuantity = Math.Clamp(quantity, 0, InputLimits.StockMax);
             ItemInventoryData.SyncStock(variant.Item);
             await _context.SaveChangesAsync();
+            await _alerts.NotifyRestockAsync(variant.ItemId);
         }
 
         public async Task AddVariantAsync(int itemId, string? size, string? color, string? model, int quantity)
@@ -219,6 +223,7 @@ namespace MarketLine.Services
             });
             ItemInventoryData.SyncStock(item);
             await _context.SaveChangesAsync();
+            await _alerts.NotifyRestockAsync(itemId);
         }
 
         public async Task DeleteVariantAsync(int variantId)
@@ -230,6 +235,12 @@ namespace MarketLine.Services
             if (variant?.Item == null || variant.Item.Variants.Count <= 1)
             {
                 return;
+            }
+
+            var alerts = await _context.StockAlerts.Where(alert => alert.VariantId == variantId).ToListAsync();
+            foreach (var alert in alerts)
+            {
+                alert.VariantId = null;
             }
 
             _context.ItemVariants.Remove(variant);
@@ -266,7 +277,8 @@ namespace MarketLine.Services
             var stats = new AdminStats
             {
                 OrderCount = orders.Count,
-                Turnover = orders.Sum(o => o.Total)
+                Turnover = orders.Sum(o => o.Total),
+                PendingStockAlerts = await _context.StockAlerts.CountAsync(alert => alert.NotifiedAt == null)
             };
             stats.AverageOrder = stats.OrderCount == 0 ? 0 : Math.Round(stats.Turnover / stats.OrderCount, 2);
             stats.TopProducts = orders

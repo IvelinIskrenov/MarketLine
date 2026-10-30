@@ -7,6 +7,11 @@
     <h1 class="mb-4 text-center">Наличности</h1>
     <partial name="_AdminNav" />
 
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">@TempData["CartMessage"]</div>
+    }
+
     @foreach (var item in Model)
     {
         <div class="card shadow-sm border-0 mb-4">

@@ -40,6 +40,7 @@ namespace MarketLine.Services
         public int OrderCount { get; set; }
         public decimal Turnover { get; set; }
         public decimal AverageOrder { get; set; }
+        public int PendingStockAlerts { get; set; }
         public List<AdminTopProduct> TopProducts { get; set; } = new();
         public List<AdminStockAlert> LowStockItems { get; set; } = new();
     }

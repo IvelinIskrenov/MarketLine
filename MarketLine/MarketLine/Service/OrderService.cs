@@ -7,10 +7,12 @@ namespace MarketLine.Services
     public class OrderService : IOrderService
     {
         private readonly MarketLineDbContext _context;
+        private readonly IStockAlertService _alerts;
 
-        public OrderService(MarketLineDbContext context)
+        public OrderService(MarketLineDbContext context, IStockAlertService alerts)
         {
             _context = context;
+            _alerts = alerts;
         }
 
         public async Task<(Order? Order, string? Error)> PlaceAsync(CheckoutForm form, CartViewModel cart, string? userId)
@@ -220,11 +222,13 @@ namespace MarketLine.Services
         private async Task ApplyStatusAsync(Order order, string status, bool managedByAdmin)
         {
             var previous = OrderStatuses.Normalize(order.Status);
+            var restockedItems = new List<int>();
             if (status == OrderStatuses.Cancelled && previous != OrderStatuses.Cancelled)
             {
                 foreach (var line in order.Lines)
                 {
                     await RestoreStockAsync(line);
+                    restockedItems.Add(line.ItemId);
                 }
             }
 
@@ -235,6 +239,11 @@ namespace MarketLine.Services
             }
 
             await _context.SaveChangesAsync();
+
+            foreach (var itemId in restockedItems.Distinct())
+            {
+                await _alerts.NotifyRestockAsync(itemId);
+            }
         }
 
         private async Task RestoreStockAsync(OrderLine line)
