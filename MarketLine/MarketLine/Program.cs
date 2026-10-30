@@ -182,6 +182,10 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IWishlistService, WishlistService>();
 builder.Services.AddScoped<IShopAdminService, ShopAdminService>();
+builder.Services.AddSingleton<ShopEmailSender>();
+builder.Services.AddSingleton<IEmailSender>(sp => sp.GetRequiredService<ShopEmailSender>());
+builder.Services.AddSingleton<IEmailInbox>(sp => sp.GetRequiredService<ShopEmailSender>());
+builder.Services.AddScoped<IStockAlertService, StockAlertService>();
 
 var app = builder.Build();
 

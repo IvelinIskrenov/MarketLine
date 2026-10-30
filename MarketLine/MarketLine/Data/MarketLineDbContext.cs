@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MarketLine.Models;
+using MarketLine.Security;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace MarketLine.Data
@@ -29,6 +30,8 @@ namespace MarketLine.Data
         public DbSet<ShippingSettings> ShippingSettings { get; set; }
 
         public DbSet<SitePage> SitePages { get; set; }
+
+        public DbSet<StockAlert> StockAlerts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -143,6 +146,28 @@ namespace MarketLine.Data
                 .WithMany()
                 .HasForeignKey(l => l.VariantId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<StockAlert>()
+                .HasOne(alert => alert.Item)
+                .WithMany()
+                .HasForeignKey(alert => alert.ItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<StockAlert>()
+                .HasOne(alert => alert.Variant)
+                .WithMany()
+                .HasForeignKey(alert => alert.VariantId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<StockAlert>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(alert => alert.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<StockAlert>()
+                .Property(alert => alert.Email)
+                .HasMaxLength(InputLimits.Email);
         }
     }
 }

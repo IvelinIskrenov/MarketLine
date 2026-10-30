@@ -8,6 +8,15 @@
 <div class="container mt-4">
     <h1 class="mb-4 text-center">🛒 Products</h1>
 
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">@TempData["CartMessage"]</div>
+    }
+    @if (TempData["CartError"] != null)
+    {
+        <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+    }
+
     <div class="row">
         <aside class="col-lg-3 mb-4">
             <form method="get" asp-action="Index" class="catalog-filters card shadow-sm border-0">
@@ -214,12 +223,13 @@
                                         </div>
                                         @if (item.IsSoldOut)
                                         {
-                                            <button type="button"
-                                                    class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
-                                                    style="width: 60%;"
-                                                    disabled>
-                                                Изчерпан
-                                            </button>
+                                            <a asp-action="Details"
+                                               asp-route-id="@item.id"
+                                               asp-fragment="stock-alert"
+                                               class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
+                                               style="width: 60%;">
+                                                Извести ме
+                                            </a>
                                         }
                                         else if (item.HasMultipleVariants)
                                         {

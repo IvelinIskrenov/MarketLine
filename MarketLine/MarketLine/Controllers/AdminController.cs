@@ -12,12 +12,14 @@ namespace MarketLine.Controllers
         private readonly IShopAdminService _admin;
         private readonly IOrderService _orders;
         private readonly IItemService _items;
+        private readonly IStockAlertService _alerts;
 
-        public AdminController(IShopAdminService admin, IOrderService orders, IItemService items)
+        public AdminController(IShopAdminService admin, IOrderService orders, IItemService items, IStockAlertService alerts)
         {
             _admin = admin;
             _orders = orders;
             _items = items;
+            _alerts = alerts;
         }
 
         [HttpGet]
@@ -178,6 +180,13 @@ namespace MarketLine.Controllers
             }
 
             return RedirectToAction(nameof(Inventory));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> StockAlerts()
+        {
+            ViewBag.AdminSection = "StockAlerts";
+            return View(await _alerts.GetRecentAsync());
         }
 
         [HttpGet]

@@ -8,10 +8,12 @@ namespace MarketLine.Services
     public class ItemService : IItemService
     {
         private readonly MarketLineDbContext _context;
+        private readonly IStockAlertService _alerts;
 
-        public ItemService(MarketLineDbContext context)
+        public ItemService(MarketLineDbContext context, IStockAlertService alerts)
         {
             _context = context;
+            _alerts = alerts;
         }
 
         public async Task<IEnumerable<Item>> GetAllItemsAsync()
@@ -196,6 +198,7 @@ namespace MarketLine.Services
             }
 
             await _context.SaveChangesAsync();
+            await _alerts.NotifyRestockAsync(item.id);
         }
 
         public async Task DeleteItemAsync(int id)
@@ -203,6 +206,8 @@ namespace MarketLine.Services
             var item = await _context.Items.Include(i => i.Variants).FirstOrDefaultAsync(i => i.id == id);
             if (item != null)
             {
+                var alerts = await _context.StockAlerts.Where(alert => alert.ItemId == id).ToListAsync();
+                _context.StockAlerts.RemoveRange(alerts);
                 _context.Items.Remove(item);
                 await _context.SaveChangesAsync();
             }

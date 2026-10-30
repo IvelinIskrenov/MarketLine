@@ -8,7 +8,7 @@
     <partial name="_AdminNav" />
 
     <div class="row g-3 mb-4">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <h6 class="text-muted">Поръчки</h6>
@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <h6 class="text-muted">Оборот</h6>
@@ -24,11 +24,20 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <h6 class="text-muted">Средна стойност</h6>
                     <p class="display-6 mb-0">@Model.AverageOrder.ToString("C2")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <h6 class="text-muted">Чакащи известия</h6>
+                    <p class="display-6 mb-0">@Model.PendingStockAlerts</p>
+                    <a asp-action="StockAlerts" class="small">Към заявките</a>
                 </div>
             </div>
         </div>
