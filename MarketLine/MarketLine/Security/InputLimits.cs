@@ -25,6 +25,8 @@ namespace MarketLine.Security
         public const int PriceMax = 100000;
         public const int PageTitle = 150;
         public const int PageBody = 20000;
+        public const int Question = 500;
+        public const int Answer = 2000;
         public const string PhonePattern = @"^$|^\+?[0-9\s\-()]{6,20}$";
         public const string PostalPattern = @"^[A-Za-z0-9\s\-]{3,12}$";
     }

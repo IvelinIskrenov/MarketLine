@@ -11,10 +11,12 @@ namespace MarketLine.Controllers
     public class ItemController : Controller
     {
         private readonly IItemService _itemService;
+        private readonly IProductQuestionService _questions;
 
-        public ItemController(IItemService itemService)
+        public ItemController(IItemService itemService, IProductQuestionService questions)
         {
             _itemService = itemService;
+            _questions = questions;
         }
 
         /// <summary>
@@ -175,6 +177,7 @@ namespace MarketLine.Controllers
             var item = await _itemService.GetByIdAsync(id.Value);
             if (item == null) return NotFound();
 
+            ViewBag.Questions = await _questions.GetByItemAsync(item.id);
             return View(item);
         }
 

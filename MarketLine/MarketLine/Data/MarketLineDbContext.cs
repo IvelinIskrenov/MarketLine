@@ -33,6 +33,8 @@ namespace MarketLine.Data
 
         public DbSet<StockAlert> StockAlerts { get; set; }
 
+        public DbSet<ProductQuestion> ProductQuestions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Category>().HasData(
@@ -168,6 +170,24 @@ namespace MarketLine.Data
             builder.Entity<StockAlert>()
                 .Property(alert => alert.Email)
                 .HasMaxLength(InputLimits.Email);
+
+            builder.Entity<ProductQuestion>()
+                .HasOne(question => question.Item)
+                .WithMany()
+                .HasForeignKey(question => question.ItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ProductQuestion>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(question => question.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<ProductQuestion>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(question => question.AnsweredByUserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

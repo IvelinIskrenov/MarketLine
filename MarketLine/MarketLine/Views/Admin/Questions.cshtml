@@ -1,0 +1,68 @@
+@model IEnumerable<MarketLine.Models.ProductQuestion>
+@{
+    ViewData["Title"] = "Въпроси към продуктите";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Въпроси и отговори</h1>
+    <partial name="_AdminNav" />
+
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">@TempData["CartMessage"]</div>
+    }
+    @if (TempData["CartError"] != null)
+    {
+        <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted text-center">Все още няма въпроси.</p>
+    }
+    else
+    {
+        foreach (var current in Model)
+        {
+            <div class="card shadow-sm border-0 mb-3">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                        <div>
+                            <strong>@(current.Item?.name ?? $"Продукт #{current.ItemId}")</strong>
+                            <div class="text-muted small">@current.AuthorName · @current.AskedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                        </div>
+                        @if (current.IsAnswered)
+                        {
+                            <span class="badge bg-success">Отговорен</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Чака отговор</span>
+                        }
+                    </div>
+                    <p class="mb-2">@current.Question</p>
+                    @if (current.IsAnswered)
+                    {
+                        <p class="mb-3"><strong>Отговор:</strong> @current.Answer</p>
+                    }
+                    <form asp-action="AnswerQuestion" method="post" class="mb-2">
+                        <input type="hidden" name="id" value="@current.Id" />
+                        <label class="form-label" for="answer-@current.Id">Отговор</label>
+                        <textarea id="answer-@current.Id"
+                                  name="answer"
+                                  class="form-control mb-2"
+                                  rows="3"
+                                  maxlength="2000"
+                                  required>@current.Answer</textarea>
+                        <button type="submit" class="btn btn-sm btn-success">@(current.IsAnswered ? "Обнови отговора" : "Отговори")</button>
+                    </form>
+                    <form asp-action="DeleteQuestion" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@current.Id" />
+                        <button type="submit" class="btn btn-link btn-sm text-danger p-0">Изтрий</button>
+                    </form>
+                    <a asp-controller="Item" asp-action="Details" asp-route-id="@current.ItemId" class="btn btn-link btn-sm">Към продукта</a>
+                </div>
+            </div>
+        }
+    }
+</div>

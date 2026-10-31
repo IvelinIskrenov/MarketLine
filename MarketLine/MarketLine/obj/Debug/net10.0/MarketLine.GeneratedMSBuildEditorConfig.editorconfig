@@ -94,6 +94,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUHJvbW90aW9ucy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Admin/Questions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUXVlc3Rpb25zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Admin/Shipping.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU2hpcHBpbmcuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -196,6 +200,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Shared/_OrderTracker.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9PcmRlclRyYWNrZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Shared/_ProductQuestions.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Qcm9kdWN0UXVlc3Rpb25zLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/zozo2/Downloads/MarketLine-main/marketline/MarketLine/MarketLine/Views/Shared/_ProfileNav.cshtml]

@@ -278,7 +278,8 @@ namespace MarketLine.Services
             {
                 OrderCount = orders.Count,
                 Turnover = orders.Sum(o => o.Total),
-                PendingStockAlerts = await _context.StockAlerts.CountAsync(alert => alert.NotifiedAt == null)
+                PendingStockAlerts = await _context.StockAlerts.CountAsync(alert => alert.NotifiedAt == null),
+                PendingQuestions = await _context.ProductQuestions.CountAsync(question => question.AnsweredAt == null)
             };
             stats.AverageOrder = stats.OrderCount == 0 ? 0 : Math.Round(stats.Turnover / stats.OrderCount, 2);
             stats.TopProducts = orders

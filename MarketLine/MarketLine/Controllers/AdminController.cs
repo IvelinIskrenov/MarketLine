@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MarketLine.Models;
 using MarketLine.Security;
 using MarketLine.Services;
@@ -13,13 +14,20 @@ namespace MarketLine.Controllers
         private readonly IOrderService _orders;
         private readonly IItemService _items;
         private readonly IStockAlertService _alerts;
+        private readonly IProductQuestionService _questions;
 
-        public AdminController(IShopAdminService admin, IOrderService orders, IItemService items, IStockAlertService alerts)
+        public AdminController(
+            IShopAdminService admin,
+            IOrderService orders,
+            IItemService items,
+            IStockAlertService alerts,
+            IProductQuestionService questions)
         {
             _admin = admin;
             _orders = orders;
             _items = items;
             _alerts = alerts;
+            _questions = questions;
         }
 
         [HttpGet]
@@ -187,6 +195,38 @@ namespace MarketLine.Controllers
         {
             ViewBag.AdminSection = "StockAlerts";
             return View(await _alerts.GetRecentAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Questions()
+        {
+            ViewBag.AdminSection = "Questions";
+            return View(await _questions.GetRecentAsync());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AnswerQuestion(int id, string? answer)
+        {
+            var error = await _questions.AnswerAsync(id, answer, User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (error != null)
+            {
+                TempData["CartError"] = error;
+            }
+            else
+            {
+                TempData["CartMessage"] = "Отговорът е публикуван.";
+            }
+
+            return RedirectToAction(nameof(Questions));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteQuestion(int id)
+        {
+            await _questions.DeleteAsync(id);
+            return RedirectToAction(nameof(Questions));
         }
 
         [HttpGet]

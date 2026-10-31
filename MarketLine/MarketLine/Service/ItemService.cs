@@ -208,6 +208,8 @@ namespace MarketLine.Services
             {
                 var alerts = await _context.StockAlerts.Where(alert => alert.ItemId == id).ToListAsync();
                 _context.StockAlerts.RemoveRange(alerts);
+                var questions = await _context.ProductQuestions.Where(question => question.ItemId == id).ToListAsync();
+                _context.ProductQuestions.RemoveRange(questions);
                 _context.Items.Remove(item);
                 await _context.SaveChangesAsync();
             }

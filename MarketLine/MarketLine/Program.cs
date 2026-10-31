@@ -186,6 +186,7 @@ builder.Services.AddSingleton<ShopEmailSender>();
 builder.Services.AddSingleton<IEmailSender>(sp => sp.GetRequiredService<ShopEmailSender>());
 builder.Services.AddSingleton<IEmailInbox>(sp => sp.GetRequiredService<ShopEmailSender>());
 builder.Services.AddScoped<IStockAlertService, StockAlertService>();
+builder.Services.AddScoped<IProductQuestionService, ProductQuestionService>();
 
 var app = builder.Build();
 
