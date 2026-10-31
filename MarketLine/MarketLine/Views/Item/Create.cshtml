@@ -74,6 +74,17 @@
                             <span asp-validation-for="stock_quantity" class="text-danger"></span>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label" for="publishAt">Публикуване на</label>
+                            <input id="publishAt"
+                                   name="publishAt"
+                                   type="datetime-local"
+                                   class="form-control"
+                                   value="@Model?.PublishAtLocalValue" />
+                            <div class="form-text">Оставете празно за публикуване веднага. Задайте бъдеща дата и час, за да се появи в каталога тогава.</div>
+                            <span class="text-danger">@Html.ValidationMessage("publishAt")</span>
+                        </div>
+
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-success btn-lg">
                                 <i class="bi bi-check-circle-fill me-2"></i> Create

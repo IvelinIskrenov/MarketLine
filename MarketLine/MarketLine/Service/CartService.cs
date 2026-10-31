@@ -42,6 +42,7 @@ namespace MarketLine.Services
 
             var item = await LoadItemAsync(itemId);
             if (item == null) return "Продуктът не е намерен.";
+            if (!item.IsLive) return "Продуктът още не е публикуван.";
 
             var variant = ResolveVariant(item, variantId);
             if (item.Variants.Count > 0 && variant == null)
@@ -119,6 +120,7 @@ namespace MarketLine.Services
 
             var item = await LoadItemAsync(itemId);
             if (item == null) return "Продуктът не е намерен.";
+            if (!item.IsLive) return "Продуктът още не е публикуван.";
 
             var variant = ResolveVariant(item, variantId);
             if (item.Variants.Count > 0 && variant == null)
@@ -203,7 +205,7 @@ namespace MarketLine.Services
             foreach (var savedLine in state.Lines.ToList())
             {
                 var item = items.FirstOrDefault(i => i.id == savedLine.ItemId);
-                if (item == null)
+                if (item == null || !item.IsLive)
                 {
                     state.Lines.Remove(savedLine);
                     continue;

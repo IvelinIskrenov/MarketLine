@@ -31,6 +31,7 @@ namespace MarketLine.Services
                     .ThenInclude(i => i!.category)
                 .OrderByDescending(w => w.AddedAt)
                 .Select(w => w.Item!)
+                .Where(item => item.PublishedAt == null || item.PublishedAt <= DateTime.UtcNow)
                 .ToListAsync();
         }
 
@@ -46,8 +47,8 @@ namespace MarketLine.Services
                 return false;
             }
 
-            var itemExists = await _context.Items.AnyAsync(i => i.id == itemId);
-            if (!itemExists) return false;
+            var item = await _context.Items.FirstOrDefaultAsync(i => i.id == itemId);
+            if (item == null || !item.IsLive) return false;
 
             _context.WishlistItems.Add(new WishlistItem
             {

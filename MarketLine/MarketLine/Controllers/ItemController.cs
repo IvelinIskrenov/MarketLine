@@ -1,4 +1,5 @@
-﻿using MarketLine.Models;
+﻿using MarketLine.Data;
+using MarketLine.Models;
 using MarketLine.Security;
 using MarketLine.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -147,13 +148,17 @@ namespace MarketLine.Controllers
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("name,description,discount,price,imageUrl,CategoryId,stock_quantity,Brand,Features")] Item item)
+        public async Task<IActionResult> Create(
+            [Bind("name,description,discount,price,imageUrl,CategoryId,stock_quantity,Brand,Features")] Item item,
+            string? publishAt)
         {
             ViewBag.AdminSection = "Products";
             if (ModelState.IsValid && !await CategoryExistsAsync(item.CategoryId))
             {
                 ModelState.AddModelError(nameof(item.CategoryId), "Невалидна категория.");
             }
+
+            ApplyPublishAt(item, publishAt);
 
             if (ModelState.IsValid)
             {
@@ -176,6 +181,10 @@ namespace MarketLine.Controllers
 
             var item = await _itemService.GetByIdAsync(id.Value);
             if (item == null) return NotFound();
+            if (!item.IsLive && !User.IsInRole("Admin") && !User.IsInRole("admin"))
+            {
+                return NotFound();
+            }
 
             ViewBag.Questions = await _questions.GetByItemAsync(item.id);
             return View(item);
@@ -206,7 +215,8 @@ namespace MarketLine.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("id,name,description,discount,price,imageUrl,CategoryId,stock_quantity,Brand,Features")] Item item)
+            [Bind("id,name,description,discount,price,imageUrl,CategoryId,stock_quantity,Brand,Features")] Item item,
+            string? publishAt)
         {
             if (id != item.id) return NotFound();
 
@@ -215,6 +225,8 @@ namespace MarketLine.Controllers
             {
                 ModelState.AddModelError(nameof(item.CategoryId), "Невалидна категория.");
             }
+
+            ApplyPublishAt(item, publishAt);
 
             if (ModelState.IsValid)
             {
@@ -267,6 +279,17 @@ namespace MarketLine.Controllers
         {
             await _itemService.DeleteItemAsync(id);
             return RedirectToAction(nameof(AdminControl));
+        }
+
+        private void ApplyPublishAt(Item item, string? publishAt)
+        {
+            if (!ItemPublishing.TryParseLocal(publishAt, out var publishedAt, out var error))
+            {
+                ModelState.AddModelError("publishAt", error ?? "Невалидна дата за публикуване.");
+                return;
+            }
+
+            item.PublishedAt = publishedAt;
         }
 
         private async Task<bool> CategoryExistsAsync(int? categoryId)

@@ -30,7 +30,7 @@ namespace MarketLine.Services
             var item = await _context.Items
                 .Include(current => current.Variants)
                 .FirstOrDefaultAsync(current => current.id == itemId);
-            if (item == null)
+            if (item == null || !item.IsLive)
             {
                 return "Продуктът не е намерен.";
             }

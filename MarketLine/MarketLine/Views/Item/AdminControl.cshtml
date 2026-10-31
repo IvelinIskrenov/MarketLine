@@ -21,6 +21,7 @@
                 <th>Цена</th>
                 <th>Наличност</th>
                 <th>Отстъпка</th>
+                <th>Публикуване</th>
                 <th></th>
             </tr>
         </thead>
@@ -37,6 +38,7 @@
                         <div class="mt-1">@await Html.PartialAsync("_StockStatus", item)</div>
                     </td>
                     <td>@item.discount %</td>
+                    <td>@await Html.PartialAsync("_PublishStatus", item)</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.id">Редакция</a>
                         <a asp-action="Delete" asp-route-id="@item.id" class="ms-2">Изтрий</a>

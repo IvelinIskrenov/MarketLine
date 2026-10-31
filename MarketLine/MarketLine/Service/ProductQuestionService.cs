@@ -16,7 +16,13 @@ namespace MarketLine.Services
 
         public async Task<string?> AskAsync(int itemId, string? authorName, string? question, string? userId)
         {
-            if (itemId <= 0 || !await _context.Items.AnyAsync(item => item.id == itemId))
+            if (itemId <= 0)
+            {
+                return "Продуктът не е намерен.";
+            }
+
+            var item = await _context.Items.FirstOrDefaultAsync(current => current.id == itemId);
+            if (item == null || !item.IsLive)
             {
                 return "Продуктът не е намерен.";
             }

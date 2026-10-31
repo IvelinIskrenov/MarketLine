@@ -18,10 +18,16 @@ namespace MarketLine.Services
 
         public async Task<IEnumerable<Item>> GetAllItemsAsync()
         {
-            return await _context.Items
+            var items = await _context.Items
                 .Include(i => i.category)
                 .Include(i => i.Variants)
                 .ToListAsync();
+
+            return items
+                .OrderByDescending(item => item.IsScheduled)
+                .ThenBy(item => item.PublishedAt)
+                .ThenBy(item => item.name)
+                .ToList();
         }
 
         public async Task<IEnumerable<Item>> GetFilteredItemsAsync(string? category)
@@ -44,7 +50,7 @@ namespace MarketLine.Services
         {
             query ??= new ItemSearchQuery();
 
-            var allItems = await _context.Items.AsNoTracking().ToListAsync();
+            var allItems = await _context.Items.AsNoTracking().WhereLive().ToListAsync();
             var brands = allItems
                 .Select(i => i.Brand)
                 .Where(b => !string.IsNullOrWhiteSpace(b))
@@ -60,6 +66,7 @@ namespace MarketLine.Services
             var categories = (await GetAllCategoriesAsync()).ToList();
 
             var itemsQuery = _context.Items
+                .WhereLive()
                 .Include(i => i.category)
                 .ThenInclude(c => c!.Parent)
                 .Include(i => i.Variants)
@@ -121,6 +128,7 @@ namespace MarketLine.Services
             var needle = term.Trim().ToLower();
             var matches = await _context.Items
                 .AsNoTracking()
+                .WhereLive()
                 .Where(i =>
                     (i.name != null && i.name.ToLower().Contains(needle)) ||
                     (i.description != null && i.description.ToLower().Contains(needle)) ||
@@ -181,6 +189,8 @@ namespace MarketLine.Services
             {
                 current.CreatedAt = item.CreatedAt == default ? DateTime.UtcNow : item.CreatedAt;
             }
+
+            current.PublishedAt = item.PublishedAt;
 
             if (current.Variants.Count == 0)
             {

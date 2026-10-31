@@ -1,0 +1,10 @@
+@model MarketLine.Models.Item
+
+@if (Model.IsScheduled)
+{
+    <span class="badge bg-info text-dark">Планиран @ItemPublishing.ToLocalDisplay(Model.PublishedAt)</span>
+}
+else
+{
+    <span class="badge bg-success">Публикуван</span>
+}

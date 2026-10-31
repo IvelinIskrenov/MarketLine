@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using MarketLine.Data;
 using MarketLine.Security;
 
 namespace MarketLine.Models
@@ -56,6 +57,18 @@ namespace MarketLine.Models
 
         [Display(Name = "Добавен на")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        [Display(Name = "Публикуване на")]
+        public DateTime? PublishedAt { get; set; }
+
+        [NotMapped]
+        public bool IsScheduled => PublishedAt.HasValue && ItemPublishing.AsUtc(PublishedAt.Value) > DateTime.UtcNow;
+
+        [NotMapped]
+        public bool IsLive => !IsScheduled;
+
+        [NotMapped]
+        public string? PublishAtLocalValue => ItemPublishing.ToLocalInput(PublishedAt);
 
         [NotMapped]
         public IReadOnlyList<string> FeatureTags =>

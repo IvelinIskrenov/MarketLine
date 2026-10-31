@@ -31,7 +31,7 @@ namespace MarketLine.Services
             foreach (var line in cart.Lines)
             {
                 var item = items.FirstOrDefault(candidate => candidate.id == line.ItemId);
-                if (item == null)
+                if (item == null || !item.IsLive)
                 {
                     return (null, "Продуктът не е намерен.");
                 }

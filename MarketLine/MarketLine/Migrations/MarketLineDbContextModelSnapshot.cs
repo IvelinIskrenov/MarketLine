@@ -251,6 +251,9 @@ namespace MarketLine.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("stock_quantity")
                         .HasColumnType("int");
 
