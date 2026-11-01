@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text;
 using MarketLine.Models;
 using MarketLine.Security;
 using MarketLine.Services;
@@ -16,6 +17,7 @@ namespace MarketLine.Controllers
         private readonly IStockAlertService _alerts;
         private readonly IProductQuestionService _questions;
         private readonly ISupportTicketService _tickets;
+        private readonly ISalesReportService _reports;
 
         public AdminController(
             IShopAdminService admin,
@@ -23,7 +25,8 @@ namespace MarketLine.Controllers
             IItemService items,
             IStockAlertService alerts,
             IProductQuestionService questions,
-            ISupportTicketService tickets)
+            ISupportTicketService tickets,
+            ISalesReportService reports)
         {
             _admin = admin;
             _orders = orders;
@@ -31,6 +34,7 @@ namespace MarketLine.Controllers
             _alerts = alerts;
             _questions = questions;
             _tickets = tickets;
+            _reports = reports;
         }
 
         [HttpGet]
@@ -286,6 +290,32 @@ namespace MarketLine.Controllers
         {
             await _tickets.DeleteAsync(id);
             return RedirectToAction(nameof(Tickets));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Reports(string? period, DateTime? from, DateTime? to)
+        {
+            ViewBag.AdminSection = "Reports";
+            if (period?.Length > 20)
+            {
+                period = SalesReportPeriods.Month;
+            }
+
+            return View(await _reports.GetAsync(period, from, to));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportReports(string? period, DateTime? from, DateTime? to)
+        {
+            if (period?.Length > 20)
+            {
+                period = SalesReportPeriods.Month;
+            }
+
+            var report = await _reports.GetAsync(period, from, to);
+            var bytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(_reports.ToCsv(report))).ToArray();
+            var fileName = $"otchet-{report.From:yyyyMMdd}-{report.To:yyyyMMdd}.csv";
+            return File(bytes, "text/csv; charset=utf-8", fileName);
         }
 
         [HttpGet]

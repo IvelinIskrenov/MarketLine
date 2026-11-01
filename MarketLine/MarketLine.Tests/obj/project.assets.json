@@ -9377,7 +9377,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\zozo2\\AppData\\Local\\Temp\\cursor-sandbox-cache\\88b74d61366c039da613c05838638d4b\\nuget": {},
+    "C:\\Users\\zozo2\\AppData\\Local\\Temp\\cursor-sandbox-cache\\d85ab1b281ae1bb983d29e4b024b9ad9\\nuget": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
@@ -9386,7 +9386,7 @@
       "projectUniqueName": "C:\\Users\\zozo2\\Downloads\\MarketLine-main\\marketline\\MarketLine\\MarketLine.Tests\\MarketLine.Tests.csproj",
       "projectName": "MarketLine.Tests",
       "projectPath": "C:\\Users\\zozo2\\Downloads\\MarketLine-main\\marketline\\MarketLine\\MarketLine.Tests\\MarketLine.Tests.csproj",
-      "packagesPath": "C:\\Users\\zozo2\\AppData\\Local\\Temp\\cursor-sandbox-cache\\88b74d61366c039da613c05838638d4b\\nuget",
+      "packagesPath": "C:\\Users\\zozo2\\AppData\\Local\\Temp\\cursor-sandbox-cache\\d85ab1b281ae1bb983d29e4b024b9ad9\\nuget",
       "outputPath": "C:\\Users\\zozo2\\Downloads\\MarketLine-main\\marketline\\MarketLine\\MarketLine.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
