@@ -1,0 +1,85 @@
+@model MarketLine.Models.SupportTicket
+@{
+    ViewData["Title"] = Model.TicketNumber;
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Билет @Model.TicketNumber</h1>
+    <partial name="_AdminNav" />
+
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">@TempData["CartMessage"]</div>
+    }
+    @if (TempData["CartError"] != null)
+    {
+        <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+    }
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                <div>
+                    <h5 class="mb-1">@Model.Subject</h5>
+                    <div class="text-muted small">@Model.CustomerName · @Model.Email · @Model.Topic</div>
+                    @if (!string.IsNullOrWhiteSpace(Model.OrderNumber))
+                    {
+                        <div class="small">Поръчка: @Model.OrderNumber</div>
+                    }
+                    <div class="small">Създаден: @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                </div>
+                <span class="badge @TicketStatuses.BadgeClass(Model.Status)">@TicketStatuses.Normalize(Model.Status)</span>
+            </div>
+            <form asp-action="SetTicketStatus" method="post" class="row g-2 align-items-end mt-2">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="col-md-4">
+                    <label class="form-label" for="ticket-status">Статус</label>
+                    <select id="ticket-status" name="status" class="form-select">
+                        @foreach (var status in TicketStatuses.All)
+                        {
+                            <option value="@status" selected="@(status == TicketStatuses.Normalize(Model.Status))">@status</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-sm btn-success">Обнови статуса</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @foreach (var current in Model.Messages.OrderBy(message => message.CreatedAt))
+    {
+        <div class="border rounded p-3 mb-3 @(current.IsFromAdmin ? "bg-light" : "")">
+            <p class="mb-1">
+                <strong>@(current.IsFromAdmin ? "Администратор" : current.AuthorName)</strong>
+                <span class="text-muted small"> · @current.CreatedAt.ToString("dd.MM.yyyy HH:mm")</span>
+            </p>
+            <p class="mb-0">@current.Body</p>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 mt-3">
+        <div class="card-body">
+            <form asp-action="ReplyTicket" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <label class="form-label" for="admin-reply">Отговор</label>
+                <textarea id="admin-reply" name="message" class="form-control mb-3" rows="4" maxlength="2000" required></textarea>
+                <button type="submit" class="btn btn-success">Отговори</button>
+            </form>
+            @if (!Model.IsClosed)
+            {
+                <form asp-action="CloseTicket" method="post" class="d-inline mt-3">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-outline-secondary btn-sm mt-3">Затвори</button>
+                </form>
+            }
+            <form asp-action="DeleteTicket" method="post" class="d-inline">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn btn-link btn-sm text-danger">Изтрий</button>
+            </form>
+        </div>
+    </div>
+
+    <a asp-action="Tickets" class="d-inline-block mt-3">Назад към билетите</a>
+</div>

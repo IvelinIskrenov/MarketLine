@@ -15,19 +15,22 @@ namespace MarketLine.Controllers
         private readonly IOrderService _orderService;
         private readonly IWishlistService _wishlistService;
         private readonly ICartService _cartService;
+        private readonly ISupportTicketService _tickets;
 
         public ProfileController(
             UserManager<User> userManager,
             IAddressService addressService,
             IOrderService orderService,
             IWishlistService wishlistService,
-            ICartService cartService)
+            ICartService cartService,
+            ISupportTicketService tickets)
         {
             _userManager = userManager;
             _addressService = addressService;
             _orderService = orderService;
             _wishlistService = wishlistService;
             _cartService = cartService;
+            _tickets = tickets;
         }
 
         [HttpGet]
@@ -229,6 +232,86 @@ namespace MarketLine.Controllers
             }
 
             return RedirectToAction("Index", "Cart");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Tickets()
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Challenge();
+
+            ViewBag.ProfileSection = "Tickets";
+            return View(await _tickets.GetByUserAsync(user.Id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTicket(string? subject, string? topic, string? message, string? orderNumber)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Challenge();
+
+            var name = $"{user.FirstName} {user.LastName}".Trim();
+            var (ticket, error) = await _tickets.CreateAsync(
+                user.Id,
+                subject,
+                topic,
+                message,
+                orderNumber,
+                name,
+                user.Email ?? string.Empty);
+            if (error != null)
+            {
+                TempData["CartError"] = error;
+                return RedirectToAction(nameof(Tickets));
+            }
+
+            TempData["ProfileMessage"] = "Билетът е създаден.";
+            return RedirectToAction(nameof(Ticket), new { id = ticket!.Id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Ticket(int id)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Challenge();
+            if (id <= 0) return RedirectToAction(nameof(Tickets));
+
+            var ticket = await _tickets.GetByIdAsync(id, user.Id);
+            if (ticket == null)
+            {
+                return RedirectToAction(nameof(Tickets));
+            }
+
+            ViewBag.ProfileSection = "Tickets";
+            return View(ticket);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReplyTicket(int id, string? message)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Challenge();
+            if (id <= 0) return RedirectToAction(nameof(Tickets));
+
+            var name = $"{user.FirstName} {user.LastName}".Trim();
+            var error = await _tickets.ReplyAsync(id, message, user.Id, name, false);
+            TempData[error == null ? "ProfileMessage" : "CartError"] = error ?? "Съобщението е изпратено.";
+            return RedirectToAction(nameof(Ticket), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CloseTicket(int id)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Challenge();
+            if (id <= 0) return RedirectToAction(nameof(Tickets));
+
+            var error = await _tickets.CloseAsync(id, user.Id, false);
+            TempData[error == null ? "ProfileMessage" : "CartError"] = error ?? "Билетът е затворен.";
+            return RedirectToAction(nameof(Ticket), new { id });
         }
 
         [HttpGet]

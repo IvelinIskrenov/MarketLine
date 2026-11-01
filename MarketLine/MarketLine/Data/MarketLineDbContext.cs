@@ -35,6 +35,10 @@ namespace MarketLine.Data
 
         public DbSet<ProductQuestion> ProductQuestions { get; set; }
 
+        public DbSet<SupportTicket> SupportTickets { get; set; }
+
+        public DbSet<SupportMessage> SupportMessages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Category>().HasData(
@@ -188,6 +192,28 @@ namespace MarketLine.Data
                 .WithMany()
                 .HasForeignKey(question => question.AnsweredByUserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<SupportTicket>()
+                .HasIndex(ticket => ticket.TicketNumber)
+                .IsUnique();
+
+            builder.Entity<SupportTicket>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(ticket => ticket.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<SupportTicket>()
+                .HasMany(ticket => ticket.Messages)
+                .WithOne(message => message.Ticket)
+                .HasForeignKey(message => message.TicketId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<SupportMessage>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(message => message.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

@@ -15,19 +15,22 @@ namespace MarketLine.Controllers
         private readonly IItemService _items;
         private readonly IStockAlertService _alerts;
         private readonly IProductQuestionService _questions;
+        private readonly ISupportTicketService _tickets;
 
         public AdminController(
             IShopAdminService admin,
             IOrderService orders,
             IItemService items,
             IStockAlertService alerts,
-            IProductQuestionService questions)
+            IProductQuestionService questions,
+            ISupportTicketService tickets)
         {
             _admin = admin;
             _orders = orders;
             _items = items;
             _alerts = alerts;
             _questions = questions;
+            _tickets = tickets;
         }
 
         [HttpGet]
@@ -227,6 +230,62 @@ namespace MarketLine.Controllers
         {
             await _questions.DeleteAsync(id);
             return RedirectToAction(nameof(Questions));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Tickets()
+        {
+            ViewBag.AdminSection = "Tickets";
+            return View(await _tickets.GetRecentAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Ticket(int id)
+        {
+            if (id <= 0) return RedirectToAction(nameof(Tickets));
+
+            var ticket = await _tickets.GetByIdAsync(id);
+            if (ticket == null) return RedirectToAction(nameof(Tickets));
+
+            ViewBag.AdminSection = "Tickets";
+            return View(ticket);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReplyTicket(int id, string? message)
+        {
+            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            var error = await _tickets.ReplyAsync(id, message, adminId, "Администратор", true);
+            TempData[error == null ? "CartMessage" : "CartError"] = error ?? "Отговорът е изпратен.";
+            return RedirectToAction(nameof(Ticket), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetTicketStatus(int id, string? status)
+        {
+            var error = await _tickets.SetStatusAsync(id, status);
+            TempData[error == null ? "CartMessage" : "CartError"] = error ?? "Статусът е обновен.";
+            return RedirectToAction(nameof(Ticket), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CloseTicket(int id)
+        {
+            var adminId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            var error = await _tickets.CloseAsync(id, adminId, true);
+            TempData[error == null ? "CartMessage" : "CartError"] = error ?? "Билетът е затворен.";
+            return RedirectToAction(nameof(Ticket), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteTicket(int id)
+        {
+            await _tickets.DeleteAsync(id);
+            return RedirectToAction(nameof(Tickets));
         }
 
         [HttpGet]

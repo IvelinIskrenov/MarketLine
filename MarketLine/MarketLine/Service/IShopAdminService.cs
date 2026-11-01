@@ -43,6 +43,7 @@ namespace MarketLine.Services
         public int PendingStockAlerts { get; set; }
         public int PendingQuestions { get; set; }
         public int ScheduledItems { get; set; }
+        public int OpenTickets { get; set; }
         public List<AdminTopProduct> TopProducts { get; set; } = new();
         public List<AdminStockAlert> LowStockItems { get; set; } = new();
     }

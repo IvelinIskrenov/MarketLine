@@ -1,0 +1,91 @@
+@model List<MarketLine.Models.SupportTicket>
+@{
+    ViewData["Title"] = "Поддръжка";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="mb-4 text-center">Моят профил</h1>
+            <partial name="_ProfileNav" />
+
+            @if (TempData["ProfileMessage"] != null)
+            {
+                <div class="alert alert-success text-center" role="alert">@TempData["ProfileMessage"]</div>
+            }
+            @if (TempData["CartError"] != null)
+            {
+                <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+            }
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <h5 class="mb-3">Нов билет</h5>
+                    <form asp-action="CreateTicket" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label" for="ticket-subject">Тема</label>
+                                <input id="ticket-subject" name="subject" class="form-control" maxlength="150" required />
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label" for="ticket-topic">Тема на запитването</label>
+                                <select id="ticket-topic" name="topic" class="form-select">
+                                    @foreach (var topic in TicketTopics.All)
+                                    {
+                                        <option value="@topic">@topic</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label" for="ticket-order">Номер на поръчка</label>
+                                <input id="ticket-order" name="orderNumber" class="form-control" maxlength="40" placeholder="по желание" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="ticket-message">Описание</label>
+                            <textarea id="ticket-message" name="message" class="form-control" rows="4" maxlength="2000" required placeholder="Опишете проблема или въпроса"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-custom-green">Изпрати билет</button>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.Count == 0)
+            {
+                <div class="alert alert-warning text-center" role="alert">Нямате билети за поддръжка.</div>
+            }
+            else
+            {
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Номер</th>
+                            <th>Тема</th>
+                            <th>Категория</th>
+                            <th>Статус</th>
+                            <th>Обновен</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Model)
+                        {
+                            <tr>
+                                <td>@ticket.TicketNumber</td>
+                                <td>@ticket.Subject</td>
+                                <td>@ticket.Topic</td>
+                                <td>
+                                    <span class="badge @TicketStatuses.BadgeClass(ticket.Status)">@TicketStatuses.Normalize(ticket.Status)</span>
+                                </td>
+                                <td>@ticket.UpdatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>
+                                    <a asp-action="Ticket" asp-route-id="@ticket.Id">Отвори</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>

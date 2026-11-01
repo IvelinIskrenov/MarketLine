@@ -1,0 +1,60 @@
+@model IEnumerable<MarketLine.Models.SupportTicket>
+@{
+    ViewData["Title"] = "Билети за поддръжка";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Клиентски билети</h1>
+    <partial name="_AdminNav" />
+
+    @if (TempData["CartMessage"] != null)
+    {
+        <div class="alert alert-success text-center" role="alert">@TempData["CartMessage"]</div>
+    }
+    @if (TempData["CartError"] != null)
+    {
+        <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted text-center">Все още няма билети.</p>
+    }
+    else
+    {
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Клиент</th>
+                    <th>Тема</th>
+                    <th>Категория</th>
+                    <th>Статус</th>
+                    <th>Обновен</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ticket in Model)
+                {
+                    <tr>
+                        <td>@ticket.TicketNumber</td>
+                        <td>
+                            @ticket.CustomerName
+                            <div class="text-muted small">@ticket.Email</div>
+                        </td>
+                        <td>@ticket.Subject</td>
+                        <td>@ticket.Topic</td>
+                        <td>
+                            <span class="badge @TicketStatuses.BadgeClass(ticket.Status)">@TicketStatuses.Normalize(ticket.Status)</span>
+                        </td>
+                        <td>@ticket.UpdatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            <a asp-action="Ticket" asp-route-id="@ticket.Id">Отвори</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

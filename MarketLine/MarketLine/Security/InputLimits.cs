@@ -27,6 +27,9 @@ namespace MarketLine.Security
         public const int PageBody = 20000;
         public const int Question = 500;
         public const int Answer = 2000;
+        public const int TicketSubject = 150;
+        public const int TicketMessage = 2000;
+        public const int TicketTopic = 40;
         public const string PhonePattern = @"^$|^\+?[0-9\s\-()]{6,20}$";
         public const string PostalPattern = @"^[A-Za-z0-9\s\-]{3,12}$";
     }

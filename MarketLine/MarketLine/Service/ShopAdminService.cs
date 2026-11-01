@@ -280,7 +280,8 @@ namespace MarketLine.Services
                 Turnover = orders.Sum(o => o.Total),
                 PendingStockAlerts = await _context.StockAlerts.CountAsync(alert => alert.NotifiedAt == null),
                 PendingQuestions = await _context.ProductQuestions.CountAsync(question => question.AnsweredAt == null),
-                ScheduledItems = await _context.Items.CountAsync(item => item.PublishedAt != null && item.PublishedAt > DateTime.UtcNow)
+                ScheduledItems = await _context.Items.CountAsync(item => item.PublishedAt != null && item.PublishedAt > DateTime.UtcNow),
+                OpenTickets = await _context.SupportTickets.CountAsync(ticket => ticket.Status != TicketStatuses.Closed)
             };
             stats.AverageOrder = stats.OrderCount == 0 ? 0 : Math.Round(stats.Turnover / stats.OrderCount, 2);
             stats.TopProducts = orders
