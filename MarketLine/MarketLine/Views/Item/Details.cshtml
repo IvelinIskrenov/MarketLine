@@ -1,12 +1,12 @@
-﻿@model MarketLine.Models.Item
+@model MarketLine.Models.Item
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = T["shop.details"];
     var selectedVariant = Model.Variants.FirstOrDefault(variant => variant.StockQuantity > 0) ?? Model.Variants.FirstOrDefault();
 }
 
 <div class="container mt-4">
-    <h4>Детайли за продукта</h4>
+    <h4>@T["shop.details"]</h4>
     <hr />
 
     @if (Model.IsScheduled)
@@ -18,18 +18,18 @@
 
     @if (TempData["CartError"] != null)
     {
-        <div class="alert alert-warning" role="alert">@TempData["CartError"]</div>
+        <div class="alert alert-warning" role="alert">@T.Content(TempData["CartError"] as string)</div>
     }
     @if (TempData["CartMessage"] != null)
     {
-        <div class="alert alert-success" role="alert">@TempData["CartMessage"]</div>
+        <div class="alert alert-success" role="alert">@T.Content(TempData["CartMessage"] as string)</div>
     }
 
     <div class="row">
         <div class="col-md-5 mb-4">
             @if (!string.IsNullOrEmpty(Model.imageUrl))
             {
-                <img src="@Model.imageUrl" class="img-fluid rounded shadow" alt="@Model.name" />
+                <img src="@Model.imageUrl" class="img-fluid rounded shadow" alt="@T.Content(Model.name)" />
             }
             else
             {
@@ -38,18 +38,18 @@
         </div>
 
         <div class="col-md-7">
-            <h3>@Model.name</h3>
-            <p class="text-muted mb-1">Категория: <span class="badge bg-secondary">@(Model.category?.Name)</span></p>
+            <h3>@T.Content(Model.name)</h3>
+            <p class="text-muted mb-1">@T["shop.category"]: <span class="badge bg-secondary">@T.Content(Model.category?.Name)</span></p>
             @if (!string.IsNullOrWhiteSpace(Model.Brand))
             {
-                <p class="text-muted mb-2">Марка: <span class="badge bg-success">@Model.Brand</span></p>
+                <p class="text-muted mb-2">@T["shop.brand"]: <span class="badge bg-success">@Model.Brand</span></p>
             }
             @if (Model.FeatureTags.Count > 0)
             {
                 <p class="mb-3">
                     @foreach (var tag in Model.FeatureTags)
                     {
-                        <span class="badge bg-light text-dark border me-1">@tag</span>
+                        <span class="badge bg-light text-dark border me-1">@T.Content(tag)</span>
                     }
                 </p>
             }
@@ -57,23 +57,23 @@
             <div class="price-section mb-3">
                 @if (Model.discount != 0)
                 {
-                    <del class="h5 text-danger me-2">@Model.price.ToString("C2")</del>
-                    <strong class="h3 text-dark">@Model.DiscountedPrice.ToString("C2")</strong>
+                    <del class="h5 text-danger me-2">@Model.price.Euro()</del>
+                    <strong class="h3 text-dark">@Model.DiscountedPrice.Euro()</strong>
                     <span class="badge bg-success ms-2">-@Model.discount%</span>
                 }
                 else
                 {
-                    <strong class="h3 text-danger">@Model.price.ToString("C2")</strong>
+                    <strong class="h3 text-danger">@Model.price.Euro()</strong>
                 }
             </div>
 
             <hr />
 
             <dl class="row">
-                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.description)</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.description)</dd>
+                <dt class="col-sm-4">@T["shop.description"]</dt>
+                <dd class="col-sm-8">@T.Content(Model.description)</dd>
 
-                <dt class="col-sm-4">Наличност</dt>
+                <dt class="col-sm-4">@T["shop.stock"]</dt>
                 <dd class="col-sm-8">
                     @await Html.PartialAsync("_StockStatus", Model)
                 </dd>
@@ -82,23 +82,23 @@
             @if (Model.Variants.Count > 0)
             {
                 <div class="mb-3">
-                    <p class="fw-semibold mb-2">Размер, цвят и модел</p>
+                    <p class="fw-semibold mb-2">@T["shop.variants"]</p>
                     <ul class="list-unstyled small text-muted mb-0">
                         @foreach (var variant in Model.Variants)
                         {
                             <li>
-                                @variant.Label —
+                                @T.Content(variant.Label) —
                                 @if (variant.IsSoldOut)
                                 {
-                                    <span class="text-danger">изчерпан</span>
+                                    <span class="text-danger">@T["shop.soldOut.short"]</span>
                                 }
                                 else if (variant.IsLowStock)
                                 {
-                                    <span class="text-warning">остават @variant.StockQuantity бр.</span>
+                                    <span class="text-warning">@T["shop.left"] @variant.StockQuantity @T["shop.pcs"]</span>
                                 }
                                 else
                                 {
-                                    <span>@variant.StockQuantity бр.</span>
+                                    <span>@variant.StockQuantity @T["shop.pcs"]</span>
                                 }
                             </li>
                         }
@@ -113,28 +113,28 @@
                     @if (Model.Variants.Count > 0)
                     {
                         <div>
-                            <label class="form-label" for="variantId">Вариант</label>
+                            <label class="form-label" for="variantId">@T["shop.variant"]</label>
                             <select id="variantId" name="variantId" class="form-select" @(Model.IsSoldOut ? "disabled" : null)>
                                 @foreach (var variant in Model.Variants)
                                 {
                                     if (variant.IsSoldOut)
                                     {
-                                        <option value="@variant.Id" disabled>@variant.Label — изчерпан</option>
+                                        <option value="@variant.Id" disabled>@T.Content(variant.Label) — @T["shop.soldOut.short"]</option>
                                     }
                                     else if (selectedVariant?.Id == variant.Id)
                                     {
-                                        <option value="@variant.Id" selected>@variant.Label (@variant.StockQuantity бр.)</option>
+                                        <option value="@variant.Id" selected>@T.Content(variant.Label) (@variant.StockQuantity @T["shop.pcs"])</option>
                                     }
                                     else
                                     {
-                                        <option value="@variant.Id">@variant.Label (@variant.StockQuantity бр.)</option>
+                                        <option value="@variant.Id">@T.Content(variant.Label) (@variant.StockQuantity @T["shop.pcs"])</option>
                                     }
                                 }
                             </select>
                         </div>
                     }
                     <div>
-                        <label class="form-label" for="quantity">Количество</label>
+                        <label class="form-label" for="quantity">@T["shop.quantity"]</label>
                         <input id="quantity"
                                type="number"
                                name="quantity"
@@ -145,16 +145,16 @@
                                @(Model.IsSoldOut ? "disabled" : null) />
                     </div>
                     <button type="submit" class="btn btn-success btn-lg px-4 shadow-sm" @(Model.IsSoldOut ? "disabled" : null)>
-                        <i class="bi bi-cart-plus-fill me-2"></i> Добави в количката
+                        <i class="bi bi-cart-plus-fill me-2"></i> @T["shop.addToCart"]
                     </button>
                 </form>
                 @if (Model.IsSoldOut)
                 {
-                    <p class="text-danger mt-2 mb-0">Този продукт е изчерпан и не може да бъде поръчан.</p>
+                    <p class="text-danger mt-2 mb-0">@T["shop.soldOutMsg"]</p>
                 }
                 else if (Model.IsLowStock)
                 {
-                    <p class="text-warning mt-2 mb-0">Внимание: остават малко бройки на склад.</p>
+                    <p class="text-warning mt-2 mb-0">@T["shop.lowStockWarn"]</p>
                 }
                 @await Html.PartialAsync("_StockAlertForm", Model)
                 <div class="mt-2">

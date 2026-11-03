@@ -1,11 +1,16 @@
+using System.Globalization;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using System.Threading.RateLimiting;
 using MarketLine.Data;
 using MarketLine.Filters;
+using MarketLine.Localization;
 using MarketLine.Models;
 using MarketLine.Security;
 using MarketLine.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -189,6 +194,21 @@ builder.Services.AddScoped<IStockAlertService, StockAlertService>();
 builder.Services.AddScoped<IProductQuestionService, ProductQuestionService>();
 builder.Services.AddScoped<ISupportTicketService, SupportTicketService>();
 builder.Services.AddScoped<ISalesReportService, SalesReportService>();
+builder.Services.AddSingleton(
+    HtmlEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic, UnicodeRanges.CurrencySymbols));
+builder.Services.AddScoped<IShopText, ShopText>();
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var format = new CultureInfo(ShopCultures.FormatCulture);
+    var uiCultures = ShopCultures.Supported.Select(code => new CultureInfo(code)).ToList();
+    options.DefaultRequestCulture = new RequestCulture(format, new CultureInfo(ShopCultures.Bulgarian));
+    options.SupportedCultures = [format];
+    options.SupportedUICultures = uiCultures;
+    options.RequestCultureProviders =
+    [
+        new CookieRequestCultureProvider { CookieName = ShopCultures.CookieName }
+    ];
+});
 
 var app = builder.Build();
 
@@ -316,6 +336,7 @@ if (app.Environment.IsProduction())
 app.UseMarketLineSecurityHeaders();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseRequestLocalization();
 app.UseCors("MarketLine");
 app.UseRateLimiter();
 app.UseSession();

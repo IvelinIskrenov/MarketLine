@@ -1,69 +1,69 @@
 @model List<MarketLine.Models.SupportTicket>
 @{
-    ViewData["Title"] = "Поддръжка";
+    ViewData["Title"] = T["footer.support"];
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <h1 class="mb-4 text-center">Моят профил</h1>
+            <h1 class="mb-4 text-center">@T["profile.mine"]</h1>
             <partial name="_ProfileNav" />
 
             @if (TempData["ProfileMessage"] != null)
             {
-                <div class="alert alert-success text-center" role="alert">@TempData["ProfileMessage"]</div>
+                <div class="alert alert-success text-center" role="alert">@T.Content(TempData["ProfileMessage"] as string)</div>
             }
             @if (TempData["CartError"] != null)
             {
-                <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+                <div class="alert alert-warning text-center" role="alert">@T.Content(TempData["CartError"] as string)</div>
             }
 
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body">
-                    <h5 class="mb-3">Нов билет</h5>
+                    <h5 class="mb-3">@T["ticket.create"]</h5>
                     <form asp-action="CreateTicket" method="post">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label" for="ticket-subject">Тема</label>
+                                <label class="form-label" for="ticket-subject">@T["ticket.subject"]</label>
                                 <input id="ticket-subject" name="subject" class="form-control" maxlength="150" required />
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="ticket-topic">Тема на запитването</label>
+                                <label class="form-label" for="ticket-topic">@T["ticket.topic"]</label>
                                 <select id="ticket-topic" name="topic" class="form-select">
                                     @foreach (var topic in TicketTopics.All)
                                     {
-                                        <option value="@topic">@topic</option>
+                                        <option value="@topic">@T.Content(topic)</option>
                                     }
                                 </select>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="ticket-order">Номер на поръчка</label>
-                                <input id="ticket-order" name="orderNumber" class="form-control" maxlength="40" placeholder="по желание" />
+                                <label class="form-label" for="ticket-order">@T["ticket.orderNumber"]</label>
+                                <input id="ticket-order" name="orderNumber" class="form-control" maxlength="40" placeholder="@T["ticket.optional"]" />
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="ticket-message">Описание</label>
-                            <textarea id="ticket-message" name="message" class="form-control" rows="4" maxlength="2000" required placeholder="Опишете проблема или въпроса"></textarea>
+                            <label class="form-label" for="ticket-message">@T["shop.description"]</label>
+                            <textarea id="ticket-message" name="message" class="form-control" rows="4" maxlength="2000" required placeholder="@T["ticket.describe"]"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-custom-green">Изпрати билет</button>
+                        <button type="submit" class="btn btn-custom-green">@T["ticket.send"]</button>
                     </form>
                 </div>
             </div>
 
             @if (Model.Count == 0)
             {
-                <div class="alert alert-warning text-center" role="alert">Нямате билети за поддръжка.</div>
+                <div class="alert alert-warning text-center" role="alert">@T["ticket.empty"]</div>
             }
             else
             {
                 <table class="table align-middle">
                     <thead>
                         <tr>
-                            <th>Номер</th>
-                            <th>Тема</th>
-                            <th>Категория</th>
-                            <th>Статус</th>
-                            <th>Обновен</th>
+                            <th>@T["order.number"]</th>
+                            <th>@T["ticket.subject"]</th>
+                            <th>@T["shop.category"]</th>
+                            <th>@T["order.status"]</th>
+                            <th>@T["ticket.updated"]</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -73,13 +73,13 @@
                             <tr>
                                 <td>@ticket.TicketNumber</td>
                                 <td>@ticket.Subject</td>
-                                <td>@ticket.Topic</td>
+                                <td>@T.Content(ticket.Topic)</td>
                                 <td>
-                                    <span class="badge @TicketStatuses.BadgeClass(ticket.Status)">@TicketStatuses.Normalize(ticket.Status)</span>
+                                    <span class="badge @TicketStatuses.BadgeClass(ticket.Status)">@T.Content(TicketStatuses.Normalize(ticket.Status))</span>
                                 </td>
                                 <td>@ticket.UpdatedAt.ToString("dd.MM.yyyy HH:mm")</td>
                                 <td>
-                                    <a asp-action="Ticket" asp-route-id="@ticket.Id">Отвори</a>
+                                    <a asp-action="Ticket" asp-route-id="@ticket.Id">@T["order.open"]</a>
                                 </td>
                             </tr>
                         }

@@ -1,4 +1,5 @@
 ﻿using MarketLine.Data;
+using MarketLine.Localization;
 using MarketLine.Models;
 using MarketLine.Security;
 using Microsoft.EntityFrameworkCore;
@@ -73,7 +74,6 @@ namespace MarketLine.Services
                 .AsQueryable();
 
             itemsQuery = ApplyCategoryFilter(itemsQuery, query.Category);
-            itemsQuery = ApplySearchFilter(itemsQuery, query.SearchTerm);
 
             if (!string.IsNullOrWhiteSpace(query.Brand))
             {
@@ -87,7 +87,7 @@ namespace MarketLine.Services
                 itemsQuery = itemsQuery.Where(i => i.Features != null && i.Features.Contains(feature));
             }
 
-            var items = await itemsQuery.ToListAsync();
+            var items = ApplySearchFilter(await itemsQuery.ToListAsync(), query.SearchTerm);
 
             var minPrice = query.MinPrice;
             var maxPrice = query.MaxPrice;
@@ -249,19 +249,20 @@ namespace MarketLine.Services
                 (i.category.Name == category || (i.category.Parent != null && i.category.Parent.Name == category)));
         }
 
-        private static IQueryable<Item> ApplySearchFilter(IQueryable<Item> itemsQuery, string? searchTerm)
+        private static List<Item> ApplySearchFilter(List<Item> items, string? searchTerm)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
+            var aliases = ShopTranslator.SearchAliases(searchTerm);
+            if (aliases.Count == 0)
             {
-                return itemsQuery;
+                return items;
             }
 
-            var term = searchTerm.Trim().ToLower();
-            return itemsQuery.Where(i =>
-                (i.name != null && i.name.ToLower().Contains(term)) ||
-                (i.description != null && i.description.ToLower().Contains(term)) ||
-                (i.Brand != null && i.Brand.ToLower().Contains(term)) ||
-                (i.Features != null && i.Features.ToLower().Contains(term)));
+            return items.Where(i =>
+                aliases.Any(term =>
+                    (i.name != null && i.name.ToLower().Contains(term)) ||
+                    (i.description != null && i.description.ToLower().Contains(term)) ||
+                    (i.Brand != null && i.Brand.ToLower().Contains(term)) ||
+                    (i.Features != null && i.Features.ToLower().Contains(term)))).ToList();
         }
 
         private async Task<List<Item>> SortItemsAsync(List<Item> items, string? sort)

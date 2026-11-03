@@ -47,7 +47,7 @@
                             </span>
                         </td>
                         <td>@order.PaymentStatus</td>
-                        <td>@order.Total.ToString("C2")</td>
+                        <td>@order.Total.Euro()</td>
                         <td><a asp-action="Order" asp-route-id="@order.Id">Обработка</a></td>
                     </tr>
                 }

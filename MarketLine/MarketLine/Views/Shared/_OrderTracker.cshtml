@@ -6,7 +6,7 @@
 
 @if (status == OrderStatuses.Cancelled)
 {
-    <div class="alert alert-danger text-center mb-4" role="alert">Поръчката е отказана.</div>
+    <div class="alert alert-danger text-center mb-4" role="alert">@T.Content("Поръчката е отказана.")</div>
 }
 else
 {
@@ -15,7 +15,7 @@ else
         {
             var step = OrderStatuses.Steps[i];
             <div class="text-center flex-fill">
-                <span class="badge @(i <= currentStep ? "bg-success" : "bg-secondary")">@step</span>
+                <span class="badge @(i <= currentStep ? "bg-success" : "bg-secondary")">@T.Content(step)</span>
             </div>
         }
     </div>

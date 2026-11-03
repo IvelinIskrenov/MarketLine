@@ -1,43 +1,43 @@
 @model MarketLine.Models.Order
 @{
-    ViewData["Title"] = "Поръчка " + Model.OrderNumber;
+    ViewData["Title"] = T["profile.order"] + " " + Model.OrderNumber;
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1 class="mb-4 text-center">Моят профил</h1>
+            <h1 class="mb-4 text-center">@T["profile.mine"]</h1>
             <partial name="_ProfileNav" />
 
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
-                    <h5 class="mb-3">Поръчка @Model.OrderNumber</h5>
-                    <p class="mb-3">Дата: @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
+                    <h5 class="mb-3">@T["profile.order"] @Model.OrderNumber</h5>
+                    <p class="mb-3">@T["order.date"]: @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</p>
 
-                    <h5 class="mb-3">Проследяване</h5>
+                    <h5 class="mb-3">@T["order.track"]</h5>
                     <p class="mb-3">
-                        Текущ статус:
+                        @T["profile.currentStatus"]:
                         <span class="badge @OrderStatuses.BadgeClass(Model.Status)">
-                            @OrderStatuses.Normalize(Model.Status)
+                            @T.Content(OrderStatuses.Normalize(Model.Status))
                         </span>
                     </p>
                     <partial name="_OrderTracker" model="Model" />
 
-                    <h5 class="mb-3">Данни за доставка</h5>
+                    <h5 class="mb-3">@T["checkout.shippingDetails"]</h5>
                     <p class="mb-1">@Model.FirstName @Model.LastName</p>
                     <p class="mb-1">@Model.Address, @Model.PostalCode @Model.City</p>
                     <p class="mb-1">@Model.Phone · @Model.Email</p>
-                    <p class="mb-1">@Model.Courier · @Model.DeliveryMethod</p>
-                    <p class="mb-0">Плащане: @Model.PaymentMethod — @Model.PaymentStatus</p>
+                    <p class="mb-1">@T.Content(Model.Courier) · @T.Content(Model.DeliveryMethod)</p>
+                    <p class="mb-0">@T["order.payment"]: @T.Content(Model.PaymentMethod) — @T.Content(Model.PaymentStatus)</p>
                 </div>
             </div>
 
             <table class="table align-middle">
                 <thead>
                     <tr>
-                        <th>Продукт</th>
-                        <th>Количество</th>
-                        <th>Общо</th>
+                        <th>@T["cart.product"]</th>
+                        <th>@T["cart.qty"]</th>
+                        <th>@T["cart.total"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,27 +45,27 @@
                     {
                         <tr>
                             <td>
-                                @line.Name
+                                @T.Content(line.Name)
                                 @if (!string.IsNullOrWhiteSpace(line.VariantLabel))
                                 {
-                                    <div class="text-muted small">@line.VariantLabel</div>
+                                    <div class="text-muted small">@T.Content(line.VariantLabel)</div>
                                 }
                             </td>
                             <td>@line.Quantity</td>
-                            <td>@line.LineTotal.ToString("C2")</td>
+                            <td>@line.LineTotal.Euro()</td>
                         </tr>
                     }
                 </tbody>
             </table>
 
             <div class="d-flex justify-content-between h5">
-                <span>Платена сума</span>
-                <strong>@Model.Total.ToString("C2")</strong>
+                <span>@T["checkout.paid"]</span>
+                <strong>@Model.Total.Euro()</strong>
             </div>
 
             <div class="text-center mt-4 d-flex flex-wrap justify-content-center gap-2">
                 <partial name="_ReorderButton" model="Model" />
-                <a asp-action="Orders" class="btn btn-outline-secondary">Назад към поръчките</a>
+                <a asp-action="Orders" class="btn btn-outline-secondary">@T["profile.backOrders"]</a>
             </div>
         </div>
     </div>

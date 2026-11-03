@@ -2,13 +2,13 @@
 
 @if (Model.IsSoldOut)
 {
-    <span class="badge bg-danger">Изчерпан</span>
+    <span class="badge bg-danger">@T["shop.soldOut"]</span>
 }
 else if (Model.IsLowStock)
 {
-    <span class="badge bg-warning text-dark">Ниска наличност (@Model.AvailableStock)</span>
+    <span class="badge bg-warning text-dark">@T["shop.lowStock"] (@Model.AvailableStock)</span>
 }
 else
 {
-    <span class="badge bg-success">В наличност (@Model.AvailableStock)</span>
+    <span class="badge bg-success">@T["shop.inStock"] (@Model.AvailableStock)</span>
 }

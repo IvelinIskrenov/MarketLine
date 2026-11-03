@@ -56,8 +56,8 @@
             {
                 <tr>
                     <td>@promo.Code</td>
-                    <td>@(promo.IsPercent ? $"{promo.Value}%" : promo.Value.ToString("C2"))</td>
-                    <td>@promo.MinSubTotal.ToString("C2")</td>
+                    <td>@(promo.IsPercent ? $"{promo.Value}%" : promo.Value.Euro())</td>
+                    <td>@promo.MinSubTotal.Euro()</td>
                     <td>@(promo.EndsAt?.ToString("dd.MM.yyyy") ?? "Без срок")</td>
                     <td>@(promo.IsActive ? "Активна" : "Спряна")</td>
                     <td>

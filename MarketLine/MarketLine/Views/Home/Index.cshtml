@@ -1,8 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = T["home.welcome"];
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">@T["home.welcome"]</h1>
+    <p>@T.Content("Козметика, грижа за кожата и хранителни добавки с безплатна доставка над 100 лв.")</p>
 </div>

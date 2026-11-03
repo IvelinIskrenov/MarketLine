@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="@T.Culture">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,7 +19,7 @@
                     <li class="nav-item d-flex align-items-center">
                         <a asp-controller="Item" asp-action="Index" class="nav-link">
                             <button class="btn btn-login shadow-sm">
-                                Продукти
+                                @T["nav.products"]
                             </button>
                         </a>
                     </li>
@@ -27,7 +27,7 @@
                     {
                         <li class="nav-item d-flex align-items-center">
                             <a asp-controller="Admin" asp-action="Index" class="nav-link">
-                                <button class="btn btn-login shadow-sm">Админ панел</button>
+                                <button class="btn btn-login shadow-sm">@T["nav.admin"]</button>
                             </a>
                         </li>
                     }
@@ -41,14 +41,14 @@
                         <li class="nav-item d-flex align-items-center">
                             <a asp-controller="Profile" asp-action="Index" class="nav-link">
                                 <button class="btn btn-login shadow-sm">
-                                    <i class="bi bi-box-arrow-in-right me-1"></i> Профил
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> @T["nav.profile"]
                                 </button>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center">
                             <form asp-controller="Account" asp-action="Logout" method="post" class="nav-link mb-0">
                                 <button type="submit" class="btn btn-login shadow-sm">
-                                    Изход
+                                    @T["nav.logout"]
                                 </button>
                             </form>
                         </li>
@@ -58,19 +58,21 @@
                         <li class="nav-item d-flex align-items-center">
                             <a asp-controller="Account" asp-action="Login" class="nav-link">
                                 <button class="btn btn-login shadow-sm">
-                                    <i class="bi bi-box-arrow-in-right me-1"></i> Вход
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> @T["nav.login"]
                                 </button>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center">
                             <a asp-controller="Account" asp-action="Register" class="nav-link">
                                 <button class="btn btn-login shadow-sm">
-                                    <i class="bi bi-box-arrow-in-right me-1"></i> Регистрация
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> @T["nav.register"]
                                 </button>
                             </a>
                         </li>
                     }
-
+                    <li class="nav-item d-flex align-items-center ms-2">
+                        <partial name="_LanguageSwitch" />
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -102,10 +104,10 @@
                         </li>
                         <!-- 3. MESSAGE TEXT -->
                         <li class="nav-item ms-3 d-flex align-items-center">
-                            <span class="btn btn-custom-green">Безплатна доставка над 100 лв.</span>
+                            <span class="btn btn-custom-green">@T["nav.freeshipping"]</span>
                         </li>
                         <li class="nav-item d-flex align-items-center ms-3">
-                            <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">Продукти</a>
+                            <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">@T["nav.products"]</a>
                         </li>
                     </ul>
 
@@ -117,7 +119,7 @@
                             <input type="search"
                                    name="searchTerm"
                                    class="form-control search-input"
-                                   placeholder="Търси продукти..."
+                                   placeholder="@T["nav.search"]"
                                    aria-label="Search"
                                    autocomplete="off"
                                    aria-autocomplete="list"
@@ -154,20 +156,19 @@
         <div class="footerTop">
             <div class="wrapper">
                 <div class="footerCol firstFooterCol">
-                    <p><span class="footerColTitle">За MarketLine</span></p>
+                    <p><span class="footerColTitle">@T["footer.about"]</span></p>
                     <ul>
-                        <li><a href="/about">За нас</a></li>
-                        <!--<li><a href="/karieri">Кариери</a></li>-->
-                        <li><a href="/contacts">Контакти</a></li>
-                        <li><a asp-controller="Profile" asp-action="Tickets">Поддръжка</a></li>
+                        <li><a href="/about">@T["footer.about.us"]</a></li>
+                        <li><a href="/contacts">@T["footer.contacts"]</a></li>
+                        <li><a asp-controller="Profile" asp-action="Tickets">@T["footer.support"]</a></li>
                     </ul>
                 </div>
                 <div class="footerCol footerPolicies">
-                    <p><span class="footerColTitle">Политики</span></p>
+                    <p><span class="footerColTitle">@T["footer.policies"]</span></p>
                     <ul>
-                        <li><a href="/obshti-uslovia">Общи условия</a></li>
-                        <li><a href="/dostavka-i-plashtane">Доставка и плащане</a></li>
-                        <li><a href="/zashtita-na-lichnite-danni">Защита на личните данни</a></li>
+                        <li><a href="/obshti-uslovia">@T["footer.terms"]</a></li>
+                        <li><a href="/dostavka-i-plashtane">@T["footer.shipping"]</a></li>
+                        <li><a href="/zashtita-na-lichnite-danni">@T["footer.privacy"]</a></li>
                     </ul>
                 </div>
     </footer>

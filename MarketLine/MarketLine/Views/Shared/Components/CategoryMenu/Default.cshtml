@@ -3,10 +3,10 @@
 <ul class="navbar-nav">
     <li class="nav-item dropdown">
         <a class="btn btn-custom-green dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Категории
+            @T["nav.categories"]
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="">Всички</a></li>
+            <li><a class="dropdown-item" asp-controller="Item" asp-action="Index" asp-route-category="">@T["shop.all"]</a></li>
 
             @foreach (var cat in Model)
             {
@@ -15,7 +15,7 @@
                        asp-controller="Item"
                        asp-action="Index"
                        asp-route-category="@cat.Name">
-                        @cat.Name
+                        @T.Content(cat.Name)
                     </a>
                 </li>
             }

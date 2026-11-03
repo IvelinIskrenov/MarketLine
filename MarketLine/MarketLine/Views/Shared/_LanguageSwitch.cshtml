@@ -1,0 +1,18 @@
+@inject MarketLine.Localization.IShopText T
+@{
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+    var english = T.IsEnglish;
+}
+
+<div class="d-inline-flex align-items-center gap-1">
+    <a asp-controller="Language"
+       asp-action="Set"
+       asp-route-culture="bg"
+       asp-route-returnUrl="@returnUrl"
+       class="btn btn-sm @(english ? "btn-outline-secondary" : "btn-success")">BG</a>
+    <a asp-controller="Language"
+       asp-action="Set"
+       asp-route-culture="en"
+       asp-route-returnUrl="@returnUrl"
+       class="btn btn-sm @(english ? "btn-success" : "btn-outline-secondary")">EN</a>
+</div>

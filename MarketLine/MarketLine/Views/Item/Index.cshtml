@@ -1,81 +1,81 @@
-﻿@model MarketLine.Models.ItemCatalogViewModel
+@model MarketLine.Models.ItemCatalogViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = T["nav.products"];
     var query = Model.Query;
     var currentSort = string.IsNullOrWhiteSpace(query.Sort) ? "newest" : query.Sort;
 }
 
 <div class="container mt-4">
-    <h1 class="mb-4 text-center">🛒 Products</h1>
+    <h1 class="mb-4 text-center">🛒 @T["nav.products"]</h1>
 
     @if (TempData["CartMessage"] != null)
     {
-        <div class="alert alert-success text-center" role="alert">@TempData["CartMessage"]</div>
+                    <div class="alert alert-success text-center" role="alert">@T.Content(TempData["CartMessage"] as string)</div>
     }
     @if (TempData["CartError"] != null)
     {
-        <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+                    <div class="alert alert-warning text-center" role="alert">@T.Content(TempData["CartError"] as string)</div>
     }
 
     <div class="row">
         <aside class="col-lg-3 mb-4">
             <form method="get" asp-action="Index" class="catalog-filters card shadow-sm border-0">
                 <div class="card-body">
-                    <h2 class="h5 mb-3">Филтри</h2>
+                    <h2 class="h5 mb-3">@T["shop.filters"]</h2>
 
                     <div class="mb-3">
-                        <label class="form-label" for="catalog-search">Търсене</label>
+                        <label class="form-label" for="catalog-search">@T["shop.search"]</label>
                         <input id="catalog-search"
                                type="search"
                                name="searchTerm"
                                class="form-control search-input"
                                value="@query.SearchTerm"
-                               placeholder="Име или описание"
+                               placeholder="@T.Content("Име или описание")"
                                autocomplete="off" />
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="catalog-category">Категория</label>
+                        <label class="form-label" for="catalog-category">@T["shop.category"]</label>
                         <select id="catalog-category" name="category" class="form-select">
-                            <option value="">Всички</option>
+                            <option value="">@T["shop.all"]</option>
                             @foreach (var category in Model.Categories)
                             {
                                 if (string.Equals(query.Category, category.Name, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    <option value="@category.Name" selected>@category.Name</option>
+                                    <option value="@category.Name" selected>@T.Content(category.Name)</option>
                                 }
                                 else
                                 {
-                                    <option value="@category.Name">@category.Name</option>
+                                    <option value="@category.Name">@T.Content(category.Name)</option>
                                 }
                             }
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Цена</label>
+                        <label class="form-label">@T["shop.price"]</label>
                         <div class="d-flex gap-2">
                             <input type="number"
                                    name="minPrice"
                                    class="form-control"
                                    min="0"
                                    step="0.01"
-                                   placeholder="От"
+                                   placeholder="@T["shop.from"]"
                                    value="@query.MinPrice" />
                             <input type="number"
                                    name="maxPrice"
                                    class="form-control"
                                    min="0"
                                    step="0.01"
-                                   placeholder="До"
+                                   placeholder="@T["shop.to"]"
                                    value="@query.MaxPrice" />
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="catalog-brand">Марка</label>
+                        <label class="form-label" for="catalog-brand">@T["shop.brand"]</label>
                         <select id="catalog-brand" name="brand" class="form-select">
-                            <option value="">Всички</option>
+                            <option value="">@T["shop.all"]</option>
                             @foreach (var brand in Model.Brands)
                             {
                                 if (string.Equals(query.Brand, brand, StringComparison.OrdinalIgnoreCase))
@@ -91,18 +91,18 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="catalog-feature">Характеристика</label>
+                        <label class="form-label" for="catalog-feature">@T["shop.feature"]</label>
                         <select id="catalog-feature" name="feature" class="form-select">
-                            <option value="">Всички</option>
+                            <option value="">@T["shop.all"]</option>
                             @foreach (var feature in Model.Features)
                             {
                                 if (string.Equals(query.Feature, feature, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    <option value="@feature" selected>@feature</option>
+                                    <option value="@feature" selected>@T.Content(feature)</option>
                                 }
                                 else
                                 {
-                                    <option value="@feature">@feature</option>
+                                    <option value="@feature">@T.Content(feature)</option>
                                 }
                             }
                         </select>
@@ -111,8 +111,8 @@
                     <input type="hidden" name="sort" value="@currentSort" />
 
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-custom-green">Приложи</button>
-                        <a asp-action="Index" class="btn btn-outline-secondary">Изчисти</a>
+                        <button type="submit" class="btn btn-custom-green">@T["shop.apply"]</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">@T["shop.clear"]</a>
                     </div>
                 </div>
             </form>
@@ -126,41 +126,41 @@
                 <input type="hidden" name="maxPrice" value="@query.MaxPrice" />
                 <input type="hidden" name="brand" value="@query.Brand" />
                 <input type="hidden" name="feature" value="@query.Feature" />
-                <p class="mb-0 text-muted">Намерени продукти: @Model.Items.Count</p>
+                <p class="mb-0 text-muted">@T["shop.found"]: @Model.Items.Count</p>
                 <div class="d-flex align-items-center gap-2">
-                    <label class="form-label mb-0" for="catalog-sort">Сортиране</label>
+                    <label class="form-label mb-0" for="catalog-sort">@T["shop.sort"]</label>
                     <select id="catalog-sort" name="sort" class="form-select" style="width: auto;" onchange="this.form.submit()">
                         @if (currentSort == "newest")
                         {
-                            <option value="newest" selected>Новост</option>
+                            <option value="newest" selected>@T["shop.sort.newest"]</option>
                         }
                         else
                         {
-                            <option value="newest">Новост</option>
+                            <option value="newest">@T["shop.sort.newest"]</option>
                         }
                         @if (currentSort == "price-asc")
                         {
-                            <option value="price-asc" selected>Цена: ниска към висока</option>
+                            <option value="price-asc" selected>@T["shop.sort.priceAsc"]</option>
                         }
                         else
                         {
-                            <option value="price-asc">Цена: ниска към висока</option>
+                            <option value="price-asc">@T["shop.sort.priceAsc"]</option>
                         }
                         @if (currentSort == "price-desc")
                         {
-                            <option value="price-desc" selected>Цена: висока към ниска</option>
+                            <option value="price-desc" selected>@T["shop.sort.priceDesc"]</option>
                         }
                         else
                         {
-                            <option value="price-desc">Цена: висока към ниска</option>
+                            <option value="price-desc">@T["shop.sort.priceDesc"]</option>
                         }
                         @if (currentSort == "popular")
                         {
-                            <option value="popular" selected>Популярност</option>
+                            <option value="popular" selected>@T["shop.sort.popular"]</option>
                         }
                         else
                         {
-                            <option value="popular">Популярност</option>
+                            <option value="popular">@T["shop.sort.popular"]</option>
                         }
                     </select>
                 </div>
@@ -169,7 +169,7 @@
             @if (Model.Items.Count == 0)
             {
                 <div class="alert alert-warning text-center" role="alert">
-                    No quantity in this moment
+                    @T["shop.empty"]
                 </div>
             }
             else
@@ -177,16 +177,16 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
                     @foreach (var item in Model.Items)
                     {
-                        var description = item.description ?? string.Empty;
+                        var description = T.Content(item.description);
                         <div class="col">
                             <div class="card h-100 shadow-sm border-0">
                                 <a asp-action="Details" asp-route-id="@item.id">
-                                    <img src="@item.imageUrl" class="card-img-top" alt="@item.name" style="height: 200px; object-fit: cover;">
+                                    <img src="@item.imageUrl" class="card-img-top" alt="@T.Content(item.name)" style="height: 200px; object-fit: cover;">
                                 </a>
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title text-truncate">
                                         <a asp-action="Details" asp-route-id="@item.id" class="text-decoration-none text-dark">
-                                            @item.name
+                                            @T.Content(item.name)
                                         </a>
                                     </h5>
                                     @if (!string.IsNullOrWhiteSpace(item.Brand))
@@ -204,17 +204,17 @@
                                             @if (item.discount != 0)
                                             {
                                                 <del class="text-danger me-2">
-                                                    @item.price.ToString("C2")
+                                                    @item.price.Euro()
                                                 </del>
 
                                                 <strong class="text-dark">
-                                                    @item.DiscountedPrice.ToString("C2")
+                                                    @item.DiscountedPrice.Euro()
                                                 </strong>
                                             }
                                             else
                                             {
                                                 <strong class="text-danger">
-                                                    @item.price.ToString("C2")
+                                                    @item.price.Euro()
                                                 </strong>
                                             }
                                         </div>
@@ -228,7 +228,7 @@
                                                asp-fragment="stock-alert"
                                                class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
                                                style="width: 60%;">
-                                                Извести ме
+                                                @T["shop.notifyMe"]
                                             </a>
                                         }
                                         else if (item.HasMultipleVariants)
@@ -237,7 +237,7 @@
                                                asp-route-id="@item.id"
                                                class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
                                                style="width: 60%;">
-                                                Избери вариант
+                                                @T["shop.chooseVariant"]
                                             </a>
                                         }
                                         else
@@ -252,7 +252,7 @@
                                                         class="btn btn-custom-green w-60 d-inline-flex align-items-center justify-content-center"
                                                         style="width: 60%;">
                                                     <img src="~/images/add-to-cart.png" alt="Cart" style="width: 20px; height: 20px;" class="me-2" />
-                                                    Add to Cart
+                                                    @T["shop.addToCart"]
                                                 </button>
                                             </form>
                                         }

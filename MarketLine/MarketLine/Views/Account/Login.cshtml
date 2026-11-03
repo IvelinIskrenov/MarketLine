@@ -1,16 +1,16 @@
 @model MarketLine.Models.LoginViewModel
 @{
-    ViewData["Title"] = "Вход";
+    ViewData["Title"] = T["account.login"];
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-6">
-            <h1 class="mb-4 text-center">Вход</h1>
+            <h1 class="mb-4 text-center">@T["account.login"]</h1>
 
             @if (TempData["AccountMessage"] != null)
             {
-                <div class="alert alert-success text-center" role="alert">@TempData["AccountMessage"]</div>
+                <div class="alert alert-success text-center" role="alert">@T.Content(TempData["AccountMessage"] as string)</div>
             }
 
             <div class="card shadow-sm border-0">
@@ -20,24 +20,24 @@
                         <input type="hidden" asp-for="ReturnUrl" />
 
                         <div class="mb-3">
-                            <label asp-for="Email" class="form-label"></label>
+                            <label asp-for="Email" class="form-label">@T["account.email"]</label>
                             <input asp-for="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Password" class="form-label"></label>
+                            <label asp-for="Password" class="form-label">@T["account.password"]</label>
                             <input asp-for="Password" class="form-control" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <div class="form-check mb-3">
                             <input asp-for="RememberMe" class="form-check-input" />
-                            <label asp-for="RememberMe" class="form-check-label"></label>
+                            <label asp-for="RememberMe" class="form-check-label">@T["account.remember"]</label>
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success btn-lg">Вход</button>
-                            <a asp-action="Register" class="btn btn-outline-secondary">Нямате профил? Регистрация</a>
-                            <a asp-action="ForgotPassword" class="btn btn-link">Забравена парола</a>
+                            <button type="submit" class="btn btn-success btn-lg">@T["account.login"]</button>
+                            <a asp-action="Register" class="btn btn-outline-secondary">@T["account.noProfile"]</a>
+                            <a asp-action="ForgotPassword" class="btn btn-link">@T["account.forgot"]</a>
                         </div>
                     </form>
                 </div>

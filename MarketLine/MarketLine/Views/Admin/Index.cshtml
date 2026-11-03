@@ -20,7 +20,7 @@
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <h6 class="text-muted">Оборот</h6>
-                    <p class="display-6 mb-0">@Model.Turnover.ToString("C2")</p>
+                    <p class="display-6 mb-0">@Model.Turnover.Euro()</p>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <h6 class="text-muted">Средна стойност</h6>
-                    <p class="display-6 mb-0">@Model.AverageOrder.ToString("C2")</p>
+                    <p class="display-6 mb-0">@Model.AverageOrder.Euro()</p>
                 </div>
             </div>
         </div>
@@ -147,7 +147,7 @@
                             <tr>
                                 <td>@product.Name</td>
                                 <td>@product.Quantity</td>
-                                <td>@product.Total.ToString("C2")</td>
+                                <td>@product.Total.Euro()</td>
                             </tr>
                         }
                     </tbody>

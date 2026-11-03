@@ -1,107 +1,107 @@
 @model MarketLine.Models.CheckoutForm
 @{
-    ViewData["Title"] = "Каса";
+    ViewData["Title"] = T["checkout.title"];
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1 class="mb-4 text-center">Завършване на поръчка</h1>
+            <h1 class="mb-4 text-center">@T["checkout.heading"]</h1>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
                     <form asp-action="Index" method="post">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-                        <h5 class="mb-3">Данни за клиента</h5>
+                        <h5 class="mb-3">@T["checkout.customer"]</h5>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="FirstName" class="form-label"></label>
+                                <label asp-for="FirstName" class="form-label">@T["account.firstName"]</label>
                                 <input asp-for="FirstName" class="form-control" />
                                 <span asp-validation-for="FirstName" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="LastName" class="form-label"></label>
+                                <label asp-for="LastName" class="form-label">@T["account.lastName"]</label>
                                 <input asp-for="LastName" class="form-control" />
                                 <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Email" class="form-label"></label>
+                                <label asp-for="Email" class="form-label">@T["account.email"]</label>
                                 <input asp-for="Email" class="form-control" />
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Phone" class="form-label"></label>
+                                <label asp-for="Phone" class="form-label">@T["account.phone"]</label>
                                 <input asp-for="Phone" class="form-control" />
                                 <span asp-validation-for="Phone" class="text-danger"></span>
                             </div>
                         </div>
 
                         <hr />
-                        <h5 class="mb-3">Адрес за доставка</h5>
+                        <h5 class="mb-3">@T["checkout.address"]</h5>
                         <div class="mb-3">
-                            <label asp-for="Address" class="form-label"></label>
+                            <label asp-for="Address" class="form-label">@T["account.address"]</label>
                             <input asp-for="Address" class="form-control" />
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="City" class="form-label"></label>
+                                <label asp-for="City" class="form-label">@T["account.city"]</label>
                                 <input asp-for="City" class="form-control" />
                                 <span asp-validation-for="City" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="PostalCode" class="form-label"></label>
+                                <label asp-for="PostalCode" class="form-label">@T["account.postal"]</label>
                                 <input asp-for="PostalCode" class="form-control" />
                                 <span asp-validation-for="PostalCode" class="text-danger"></span>
                             </div>
                         </div>
 
                         <hr />
-                        <h5 class="mb-3">Доставка и плащане</h5>
+                        <h5 class="mb-3">@T["checkout.shippingPay"]</h5>
                         <div class="mb-3">
-                            <label asp-for="Courier" class="form-label"></label>
+                            <label asp-for="Courier" class="form-label">@T["checkout.courier"]</label>
                             <select asp-for="Courier" class="form-select">
-                                <option value="">Изберете куриер</option>
+                                <option value="">@T["checkout.chooseCourier"]</option>
                                 @if (ViewBag.Couriers is IEnumerable<MarketLine.Models.Courier> couriers && couriers.Any())
                                 {
                                     foreach (var courier in couriers)
                                     {
-                                        <option value="@courier.Name">@courier.Name — @courier.Price.ToString("C2")</option>
+                                        <option value="@courier.Name">@T.Content(courier.Name) — @courier.Price.Euro()</option>
                                     }
                                 }
                                 else
                                 {
-                                    <option value="Спиди">Спиди</option>
-                                    <option value="Еконт">Еконт</option>
+                                    <option value="Спиди">@T.Content("Спиди")</option>
+                                    <option value="Еконт">@T.Content("Еконт")</option>
                                 }
                             </select>
                             <span asp-validation-for="Courier" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="DeliveryMethod" class="form-label"></label>
+                            <label asp-for="DeliveryMethod" class="form-label">@T["account.deliveryMethod"]</label>
                             <select asp-for="DeliveryMethod" class="form-select">
-                                <option value="">Изберете начин</option>
-                                <option value="До адрес">До адрес</option>
-                                <option value="До офис на куриера">До офис на куриера</option>
+                                <option value="">@T["checkout.chooseWay"]</option>
+                                <option value="До адрес">@T.Content("До адрес")</option>
+                                <option value="До офис на куриера">@T.Content("До офис на куриера")</option>
                             </select>
                             <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="PaymentMethod" class="form-label"></label>
+                            <label asp-for="PaymentMethod" class="form-label">@T["account.paymentMethod"]</label>
                             <select asp-for="PaymentMethod" class="form-select">
-                                <option value="">Изберете метод</option>
-                                <option value="Наложен платеж">Наложен платеж</option>
-                                <option value="Банков превод">Банков превод</option>
+                                <option value="">@T["checkout.choosePay"]</option>
+                                <option value="Наложен платеж">@T.Content("Наложен платеж")</option>
+                                <option value="Банков превод">@T.Content("Банков превод")</option>
                             </select>
                             <span asp-validation-for="PaymentMethod" class="text-danger"></span>
                         </div>
 
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-success btn-lg">Преглед на поръчката</button>
-                            <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">Назад към количката</a>
+                            <button type="submit" class="btn btn-success btn-lg">@T["checkout.reviewBtn"]</button>
+                            <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">@T["checkout.backCart"]</a>
                         </div>
                     </form>
                 </div>

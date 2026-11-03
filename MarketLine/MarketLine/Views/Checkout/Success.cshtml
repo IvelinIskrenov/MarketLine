@@ -1,40 +1,40 @@
 @model MarketLine.Models.Order
 @{
-    ViewData["Title"] = "Успешна поръчка";
+    ViewData["Title"] = T["checkout.success"];
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="alert alert-success text-center" role="alert">
-                Поръчката е направена успешно.
+                @T["checkout.successMsg"]
             </div>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
-                    <h1 class="h3 mb-3 text-center">Благодарим ви!</h1>
-                    <p class="text-center mb-2">Номер на поръчка: <strong>@Model.OrderNumber</strong></p>
+                    <h1 class="h3 mb-3 text-center">@T["checkout.thanks"]</h1>
+                    <p class="text-center mb-2">@T["checkout.orderNumber"]: <strong>@Model.OrderNumber</strong></p>
                     <p class="text-center mb-3">
-                        Статус:
+                        @T["order.status"]:
                         <span class="badge @OrderStatuses.BadgeClass(Model.Status)">
-                            @OrderStatuses.Normalize(Model.Status)
+                            @T.Content(OrderStatuses.Normalize(Model.Status))
                         </span>
                     </p>
                     <partial name="_OrderTracker" model="Model" />
 
-                    <h5 class="mb-3">Данни за доставка</h5>
+                    <h5 class="mb-3">@T["checkout.shippingDetails"]</h5>
                     <p class="mb-1">@Model.FirstName @Model.LastName</p>
                     <p class="mb-1">@Model.Address, @Model.PostalCode @Model.City</p>
                     <p class="mb-1">@Model.Phone · @Model.Email</p>
-                    <p class="mb-1">@Model.Courier · @Model.DeliveryMethod</p>
-                    <p class="mb-3">Плащане: @Model.PaymentMethod</p>
+                    <p class="mb-1">@T.Content(Model.Courier) · @T.Content(Model.DeliveryMethod)</p>
+                    <p class="mb-3">@T["order.payment"]: @T.Content(Model.PaymentMethod)</p>
 
                     <table class="table align-middle">
                         <thead>
                             <tr>
-                                <th>Продукт</th>
-                                <th>Количество</th>
-                                <th>Общо</th>
+                                <th>@T["cart.product"]</th>
+                                <th>@T["cart.qty"]</th>
+                                <th>@T["cart.total"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,31 +42,31 @@
                             {
                                 <tr>
                                     <td>
-                                        @line.Name
+                                        @T.Content(line.Name)
                                         @if (!string.IsNullOrWhiteSpace(line.VariantLabel))
                                         {
-                                            <div class="text-muted small">@line.VariantLabel</div>
+                                            <div class="text-muted small">@T.Content(line.VariantLabel)</div>
                                         }
                                     </td>
                                     <td>@line.Quantity</td>
-                                    <td>@line.LineTotal.ToString("C2")</td>
+                                    <td>@line.LineTotal.Euro()</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
 
                     <div class="d-flex justify-content-between h5">
-                        <span>Платена сума</span>
-                        <strong>@Model.Total.ToString("C2")</strong>
+                        <span>@T["checkout.paid"]</span>
+                        <strong>@Model.Total.Euro()</strong>
                     </div>
 
                     <div class="text-center mt-4 d-flex flex-wrap justify-content-center gap-2">
                         @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <a asp-controller="Profile" asp-action="Order" asp-route-orderNumber="@Model.OrderNumber" class="btn btn-success">Проследи поръчката</a>
+                            <a asp-controller="Profile" asp-action="Order" asp-route-orderNumber="@Model.OrderNumber" class="btn btn-success">@T["checkout.track"]</a>
                             <partial name="_ReorderButton" model="Model" />
                         }
-                        <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">Към продуктите</a>
+                        <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">@T["cart.toProducts"]</a>
                     </div>
                 </div>
             </div>

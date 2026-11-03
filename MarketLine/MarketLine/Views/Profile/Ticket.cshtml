@@ -6,16 +6,16 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1 class="mb-4 text-center">Моят профил</h1>
+            <h1 class="mb-4 text-center">@T["profile.mine"]</h1>
             <partial name="_ProfileNav" />
 
             @if (TempData["ProfileMessage"] != null)
             {
-                <div class="alert alert-success text-center" role="alert">@TempData["ProfileMessage"]</div>
+                <div class="alert alert-success text-center" role="alert">@T.Content(TempData["ProfileMessage"] as string)</div>
             }
             @if (TempData["CartError"] != null)
             {
-                <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+                <div class="alert alert-warning text-center" role="alert">@T.Content(TempData["CartError"] as string)</div>
             }
 
             <div class="card shadow-sm border-0 mb-4">
@@ -23,13 +23,13 @@
                     <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
                         <div>
                             <h5 class="mb-1">@Model.Subject</h5>
-                            <div class="text-muted small">@Model.TicketNumber · @Model.Topic · @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                            <div class="text-muted small">@Model.TicketNumber · @T.Content(Model.Topic) · @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
                             @if (!string.IsNullOrWhiteSpace(Model.OrderNumber))
                             {
-                                <div class="small">Поръчка: @Model.OrderNumber</div>
+                                <div class="small">@T["profile.order"]: @Model.OrderNumber</div>
                             }
                         </div>
-                        <span class="badge @TicketStatuses.BadgeClass(Model.Status)">@TicketStatuses.Normalize(Model.Status)</span>
+                        <span class="badge @TicketStatuses.BadgeClass(Model.Status)">@T.Content(TicketStatuses.Normalize(Model.Status))</span>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@
             {
                 <div class="border rounded p-3 mb-3 @(current.IsFromAdmin ? "bg-light" : "")">
                     <p class="mb-1">
-                        <strong>@(current.IsFromAdmin ? "Администратор" : current.AuthorName)</strong>
+                        <strong>@(current.IsFromAdmin ? T["ticket.admin"] : current.AuthorName)</strong>
                         <span class="text-muted small"> · @current.CreatedAt.ToString("dd.MM.yyyy HH:mm")</span>
                     </p>
                     <p class="mb-0">@current.Body</p>
@@ -51,19 +51,19 @@
                     <div class="card-body">
                         <form asp-action="ReplyTicket" method="post">
                             <input type="hidden" name="id" value="@Model.Id" />
-                            <label class="form-label" for="reply-message">Отговор</label>
+                            <label class="form-label" for="reply-message">@T["qa.answer"]</label>
                             <textarea id="reply-message" name="message" class="form-control mb-3" rows="4" maxlength="2000" required></textarea>
-                            <button type="submit" class="btn btn-custom-green">Изпрати</button>
+                            <button type="submit" class="btn btn-custom-green">@T["ticket.sendReply"]</button>
                         </form>
                         <form asp-action="CloseTicket" method="post" class="mt-3">
                             <input type="hidden" name="id" value="@Model.Id" />
-                            <button type="submit" class="btn btn-outline-secondary btn-sm">Затвори билета</button>
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">@T["ticket.close"]</button>
                         </form>
                     </div>
                 </div>
             }
 
-            <a asp-action="Tickets" class="d-inline-block mt-3">Назад към билетите</a>
+            <a asp-action="Tickets" class="d-inline-block mt-3">@T["ticket.back"]</a>
         </div>
     </div>
 </div>

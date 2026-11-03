@@ -1,27 +1,27 @@
 @model MarketLine.Models.CartViewModel
 @{
-    ViewData["Title"] = "Количка";
+    ViewData["Title"] = T["cart.title"];
 }
 
 <div class="container mt-4">
-    <h1 class="mb-4 text-center">Количка</h1>
+    <h1 class="mb-4 text-center">@T["cart.title"]</h1>
 
     @if (TempData["CartMessage"] != null)
     {
-        <div class="alert alert-success text-center" role="alert">@TempData["CartMessage"]</div>
+        <div class="alert alert-success text-center" role="alert">@T.Content(TempData["CartMessage"] as string)</div>
     }
     @if (TempData["CartError"] != null)
     {
-        <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+        <div class="alert alert-warning text-center" role="alert">@T.Content(TempData["CartError"] as string)</div>
     }
 
     @if (Model.Lines.Count == 0)
     {
         <div class="alert alert-warning text-center" role="alert">
-            Количката е празна.
+            @T["cart.empty"]
         </div>
         <div class="text-center">
-            <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">Към продуктите</a>
+            <a asp-controller="Item" asp-action="Index" class="btn btn-custom-green">@T["cart.toProducts"]</a>
         </div>
     }
     else
@@ -31,10 +31,10 @@
                 <table class="table align-middle">
                     <thead>
                         <tr>
-                            <th>Продукт</th>
-                            <th>Цена</th>
-                            <th>Количество</th>
-                            <th>Общо</th>
+                            <th>@T["cart.product"]</th>
+                            <th>@T["cart.price"]</th>
+                            <th>@T["cart.qty"]</th>
+                            <th>@T["cart.total"]</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -46,18 +46,18 @@
                                     <div class="d-flex align-items-center">
                                         @if (!string.IsNullOrEmpty(line.ImageUrl))
                                         {
-                                            <img src="@line.ImageUrl" alt="@line.Name" style="width: 70px; height: 70px; object-fit: cover;" class="me-3 rounded" />
+                                            <img src="@line.ImageUrl" alt="@T.Content(line.Name)" style="width: 70px; height: 70px; object-fit: cover;" class="me-3 rounded" />
                                         }
                                         <a asp-controller="Item" asp-action="Details" asp-route-id="@line.ItemId" class="text-decoration-none text-dark">
-                                            @line.Name
+                                            @T.Content(line.Name)
                                         </a>
                                         @if (!string.IsNullOrWhiteSpace(line.VariantLabel))
                                         {
-                                            <div class="text-muted small">@line.VariantLabel</div>
+                                            <div class="text-muted small">@T.Content(line.VariantLabel)</div>
                                         }
                                     </div>
                                 </td>
-                                <td>@line.UnitPrice.ToString("C2")</td>
+                                <td>@line.UnitPrice.Euro()</td>
                                 <td>
                                     <form asp-action="Update" method="post" class="d-flex align-items-center">
                                         <input type="hidden" name="id" value="@line.ItemId" />
@@ -69,15 +69,15 @@
                                                max="@line.StockQuantity"
                                                class="form-control"
                                                style="width: 80px;" />
-                                        <button type="submit" class="btn btn-outline-secondary btn-sm ms-2">Обнови</button>
+                                        <button type="submit" class="btn btn-outline-secondary btn-sm ms-2">@T["cart.update"]</button>
                                     </form>
                                 </td>
-                                <td>@line.LineTotal.ToString("C2")</td>
+                                <td>@line.LineTotal.Euro()</td>
                                 <td>
                                     <form asp-action="Remove" method="post">
                                         <input type="hidden" name="id" value="@line.ItemId" />
                                         <input type="hidden" name="variantId" value="@line.VariantId" />
-                                        <button type="submit" class="btn btn-link text-danger p-0">Премахни</button>
+                                        <button type="submit" class="btn btn-link text-danger p-0">@T["cart.remove"]</button>
                                     </form>
                                 </td>
                             </tr>
@@ -89,43 +89,43 @@
             <div class="col-lg-4">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        <h5 class="mb-3">Обобщение</h5>
+                        <h5 class="mb-3">@T["cart.summary"]</h5>
 
                         <form asp-action="ApplyPromo" method="post" class="mb-3">
-                            <label class="form-label">Промоционален код</label>
+                            <label class="form-label">@T["cart.promo"]</label>
                             <div class="d-flex">
                                 <input type="text"
                                        name="promoCode"
                                        value="@Model.PromoCode"
                                        class="form-control me-2"
-                                       placeholder="Код" />
-                                <button type="submit" class="btn btn-custom-green">Приложи</button>
+                                       placeholder="@T["cart.code"]" />
+                                <button type="submit" class="btn btn-custom-green">@T["shop.apply"]</button>
                             </div>
                         </form>
 
                         @if (!string.IsNullOrEmpty(Model.PromoCode) && Model.PromoDiscount > 0)
                         {
                             <form asp-action="RemovePromo" method="post" class="mb-3">
-                                <button type="submit" class="btn btn-link p-0">Премахни кода @Model.PromoCode</button>
+                                <button type="submit" class="btn btn-link p-0">@T["cart.removeCode"] @Model.PromoCode</button>
                             </form>
                         }
 
                         <dl class="row mb-0">
-                            <dt class="col-6">Междинна сума</dt>
-                            <dd class="col-6 text-end">@Model.SubTotal.ToString("C2")</dd>
+                            <dt class="col-6">@T["cart.subtotal"]</dt>
+                            <dd class="col-6 text-end">@Model.SubTotal.Euro()</dd>
 
-                            <dt class="col-6">Отстъпка</dt>
-                            <dd class="col-6 text-end">-@Model.PromoDiscount.ToString("C2")</dd>
+                            <dt class="col-6">@T["cart.discount"]</dt>
+                            <dd class="col-6 text-end">-@Model.PromoDiscount.Euro()</dd>
 
-                            <dt class="col-6">Доставка</dt>
+                            <dt class="col-6">@T["cart.shipping"]</dt>
                             <dd class="col-6 text-end">
                                 @if (Model.Shipping == 0)
                                 {
-                                    <span class="text-success">Безплатна</span>
+                                    <span class="text-success">@T["cart.freeLabel"]</span>
                                 }
                                 else
                                 {
-                                    @Model.Shipping.ToString("C2")
+                                    @Model.Shipping.Euro()
                                 }
                             </dd>
                         </dl>
@@ -133,21 +133,21 @@
                         @if (Model.RemainingForFreeShipping > 0)
                         {
                             <p class="text-muted small mt-2 mb-0">
-                                Остават @Model.RemainingForFreeShipping.ToString("C2") до безплатна доставка над @Model.FreeShippingThreshold.ToString("C2").
+                                @T.Format("cart.remaining", Model.RemainingForFreeShipping.Euro(), Model.FreeShippingThreshold.Euro())
                             </p>
                         }
 
                         <hr />
                         <div class="d-flex justify-content-between h5 mb-3">
-                            <span>Общо</span>
-                            <strong>@Model.Total.ToString("C2")</strong>
+                            <span>@T["cart.total"]</span>
+                            <strong>@Model.Total.Euro()</strong>
                         </div>
 
                         <a asp-controller="Checkout" asp-action="Index" class="btn btn-success w-100 mb-2">
-                            Към касата
+                            @T["cart.checkout"]
                         </a>
                         <a asp-controller="Item" asp-action="Index" class="btn btn-outline-secondary w-100">
-                            Продължи пазаруването
+                            @T["cart.continue"]
                         </a>
                     </div>
                 </div>

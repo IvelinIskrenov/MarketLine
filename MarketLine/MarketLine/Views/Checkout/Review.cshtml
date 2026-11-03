@@ -1,44 +1,44 @@
 @model MarketLine.Models.CheckoutReviewViewModel
 @{
-    ViewData["Title"] = "Преглед на поръчката";
+    ViewData["Title"] = T["checkout.reviewBtn"];
 }
 
 <div class="container mt-4">
-    <h1 class="mb-4 text-center">Преглед на поръчката</h1>
+    <h1 class="mb-4 text-center">@T["checkout.reviewBtn"]</h1>
 
     @if (TempData["CartError"] != null)
     {
-        <div class="alert alert-warning text-center" role="alert">@TempData["CartError"]</div>
+        <div class="alert alert-warning text-center" role="alert">@T.Content(TempData["CartError"] as string)</div>
     }
 
     <div class="row">
         <div class="col-lg-8">
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
-                    <h5 class="mb-3">Данни за клиента</h5>
+                    <h5 class="mb-3">@T["checkout.customer"]</h5>
                     <p class="mb-1">@Model.Customer.FirstName @Model.Customer.LastName</p>
                     <p class="mb-1">@Model.Customer.Email</p>
                     <p class="mb-0">@Model.Customer.Phone</p>
 
                     <hr />
-                    <h5 class="mb-3">Адрес за доставка</h5>
+                    <h5 class="mb-3">@T["checkout.address"]</h5>
                     <p class="mb-1">@Model.Customer.Address</p>
                     <p class="mb-0">@Model.Customer.PostalCode @Model.Customer.City</p>
 
                     <hr />
-                    <h5 class="mb-3">Куриер и плащане</h5>
-                    <p class="mb-1">Куриер: @Model.Customer.Courier</p>
-                    <p class="mb-1">Доставка: @Model.Customer.DeliveryMethod</p>
-                    <p class="mb-0">Плащане: @Model.Customer.PaymentMethod</p>
+                    <h5 class="mb-3">@T["checkout.courierPay"]</h5>
+                    <p class="mb-1">@T["checkout.courier"]: @T.Content(Model.Customer.Courier)</p>
+                    <p class="mb-1">@T["cart.shipping"]: @T.Content(Model.Customer.DeliveryMethod)</p>
+                    <p class="mb-0">@T["order.payment"]: @T.Content(Model.Customer.PaymentMethod)</p>
                 </div>
             </div>
 
             <table class="table align-middle">
                 <thead>
                     <tr>
-                        <th>Продукт</th>
-                        <th>Количество</th>
-                        <th>Общо</th>
+                        <th>@T["cart.product"]</th>
+                        <th>@T["cart.qty"]</th>
+                        <th>@T["cart.total"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,14 +46,14 @@
                     {
                         <tr>
                             <td>
-                                @line.Name
+                                @T.Content(line.Name)
                                 @if (!string.IsNullOrWhiteSpace(line.VariantLabel))
                                 {
-                                    <div class="text-muted small">@line.VariantLabel</div>
+                                    <div class="text-muted small">@T.Content(line.VariantLabel)</div>
                                 }
                             </td>
                             <td>@line.Quantity</td>
-                            <td>@line.LineTotal.ToString("C2")</td>
+                            <td>@line.LineTotal.Euro()</td>
                         </tr>
                     }
                 </tbody>
@@ -63,34 +63,34 @@
         <div class="col-lg-4">
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
-                    <h5 class="mb-3">Обобщение</h5>
+                    <h5 class="mb-3">@T["cart.summary"]</h5>
                     <dl class="row mb-0">
-                        <dt class="col-6">Междинна сума</dt>
-                        <dd class="col-6 text-end">@Model.Cart.SubTotal.ToString("C2")</dd>
-                        <dt class="col-6">Отстъпка</dt>
-                        <dd class="col-6 text-end">-@Model.Cart.PromoDiscount.ToString("C2")</dd>
-                        <dt class="col-6">Доставка</dt>
+                        <dt class="col-6">@T["cart.subtotal"]</dt>
+                        <dd class="col-6 text-end">@Model.Cart.SubTotal.Euro()</dd>
+                        <dt class="col-6">@T["cart.discount"]</dt>
+                        <dd class="col-6 text-end">-@Model.Cart.PromoDiscount.Euro()</dd>
+                        <dt class="col-6">@T["cart.shipping"]</dt>
                         <dd class="col-6 text-end">
                             @if (Model.Cart.Shipping == 0)
                             {
-                                <span class="text-success">Безплатна</span>
+                                <span class="text-success">@T["cart.freeLabel"]</span>
                             }
                             else
                             {
-                                @Model.Cart.Shipping.ToString("C2")
+                                @Model.Cart.Shipping.Euro()
                             }
                         </dd>
                     </dl>
                     <hr />
                     <div class="d-flex justify-content-between h5 mb-3">
-                        <span>Общо</span>
-                        <strong>@Model.Cart.Total.ToString("C2")</strong>
+                        <span>@T["cart.total"]</span>
+                        <strong>@Model.Cart.Total.Euro()</strong>
                     </div>
 
                     <form asp-action="Confirm" method="post" class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success btn-lg">Потвърди поръчката</button>
+                        <button type="submit" class="btn btn-success btn-lg">@T["checkout.place"]</button>
                     </form>
-                    <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">Редактирай данните</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">@T["checkout.edit"]</a>
                 </div>
             </div>
         </div>

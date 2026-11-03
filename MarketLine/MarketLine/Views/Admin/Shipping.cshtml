@@ -60,7 +60,7 @@
             {
                 <tr>
                     <td>@courier.Name</td>
-                    <td>@courier.Price.ToString("C2")</td>
+                    <td>@courier.Price.Euro()</td>
                     <td>@(courier.IsActive ? "Активен" : "Спрян")</td>
                     <td>
                         <form asp-action="ToggleCourier" method="post" class="d-inline">

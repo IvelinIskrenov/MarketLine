@@ -42,7 +42,7 @@
                                 @OrderStatuses.Normalize(order.Status)
                             </span>
                         </td>
-                        <td>@order.Total.ToString("C2")</td>
+                        <td>@order.Total.Euro()</td>
                     </tr>
                 }
             </tbody>

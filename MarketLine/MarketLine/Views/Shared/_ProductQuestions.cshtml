@@ -5,11 +5,11 @@
 }
 
 <div id="product-questions" class="mt-5">
-    <h4 class="mb-3">Въпроси и отговори</h4>
+    <h4 class="mb-3">@T["qa.title"]</h4>
 
     @if (!questions.Any())
     {
-        <p class="text-muted">Все още няма въпроси за този продукт.</p>
+        <p class="text-muted">@T["qa.empty"]</p>
     }
     else
     {
@@ -17,18 +17,18 @@
         {
             <div class="border rounded p-3 mb-3 bg-light">
                 <p class="mb-1">
-                    <strong>Въпрос</strong>
+                    <strong>@T["qa.question"]</strong>
                     <span class="text-muted small"> · @current.AuthorName · @current.AskedAt.ToString("dd.MM.yyyy")</span>
                 </p>
                 <p class="mb-2">@current.Question</p>
                 @if (current.IsAnswered)
                 {
-                    <p class="mb-1"><strong>Отговор</strong></p>
+                    <p class="mb-1"><strong>@T["qa.answer"]</strong></p>
                     <p class="mb-0">@current.Answer</p>
                 }
                 else
                 {
-                    <p class="text-muted mb-0">Очаква отговор от администратор.</p>
+                    <p class="text-muted mb-0">@T["qa.waiting"]</p>
                 }
             </div>
         }
@@ -36,31 +36,31 @@
 
     <div class="card shadow-sm border-0 mt-4">
         <div class="card-body">
-            <h5 class="mb-3">Задайте въпрос</h5>
+            <h5 class="mb-3">@T["qa.ask"]</h5>
             <form asp-controller="ProductQuestion" asp-action="Ask" method="post">
                 <input type="hidden" name="itemId" value="@Model.id" />
                 @if (!isSignedIn)
                 {
                     <div class="mb-3">
-                        <label class="form-label" for="question-author">Име</label>
+                        <label class="form-label" for="question-author">@T["qa.name"]</label>
                         <input id="question-author"
                                name="authorName"
                                class="form-control"
                                maxlength="50"
-                               placeholder="Вашето име" />
+                               placeholder="@T["qa.namePlaceholder"]" />
                     </div>
                 }
                 <div class="mb-3">
-                    <label class="form-label" for="question-text">Въпрос</label>
+                    <label class="form-label" for="question-text">@T["qa.question"]</label>
                     <textarea id="question-text"
                               name="question"
                               class="form-control"
                               rows="3"
                               required
                               maxlength="500"
-                              placeholder="Попитайте за съставки, употреба или наличност"></textarea>
+                              placeholder="@T["qa.placeholder"]"></textarea>
                 </div>
-                <button type="submit" class="btn btn-custom-green">Изпрати въпрос</button>
+                <button type="submit" class="btn btn-custom-green">@T["qa.submit"]</button>
             </form>
         </div>
     </div>

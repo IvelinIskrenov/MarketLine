@@ -19,7 +19,7 @@
                     @OrderStatuses.Normalize(Model.Status)
                 </span>
             </p>
-            <p class="mb-0"><strong>Сума:</strong> @Model.Total.ToString("C2")</p>
+            <p class="mb-0"><strong>Сума:</strong> @Model.Total.Euro()</p>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
                         }
                     </td>
                     <td>@line.Quantity</td>
-                    <td>@line.LineTotal.ToString("C2")</td>
+                    <td>@line.LineTotal.Euro()</td>
                 </tr>
             }
         </tbody>

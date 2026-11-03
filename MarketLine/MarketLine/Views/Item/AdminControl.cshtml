@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MarketLine.Models.Item>
+@model IEnumerable<MarketLine.Models.Item>
 @{
     ViewData["Title"] = "Продукти";
     Layout = "_AdminLayout";
@@ -32,7 +32,7 @@
                     <td>@item.name</td>
                     <td>@(item.Brand)</td>
                     <td>@(item.category?.Name)</td>
-                    <td>@item.price.ToString("C2")</td>
+                    <td>@item.price.Euro()</td>
                     <td>
                         @item.AvailableStock
                         <div class="mt-1">@await Html.PartialAsync("_StockStatus", item)</div>

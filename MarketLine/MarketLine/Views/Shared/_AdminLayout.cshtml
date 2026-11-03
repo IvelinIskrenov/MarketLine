@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bg">
+<html lang="@T.Culture">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,12 +11,13 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1e7e34;">
             <div class="container-fluid">
-                <span class="navbar-brand fw-bold">MarketLine Админ</span>
+                <span class="navbar-brand fw-bold">@T["admin.brand"]</span>
                 <div class="d-flex align-items-center gap-3">
-                    <a class="btn btn-sm btn-outline-light" asp-controller="Home" asp-action="Index">Към магазина</a>
-                    <a class="btn btn-sm btn-outline-light" asp-controller="Profile" asp-action="Index">Моят профил</a>
+                    <partial name="_LanguageSwitch" />
+                    <a class="btn btn-sm btn-outline-light" asp-controller="Home" asp-action="Index">@T["admin.toShop"]</a>
+                    <a class="btn btn-sm btn-outline-light" asp-controller="Profile" asp-action="Index">@T["admin.myProfile"]</a>
                     <form asp-controller="Account" asp-action="Logout" method="post" class="mb-0">
-                        <button type="submit" class="btn btn-sm btn-light">Изход</button>
+                        <button type="submit" class="btn btn-sm btn-light">@T["nav.logout"]</button>
                     </form>
                 </div>
             </div>

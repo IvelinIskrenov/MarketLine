@@ -2,9 +2,9 @@
 
 @if (Model.IsScheduled)
 {
-    <span class="badge bg-info text-dark">Планиран @ItemPublishing.ToLocalDisplay(Model.PublishedAt)</span>
+    <span class="badge bg-info text-dark">@T["shop.scheduled"] @ItemPublishing.ToLocalDisplay(Model.PublishedAt)</span>
 }
 else
 {
-    <span class="badge bg-success">Публикуван</span>
+    <span class="badge bg-success">@T["shop.published"]</span>
 }

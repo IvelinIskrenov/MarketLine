@@ -8,8 +8,8 @@
 @if (showForm)
 {
     <div id="stock-alert" class="mt-3 p-3 border rounded bg-light">
-        <p class="fw-semibold mb-2">Извести ме при наличност</p>
-        <p class="text-muted small mb-3">Ще изпратим имейл, когато продуктът отново е на склад.</p>
+        <p class="fw-semibold mb-2">@T["alert.title"]</p>
+        <p class="text-muted small mb-3">@T["alert.hint"]</p>
         <form asp-controller="StockAlert" asp-action="Subscribe" method="post" class="row g-2 align-items-end">
             <input type="hidden" name="itemId" value="@Model.id" />
             <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
@@ -20,21 +20,21 @@
             else if (soldOutVariants.Count > 1)
             {
                 <div class="col-md-4">
-                    <label class="form-label" for="alert-variant">Вариант</label>
+                    <label class="form-label" for="alert-variant">@T["shop.variant"]</label>
                     <select id="alert-variant" name="variantId" class="form-select">
                         @if (Model.IsSoldOut)
                         {
-                            <option value="0">Когато има който и да е вариант</option>
+                            <option value="0">@T["alert.anyVariant"]</option>
                         }
                         @foreach (var variant in soldOutVariants)
                         {
-                            <option value="@variant.Id">@variant.Label</option>
+                            <option value="@variant.Id">@T.Content(variant.Label)</option>
                         }
                     </select>
                 </div>
             }
             <div class="col-md-5">
-                <label class="form-label" for="alert-email">Имейл</label>
+                <label class="form-label" for="alert-email">@T["alert.email"]</label>
                 <input id="alert-email"
                        type="email"
                        name="email"
@@ -45,7 +45,7 @@
                        placeholder="you@email.com" />
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-custom-green w-100">Извести ме</button>
+                <button type="submit" class="btn btn-custom-green w-100">@T["shop.notifyMe"]</button>
             </div>
         </form>
     </div>

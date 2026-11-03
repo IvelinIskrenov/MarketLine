@@ -1,22 +1,22 @@
 @model MarketLine.Models.AddressesPageViewModel
 @{
-    ViewData["Title"] = "Адреси";
+    ViewData["Title"] = T["profile.addresses"];
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <h1 class="mb-4 text-center">Моят профил</h1>
+            <h1 class="mb-4 text-center">@T["profile.mine"]</h1>
             <partial name="_ProfileNav" />
 
             @if (TempData["ProfileMessage"] != null)
             {
-                <div class="alert alert-success text-center" role="alert">@TempData["ProfileMessage"]</div>
+                <div class="alert alert-success text-center" role="alert">@T.Content(TempData["ProfileMessage"] as string)</div>
             }
 
             @if (Model.Addresses.Count == 0)
             {
-                <div class="alert alert-warning text-center" role="alert">Нямате записани адреси.</div>
+                <div class="alert alert-warning text-center" role="alert">@T["profile.noAddresses"]</div>
             }
             else
             {
@@ -33,7 +33,7 @@
                                         }
                                         @if (address.IsDefault)
                                         {
-                                            <span class="badge bg-success">По подразбиране</span>
+                                            <span class="badge bg-success">@T["profile.default"]</span>
                                         }
                                     </p>
                                     <p class="mb-0">@address.AddressLine</p>
@@ -44,12 +44,12 @@
                                     {
                                         <form asp-action="SetDefaultAddress" method="post" class="d-inline">
                                             <input type="hidden" name="id" value="@address.Id" />
-                                            <button type="submit" class="btn btn-link p-0">Направи основен</button>
+                                            <button type="submit" class="btn btn-link p-0">@T["profile.makeDefault"]</button>
                                         </form>
                                     }
                                     <form asp-action="DeleteAddress" method="post" class="d-inline">
                                         <input type="hidden" name="id" value="@address.Id" />
-                                        <button type="submit" class="btn btn-link text-danger p-0">Премахни</button>
+                                        <button type="submit" class="btn btn-link text-danger p-0">@T["cart.remove"]</button>
                                     </form>
                                 </div>
                             </div>
@@ -64,36 +64,36 @@
 
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
-                    <h5 class="mb-3">Нов адрес</h5>
+                    <h5 class="mb-3">@T["profile.newAddress"]</h5>
                     <form asp-action="AddAddress" method="post">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                         <div class="mb-3">
-                            <label asp-for="NewAddress.Label" class="form-label"></label>
-                            <input asp-for="NewAddress.Label" class="form-control" placeholder="Дом, офис..." />
+                            <label asp-for="NewAddress.Label" class="form-label">@T["account.label"]</label>
+                            <input asp-for="NewAddress.Label" class="form-control" placeholder="@T.Content("Дом, офис...")" />
                         </div>
                         <div class="mb-3">
-                            <label asp-for="NewAddress.AddressLine" class="form-label"></label>
+                            <label asp-for="NewAddress.AddressLine" class="form-label">@T["account.address"]</label>
                             <input asp-for="NewAddress.AddressLine" class="form-control" />
                             <span asp-validation-for="NewAddress.AddressLine" class="text-danger"></span>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="NewAddress.City" class="form-label"></label>
+                                <label asp-for="NewAddress.City" class="form-label">@T["account.city"]</label>
                                 <input asp-for="NewAddress.City" class="form-control" />
                                 <span asp-validation-for="NewAddress.City" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="NewAddress.PostalCode" class="form-label"></label>
+                                <label asp-for="NewAddress.PostalCode" class="form-label">@T["account.postal"]</label>
                                 <input asp-for="NewAddress.PostalCode" class="form-control" />
                                 <span asp-validation-for="NewAddress.PostalCode" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="form-check mb-3">
                             <input asp-for="NewAddress.IsDefault" class="form-check-input" />
-                            <label asp-for="NewAddress.IsDefault" class="form-check-label"></label>
+                            <label asp-for="NewAddress.IsDefault" class="form-check-label">@T["account.defaultAddress"]</label>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-success">Добави адрес</button>
+                            <button type="submit" class="btn btn-success">@T["profile.addAddress"]</button>
                         </div>
                     </form>
                 </div>

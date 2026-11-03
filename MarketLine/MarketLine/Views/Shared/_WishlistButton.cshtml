@@ -11,12 +11,12 @@
         @if (isFavorite)
         {
             <span class="me-2" style="color: #dc3545; font-weight: 700; line-height: 1;">&times;</span>
-            <span>Премахни от любими</span>
+            <span>@T["shop.wishlist.remove"]</span>
         }
         else
         {
             <span class="me-2" style="font-weight: 700; line-height: 1;">+</span>
-            <span>Добави в любими</span>
+            <span>@T["shop.wishlist.add"]</span>
         }
     </button>
 </form>
